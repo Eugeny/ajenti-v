@@ -1,0 +1,32 @@
+<vc>
+    <body>
+        <pad>
+            <bind:collection bind="websites" id="websites">
+                <vc>
+                    <dt bind="__items" />
+                    <button bind="__add" icon="plus" text="{Website}" />
+                </vc>
+
+                <bind:template>
+                   <collapserow>
+                        <box>
+                            <right />
+                            <hc>
+                                <icon icon="globe" />
+                                <label bind="name" />
+                            </hc>   
+                        </box>
+
+                        <pad>
+                            <include layout="vh:main-website" />
+                        </pad>
+                    </collapserow>
+                </bind:template>
+            </bind:collection>
+        </pad>
+    </body>
+
+    <hc>
+        <button style="normal big" icon="ok" id="save" text="{Apply changes}" />
+    </hc>
+</vc>

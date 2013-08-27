@@ -1,0 +1,14 @@
+<vc>
+    <right>
+        <button id="delete" icon="remove" text="{Delete}" warning="{All website data will be lost. Continue?}" />
+    </right>
+    <formline text="{Name}">
+        <textbox bind="name" />
+    </formline>
+    <formline>
+        <checkbox bind="enabled" text="{Enabled}" />
+    </formline>
+    <formline>
+        <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
+    </formline>
+</vc>
