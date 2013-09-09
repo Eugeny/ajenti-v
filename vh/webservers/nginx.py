@@ -17,13 +17,40 @@ class NginxWebserver (object):
         self.config_file_proxy = '/etc/nginx/proxy.conf'
         self.config_vhost_root = '/etc/nginx/conf.d'
 
+    def __generate_website_location(self, ws, location):
+        if location.backend.type == 'static':
+            params = location.backend.params
+            content = TEMPLATE_LOCATION_CONTENT_STATIC % {
+                'root': ('root %s;' % params['root']) if params.get('root', '') else '',
+                'autoindex': 'autoindex on;' if params['autoindex'] else '',
+            }
+
+        if location.backend.type == 'php-fcgi':
+            params = location.backend.params
+            content = TEMPLATE_LOCATION_CONTENT_PHP_FCGI % {
+                'id': location.backend.id,
+            }
+
+        return TEMPLATE_LOCATION % {
+            'pattern': location.pattern,
+            'match': {
+                'exact': '',
+                'regex': '~',
+                'force-regex': '^~',
+            }[location.match],
+            'content': content,
+        }
+
     def __generate_website_config(self, website):
         params = {
             'server_name': (
                 'server_name %s;' % (' '.join(domain.domain for domain in website.domains))
             ) if website.domains else '',
             'maintenance': TEMPLATE_MAINTENANCE if website.maintenance_mode else '',
-            'locations': '',
+            'root': website.root,
+            'locations': (
+                '\n'.join(self.__generate_website_location(website, location) for location in website.locations)
+            ),
         }
         return TEMPLATE_WEBSITE % params
 

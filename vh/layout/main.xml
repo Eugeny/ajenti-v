@@ -1,16 +1,16 @@
 <vc>
     <body>
         <pad>
-            <bind:collection bind="websites" id="websites">
+            <label style="bold" text="{Websites}" />
+            
+            <bind:collection bind="websites" id="websites">                
                 <vc>
                     <dt bind="__items" />
-                    <button bind="__add" icon="plus" text="{Website}" />
+                    <button bind="__add" icon="plus" text="{Create}" />
                 </vc>
-
                 <bind:template>
                    <collapserow>
                         <box>
-                            <right />
                             <hc>
                                 <icon icon="globe" />
                                 <label bind="name" />

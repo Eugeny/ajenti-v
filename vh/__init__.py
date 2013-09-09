@@ -19,6 +19,7 @@ info = PluginInfo(
 
 def init():
     import api
+    import fcgi.phpfpm
     import webservers.nginx
 
     import main
@@ -28,9 +29,3 @@ def init():
     from ajenti.plugins.apache.main import Apache
     manager.blacklist.append(Nginx)
     manager.blacklist.append(Apache)
-
-    """mgr = api.VHManager.get()
-    w = api.Website.create('test')
-    w.domains += [api.WebsiteDomain.create('example.org')]
-    mgr.config.websites = [w]
-    mgr.update_configuration()"""
