@@ -19,8 +19,10 @@ info = PluginInfo(
 
 def init():
     import api
+    import extensions.mysql
     import fcgi.phpfpm
     import webservers.nginx
+    import wsgi.gunicorn
 
     import main
 

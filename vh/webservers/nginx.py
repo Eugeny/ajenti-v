@@ -31,6 +31,12 @@ class NginxWebserver (object):
                 'id': location.backend.id,
             }
 
+        if location.backend.type == 'python-wsgi':
+            params = location.backend.params
+            content = TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI % {
+                'id': location.backend.id,
+            }
+
         return TEMPLATE_LOCATION % {
             'pattern': location.pattern,
             'match': {

@@ -37,5 +37,19 @@
                 </vc>
             </bind:dict>
         </box>
+
+        <!-- Python WSGI -->
+        <box bind:visible="type" bindtransform="lambda x: x == 'python-wsgi'">
+            <bind:dict bind="params">
+                <vc>
+                    <formline text="{Application module}">
+                        <textbox bind="module" />
+                    </formline>
+                    <formline text="{Workers}">
+                        <textbox bind="workers" type="integer" />
+                    </formline>
+                </vc>
+            </bind:dict>
+        </box>
     </box>
 </vc>

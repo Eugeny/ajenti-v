@@ -1,4 +1,4 @@
-<tabs>
+<tabs id="tabs">
     <tab title="{General}">
         <right>
             <button bind="__delete" icon="remove" text="{Delete}" warning="{All website data will be lost. Continue?}" />
@@ -91,8 +91,8 @@
                 <sortabledt bind="__items" />
                 <hc>
                     <dropdown id="create-location-type"
-                        labels="['Static files', 'PHP']"
-                        values="['static', 'php-fcgi']"
+                        labels="[_('Static files'), 'PHP',      'Python WSGI']"
+                        values="['static',          'php-fcgi', 'python-wsgi']"
                     />
 
                     <button id="create-location" icon="plus" text="{Create}" />

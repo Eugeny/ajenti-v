@@ -6,6 +6,7 @@ from ajenti.api import *
 
 from webservers.nginx import NginxWebserver
 from fcgi.phpfpm import PHPFPM
+from wsgi.gunicorn import Gunicorn
 
 
 class Config (object):
@@ -58,6 +59,11 @@ class WebsiteLocation (object):
             'php-fcgi': {
                 'pattern': r'[^/]\.php(/|$)',
                 'match': 'regex',
+                'backend': Backend.create().save(),
+            },
+            'python-wsgi': {
+                'pattern': '/',
+                'match': 'exact',
                 'backend': Backend.create().save(),
             },
         }
@@ -119,6 +125,7 @@ class Website (object):
         self.enabled = j.get('enabled', True)
         self.maintenance_mode = j.get('maintenance_mode', True)
         self.root = j.get('root', '/')
+        self.extension_configs = j.get('extensions', {})
 
     @staticmethod
     def create(name):
@@ -140,6 +147,7 @@ class Website (object):
             'enabled': self.enabled,
             'maintenance_mode': self.maintenance_mode,
             'root': self.root,
+            'extensions': self.extension_configs,
         }
 
 
@@ -154,12 +162,15 @@ class VHManager (object):
             self.config = Config.create()
         self.webserver = NginxWebserver.get()
         self.fcgi_php = PHPFPM.get()
+        self.wsgi_python = Gunicorn.get()
 
     def update_configuration(self):
         self.fcgi_php.create_configuration(self.config)
+        self.wsgi_python.create_configuration(self.config)
         self.webserver.create_configuration(self.config)
 
         self.fcgi_php.apply_configuration()
+        self.wsgi_python.apply_configuration()
         self.webserver.apply_configuration()
 
     def save(self):

@@ -169,3 +169,10 @@ TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
         include fcgi.conf;
         fastcgi_pass unix:/var/run/php-fcgi-%(id)s.sock;
 """
+
+TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
+        proxy_pass http://unix:/var/run/gunicorn-%(id)s.sock;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+"""

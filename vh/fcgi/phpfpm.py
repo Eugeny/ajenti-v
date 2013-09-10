@@ -60,7 +60,7 @@ class PHPFPM (object):
         for location in website.locations:
             if location.backend.type == 'php-fcgi':
                 i += 1
-                location.backend.id = website.slug + '_' + str(i)
+                location.backend.id = website.slug + '-php-fcgi-' + str(i)
                 r += self.__generate_pool(location.backend, location.backend.id)
         return r
 
