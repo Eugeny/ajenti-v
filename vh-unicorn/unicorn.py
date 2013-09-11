@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor

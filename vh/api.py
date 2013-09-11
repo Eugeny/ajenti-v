@@ -62,6 +62,11 @@ class WebsiteLocation (object):
                 'match': 'exact',
                 'backend': Backend.create().save(),
             },
+            'ruby-unicorn': {
+                'pattern': '/',
+                'match': 'exact',
+                'backend': Backend.create().save(),
+            },
         }
         return WebsiteLocation(templates[template])
 
@@ -103,6 +108,15 @@ class Backend (object):
             'type': 'static',
             'params': {}
         })
+
+    @property
+    def typename(self):
+        return {
+            'static': _('Static files'),
+            'python-wsgi': 'Python WSGI',
+            'php-fcgi': 'PHP FastCGI',
+            'ruby-unicorn': 'Ruby Unicorn',
+        }[self.type]
 
     def save(self):
         return {

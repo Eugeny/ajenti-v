@@ -3,7 +3,7 @@ from ajenti.plugins.main.api import SectionPlugin
 from ajenti.ui import on
 from ajenti.ui.binder import Binder
 
-from api import VHManager, Website, WebsiteDomain, WebsitePort, WebsiteLocation
+from api import VHManager, Website, WebsiteDomain, WebsitePort, WebsiteLocation, ApplicationGatewayComponent
 from extensions import BaseExtension
 
 
@@ -52,6 +52,12 @@ class WebsitesPlugin (SectionPlugin):
         self.find('websites').post_item_bind = post_ws_bind
         self.find('websites').post_item_update = post_ws_update
 
+        self.find('create-location-type').labels = []
+        self.find('create-location-type').values = []
+        for g in ApplicationGatewayComponent.get_classes():
+            self.find('create-location-type').labels.append(g.title)
+            self.find('create-location-type').values.append(g.id)
+            
         self.binder.autodiscover()
 
     def on_page_load(self):
