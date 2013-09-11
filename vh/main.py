@@ -4,7 +4,7 @@ from ajenti.ui import on
 from ajenti.ui.binder import Binder
 
 from api import VHManager, Website, WebsiteDomain, WebsitePort, WebsiteLocation
-from extensions.base import BaseExtension
+from extensions import BaseExtension
 
 
 @plugin

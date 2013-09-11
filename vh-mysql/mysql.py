@@ -6,7 +6,7 @@ from ajenti.ui.binder import Binder
 
 from ajenti.plugins.mysql.api import MySQLDB
 from ajenti.plugins.db_common.api import Database, User
-from base import BaseExtension
+from ajenti.plugins.vh.extensions import BaseExtension
 
 
 @plugin

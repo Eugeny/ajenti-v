@@ -3,12 +3,13 @@ import shutil
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
+from ajenti.plugins.vh.api import WebserverComponent
 
 from nginx_templates import *
 
 
 @plugin
-class NginxWebserver (object):
+class NginxWebserver (WebserverComponent):
     def init(self):
         self.config_root = '/etc/nginx'
         self.config_file = '/etc/nginx/nginx.conf'
@@ -37,6 +38,12 @@ class NginxWebserver (object):
                 'id': location.backend.id,
             }
 
+        if location.backend.type == 'ruby-unicorn':
+            params = location.backend.params
+            content = TEMPLATE_LOCATION_CONTENT_RUBY_UNICORN % {
+                'id': location.backend.id,
+            }
+
         return TEMPLATE_LOCATION % {
             'pattern': location.pattern,
             'match': {
@@ -49,6 +56,7 @@ class NginxWebserver (object):
 
     def __generate_website_config(self, website):
         params = {
+            'slug': website.slug,
             'server_name': (
                 'server_name %s;' % (' '.join(domain.domain for domain in website.domains))
             ) if website.domains else '',
@@ -75,4 +83,8 @@ class NginxWebserver (object):
                     .write(self.__generate_website_config(website))
 
     def apply_configuration(self):
-        ServiceMultiplexor.get().get_one('nginx').command('reload')
+        s = ServiceMultiplexor.get().get_one('nginx')
+        if not s.running:
+            s.start()
+        else:
+            s.command('reload')

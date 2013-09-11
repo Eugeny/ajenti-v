@@ -131,6 +131,9 @@ TEMPLATE_WEBSITE = """
 server {
     listen 80;
     %(server_name)s
+
+    access_log /var/log/nginx/%(slug)s.access.log
+    error_log /var/log/nginx/%(slug)s.error.log
     
     root %(root)s;
     index index.html index.htm index.php;
@@ -172,6 +175,13 @@ TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
 
 TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
         proxy_pass http://unix:/var/run/gunicorn-%(id)s.sock;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+"""
+
+TEMPLATE_LOCATION_CONTENT_RUBY_UNICORN = """
+        proxy_pass http://unix:/var/run/unicorn-%(id)s.sock;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

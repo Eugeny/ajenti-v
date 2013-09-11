@@ -1,3 +1,11 @@
+import os
+import shutil
+
+from ajenti.api import *
+from ajenti.plugins.services.api import ServiceMultiplexor
+from ajenti.plugins.vh.api import ApplicationGatewayComponent
+
+
 TEMPLATE_PROCESS = """
 CONFIG = {
     'working_dir': '%(root)s',
@@ -9,15 +17,12 @@ CONFIG = {
 }
 """
 
-import os
-import shutil
-
-from ajenti.api import *
-from ajenti.plugins.services.api import ServiceMultiplexor
-
 
 @plugin
-class Gunicorn (object):
+class Gunicorn (ApplicationGatewayComponent):
+    id = 'python-wsgi'
+    title = 'Python WSGI'
+
     def init(self):
         self.config_dir = '/etc/gunicorn.d/'
 
@@ -42,4 +47,8 @@ class Gunicorn (object):
             self.__generate_website(website)
 
     def apply_configuration(self):
-        ServiceMultiplexor.get().get_one('gunicorn').command('reload')
+        s = ServiceMultiplexor.get().get_one('gunicorn')
+        if not s.running:
+            s.start()
+        else:
+            s.command('reload')

@@ -4,10 +4,6 @@ from slugify import slugify
 
 from ajenti.api import *
 
-from webservers.nginx import NginxWebserver
-from fcgi.phpfpm import PHPFPM
-from wsgi.gunicorn import Gunicorn
-
 
 class Config (object):
     def __init__(self, j):
@@ -151,6 +147,26 @@ class Website (object):
         }
 
 
+@interface
+class Component (object):
+    def create_configuration(self, config):
+        pass
+
+    def apply_configuration(self):
+        pass
+
+
+@interface
+class WebserverComponent (Component):
+    pass
+
+
+@interface
+class ApplicationGatewayComponent (Component):
+    id = None
+    title = None
+
+
 @plugin
 class VHManager (object):
     config_path = '/etc/ajenti/vh.json'
@@ -160,17 +176,17 @@ class VHManager (object):
             self.config = Config(json.load(open(self.config_path)))
         else:
             self.config = Config.create()
-        self.webserver = NginxWebserver.get()
-        self.fcgi_php = PHPFPM.get()
-        self.wsgi_python = Gunicorn.get()
+
+        self.components = ApplicationGatewayComponent.get_all()
+        self.webserver = WebserverComponent.get()
 
     def update_configuration(self):
-        self.fcgi_php.create_configuration(self.config)
-        self.wsgi_python.create_configuration(self.config)
+        for c in self.components:
+            c.create_configuration(self.config)
         self.webserver.create_configuration(self.config)
 
-        self.fcgi_php.apply_configuration()
-        self.wsgi_python.apply_configuration()
+        for c in self.components:
+            c.apply_configuration()
         self.webserver.apply_configuration()
 
     def save(self):

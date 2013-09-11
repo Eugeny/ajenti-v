@@ -1,3 +1,10 @@
+import os
+
+from ajenti.api import *
+from ajenti.plugins.services.api import ServiceMultiplexor
+from ajenti.plugins.vh.api import ApplicationGatewayComponent
+
+
 TEMPLATE_CONFIG_FILE = """
 [global]
 pid = /var/run/php5-fpm.pid
@@ -32,14 +39,12 @@ pm.max_spare_servers = %(sp_max)s
 
 """
 
-import os
-
-from ajenti.api import *
-from ajenti.plugins.services.api import ServiceMultiplexor
-
 
 @plugin
-class PHPFPM (object):
+class PHPFPM (ApplicationGatewayComponent):
+    id = 'php-fcgi'
+    title = 'PHP FastCGI'
+
     def init(self):
         self.config_file = '/etc/php5/fpm/php-fpm.conf'
 
@@ -73,4 +78,8 @@ class PHPFPM (object):
         open(self.config_file, 'w').write(cfg)
 
     def apply_configuration(self):
-        ServiceMultiplexor.get().get_one('php5-fpm').command('reload')
+        s = ServiceMultiplexor.get().get_one('php5-fpm')
+        if not s.running:
+            s.start()
+        else:
+            s.command('reload')
