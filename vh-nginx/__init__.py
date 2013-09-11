@@ -17,3 +17,9 @@ info = PluginInfo(
 def init():
     import nginx
     import nginx_templates
+
+    from ajenti.plugins import manager
+    from ajenti.plugins.nginx.main import Nginx
+    #from ajenti.plugins.apache.main import Apache
+    manager.blacklist.append(Nginx)
+    #manager.blacklist.append(Apache)
