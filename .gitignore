@@ -1,4 +1,5 @@
 *.pyc
 *.coffee.js
 *.m.js
-
+build
+dist

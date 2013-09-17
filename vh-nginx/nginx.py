@@ -26,6 +26,12 @@ class NginxWebserver (WebserverComponent):
                 'autoindex': 'autoindex on;' if params['autoindex'] else '',
             }
 
+        if location.backend.type == 'proxy':
+            params = location.backend.params
+            content = TEMPLATE_LOCATION_CONTENT_PROXY % {
+                'url': params.get('url', 'http://127.0.0.1/'),
+            }
+
         if location.backend.type == 'php-fcgi':
             params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_PHP_FCGI % {

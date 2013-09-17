@@ -9,7 +9,7 @@ DEBIANDIR=$BUILDDIR/DEBIAN
 
 echo Building package $PACKAGE
 
-rm -rf $DISTDIR $BUILDDIR
+rm -rf $BUILDDIR
 mkdir $DISTDIR $BUILDDIR $DEBIANDIR
 
 cat > $DEBIANDIR/control <<END

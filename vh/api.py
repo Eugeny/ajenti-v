@@ -52,6 +52,12 @@ class WebsiteLocation (object):
                 'match': 'exact',
                 'backend': Backend.create().save(),
             },
+            'proxy': {
+                'pattern': '/',
+                'url': '',
+                'match': 'exact',
+                'backend': Backend.create().save(),
+            },
             'php-fcgi': {
                 'pattern': r'[^/]\.php(/|$)',
                 'match': 'regex',
@@ -113,6 +119,7 @@ class Backend (object):
     def typename(self):
         return {
             'static': _('Static files'),
+            'proxy': _('Reverse proxy'),
             'python-wsgi': 'Python WSGI',
             'php-fcgi': 'PHP FastCGI',
             'ruby-unicorn': 'Ruby Unicorn',

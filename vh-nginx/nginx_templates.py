@@ -166,6 +166,13 @@ TEMPLATE_LOCATION_CONTENT_STATIC = """
         %(autoindex)s
 """
 
+TEMPLATE_LOCATION_CONTENT_PROXY = """
+        proxy_pass %(url)s;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+"""
+
 TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
         fastcgi_split_path_info ^(.+?\.php)(/.*)$;
         fastcgi_index index.php;
