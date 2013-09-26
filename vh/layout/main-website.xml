@@ -105,6 +105,9 @@
                         <hc>
                             <icon icon="home" />
                             <label bind="pattern" />
+                            <box binder:context="backend">
+                                <label bind="typename" style="bold" />
+                            </box>
                         </hc>   
                     </box>
 

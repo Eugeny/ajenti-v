@@ -70,7 +70,7 @@ class NginxWebserver (WebserverComponent):
             'root': website.root,
             'locations': (
                 '\n'.join(self.__generate_website_location(website, location) for location in website.locations)
-            ),
+            ) if not website.maintenance_mode else '',
         }
         return TEMPLATE_WEBSITE % params
 

@@ -20,7 +20,7 @@ class MySQLExtension (BaseExtension):
     name = 'MySQL'
 
     def init(self):
-        self.append(self.ui.inflate('vh:ext-mysql'))
+        self.append(self.ui.inflate('vh-mysql:ext'))
         self.binder = Binder(self, self)
         self.binder.autodiscover()
         self.refresh()
@@ -51,6 +51,8 @@ class MySQLExtension (BaseExtension):
                 self.config['name'] += '_'
         
         self.db.query_create(self.config['name'])
+        db = Database()
+        db.name = self.config['name']
 
         while True:
             exists = False
@@ -68,6 +70,7 @@ class MySQLExtension (BaseExtension):
         user.password = self.config['password']
         user.host = 'localhost'
         self.db.query_create_user(user)
+        self.db.query_grant(user, db)
         self.refresh()
 
     @on('delete', 'click')

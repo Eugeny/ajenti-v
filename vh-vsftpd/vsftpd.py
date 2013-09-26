@@ -1,0 +1,101 @@
+import os
+import subprocess
+import shutil
+import tempfile
+import uuid
+
+from ajenti.api import *
+from ajenti.ui.binder import Binder
+
+from ajenti.plugins.services.api import ServiceMultiplexor
+from ajenti.plugins.vh.api import MiscComponent
+from ajenti.plugins.vh.extensions import BaseExtension
+
+
+@plugin
+class VSFTPDExtension (BaseExtension):
+    default_config = {
+        'created': False,
+        'user': None,
+        'password': None,
+    }
+    name = 'FTP'
+
+    def init(self):
+        self.append(self.ui.inflate('vh-vsftpd:ext'))
+        self.binder = Binder(self, self)
+        self.binder.autodiscover()
+
+        if not self.config['created']:
+            self.config['username'] = self.website.slug
+            self.config['password'] = str(uuid.uuid4())
+            self.config['created'] = True
+
+        self.refresh()
+
+    def refresh(self):
+        self.binder.reset().populate()
+        
+    def update(self):
+        pass
+
+
+TEMPLATE_CONFIG = """
+listen=YES
+background=NO
+anonymous_enable=NO
+local_enable=YES
+guest_enable=YES
+virtual_use_local_privs=YES
+pam_service_name=vsftpd_virtual
+user_config_dir=%s
+chroot_local_user=YES
+hide_ids=YES
+"""
+
+TEMPLATE_PAM = """#%%PAM-1.0
+auth    required        pam_userdb.so   db=/etc/vsftpd/users
+account required        pam_userdb.so   db=/etc/vsftpd/users
+session required        pam_loginuid.so
+"""
+
+TEMPLATE_USER = """
+local_root=%(root)s
+"""
+
+
+@plugin
+class VSFTPD (MiscComponent):
+    config_root = '/etc/vsftpd'
+    config_root_users = '/etc/vsftpd.users.d'
+    config_file = '/etc/vsftpd.conf'
+    userdb_path = '/etc/vsftpd/users.db'
+    pam_path = '/etc/pam.d/vsftpd_virtual'
+
+    def create_configuration(self, config):
+        if not os.path.exists(self.config_root):
+            os.mkdir(self.config_root)
+        if os.path.exists(self.config_root_users):
+            shutil.rmtree(self.config_root_users)
+        os.mkdir(self.config_root_users)
+
+        pwfile = tempfile.NamedTemporaryFile(delete=False)
+        pwpath = pwfile.name
+        for website in config.websites:
+            cfg = website.extension_configs.get(VSFTPDExtension.classname)
+            if cfg and cfg['created']:
+                pwfile.write('%s\n%s\n' % (cfg['username'], cfg['password']))
+                open(os.path.join(self.config_root_users, cfg['username']), 'w').write(
+                    TEMPLATE_USER % {
+                        'root': website.root,
+                    }
+                )
+        pwfile.close()
+
+        subprocess.call(['db_load', '-T', '-t', 'hash', '-f', pwpath, self.userdb_path])
+        os.unlink(pwpath)
+        open(self.pam_path, 'w').write(TEMPLATE_PAM)
+        open(self.config_file, 'w').write(TEMPLATE_CONFIG % self.config_root_users)
+
+    def apply_configuration(self):
+        ServiceMultiplexor.get().get_one('vsftpd').restart()

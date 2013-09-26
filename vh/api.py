@@ -135,7 +135,6 @@ class Backend (object):
 class Website (object):
     def __init__(self, j):
         self.name = j['name']
-        self.slug = j.get('slug', slugify(self.name))
         self.domains = [WebsiteDomain(_) for _ in j['domains']]
         self.ports = [WebsitePort(_) for _ in j.get('ports', [])]
         self.locations = [WebsiteLocation(_) for _ in j.get('locations', [])]
@@ -143,6 +142,10 @@ class Website (object):
         self.maintenance_mode = j.get('maintenance_mode', True)
         self.root = j.get('root', '/')
         self.extension_configs = j.get('extensions', {})
+
+    @property
+    def slug(self):
+        return slugify(self.name)
 
     @staticmethod
     def create(name):
@@ -153,11 +156,8 @@ class Website (object):
         })
 
     def save(self):
-        if not self.slug:
-            self.slug = slugify(self.name)
         return {
             'name': self.name,
-            'slug': self.slug,
             'domains': [_.save() for _ in self.domains],
             'ports': [_.save() for _ in self.ports],
             'locations': [_.save() for _ in self.locations],
@@ -188,6 +188,11 @@ class ApplicationGatewayComponent (Component):
     title = None
 
 
+@interface
+class MiscComponent (Component):
+    pass
+
+
 @plugin
 class VHManager (object):
     config_path = '/etc/ajenti/vh.json'
@@ -199,6 +204,7 @@ class VHManager (object):
             self.config = Config.create()
 
         self.components = ApplicationGatewayComponent.get_all()
+        self.components += MiscComponent.get_all()
         self.webserver = WebserverComponent.get()
 
     def update_configuration(self):

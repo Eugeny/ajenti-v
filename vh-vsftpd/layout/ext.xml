@@ -1,0 +1,12 @@
+<bind:dict bind="config">
+    <box>
+        <vc>
+            <formline text="{Username}">
+                <label bind="username" />
+            </formline>
+            <formline text="{Password}">
+                <label bind="password" />
+            </formline>
+        </vc>
+    </box>
+</bind:dict>

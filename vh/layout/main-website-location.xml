@@ -24,6 +24,17 @@
             </bind:dict>
         </box>
 
+        <!-- Proxy -->
+        <box bind:visible="type" bindtransform="lambda x: x == 'proxy'">
+            <bind:dict bind="params">
+                <vc>
+                    <formline text="{URL}">
+                        <textbox bind="url" />
+                    </formline>
+                </vc>
+            </bind:dict>
+        </box>
+
         <!-- PHP FCGI -->
         <box bind:visible="type" bindtransform="lambda x: x == 'php-fcgi'">
             <bind:dict bind="params">
@@ -51,5 +62,17 @@
                 </vc>
             </bind:dict>
         </box>
+
+        <!-- Ruby Unicorn -->
+        <box bind:visible="type" bindtransform="lambda x: x == 'ruby-unicorn'">
+            <bind:dict bind="params">
+                <vc>
+                    <formline text="{Workers}">
+                        <textbox bind="workers" type="integer" />
+                    </formline>
+                </vc>
+            </bind:dict>
+        </box>
+
     </box>
 </vc>

@@ -26,11 +26,11 @@ class WebsitesPlugin (SectionPlugin):
 
         def post_ws_bind(object, collection, item, ui):
             def create_location():
+                self.binder.update()
                 t = ui.find('create-location-type').value
                 l = WebsiteLocation.create(template=t)
                 l.backend.type = t
                 item.locations.append(l)
-                self.binder.update()
                 self.refresh()
             ui.find('create-location').on('click', create_location)
 

@@ -1,0 +1,7 @@
+PACKAGE=ajenti-v-vsftpd
+VERSION=0.1
+DEPENDS=ajenti-v, vsftpd
+PROVIDES=ajenti-v-ftp
+DESCRIPTION="VSFTPD support for Ajenti V"
+read -d '' POSTINST <<END
+END

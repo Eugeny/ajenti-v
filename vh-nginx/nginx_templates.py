@@ -132,8 +132,8 @@ server {
     listen 80;
     %(server_name)s
 
-    access_log /var/log/nginx/%(slug)s.access.log
-    error_log /var/log/nginx/%(slug)s.error.log
+    access_log /var/log/nginx/%(slug)s.access.log;
+    error_log /var/log/nginx/%(slug)s.error.log;
     
     root %(root)s;
     index index.html index.htm index.php;
