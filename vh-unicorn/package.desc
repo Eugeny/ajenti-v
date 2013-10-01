@@ -1,7 +1,7 @@
-PACKAGE=ajenti-v-unicorn
+PACKAGE=ajenti-v-ruby-unicorn
 VERSION=0.1
-DEPENDS=ajenti-v, unicorn
-PROVIDES=ajenti-v-appgate, ajenti-v-ruby
+DEPENDS="ajenti-v, unicorn"
+PROVIDES=ajenti-v-appgate
 DESCRIPTION="Ruby support for Ajenti V (via Unicorn)"
 read -d '' POSTINST <<END
 END

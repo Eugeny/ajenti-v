@@ -1,6 +1,7 @@
 PACKAGE=ajenti-v
 VERSION=0.1
-DEPENDS=ajenti,ajenti-v-webserver
+DEPENDS="ajenti, ajenti-v-webserver"
+PROVIDES=ajenti-v-core
 DESCRIPTION="Virtual hosting solution for Ajenti"
 read -d '' POSTINST <<END
 END

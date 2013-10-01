@@ -9,8 +9,8 @@ DEBIANDIR=$BUILDDIR/DEBIAN
 
 echo Building package $PACKAGE
 
-rm -rf $BUILDDIR
-mkdir $DISTDIR $BUILDDIR $DEBIANDIR
+rm -rf $BUILDDIR > /dev/null
+mkdir $DISTDIR $BUILDDIR $DEBIANDIR 2> /dev/null
 
 cat > $DEBIANDIR/control <<END
 Source: $PACKAGE
@@ -31,7 +31,7 @@ echo "$POSTINST" > $DEBIANDIR/postinst
 chmod 755 $DEBIANDIR/postinst
 
 mkdir -p $BUILDDIR/$PLUGINDIR/$PLUGIN
-cp -rv $PLUGIN/* $BUILDDIR/$PLUGINDIR/$PLUGIN
+cp -r $PLUGIN/* $BUILDDIR/$PLUGINDIR/$PLUGIN
 find $BUILDDIR -name '*.pyc' -delete
 
 dpkg-deb -b $BUILDDIR $DISTDIR/"$PACKAGE"_"$VERSION".deb
