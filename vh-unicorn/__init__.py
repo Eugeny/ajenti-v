@@ -16,4 +16,7 @@ info = PluginInfo(
 
 
 def init():
+    from ajenti.plugins.vh import destroyed_configs
+    destroyed_configs.append('unicorn')
+
     import unicorn

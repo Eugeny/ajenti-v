@@ -1,3 +1,5 @@
+import logging
+
 from ajenti.api import *
 from ajenti.plugins.main.api import SectionPlugin
 from ajenti.ui import on
@@ -14,9 +16,25 @@ class WebsitesPlugin (SectionPlugin):
         self.icon = 'globe'
         self.category = 'Web'
 
+        self.manager = VHManager.get()
+
+        if not self.manager.is_configured:
+            from ajenti.plugins.vh import destroyed_configs
+            self.append(self.ui.inflate('vh:not-configured'))
+            self.find('destroyed-configs').text = ', '.join(destroyed_configs)
+        else:
+            self.post_init()
+
+    @on('initial-enable', 'click')
+    def on_initial_enable(self):
+        self.post_init()
+        self.manager.save()
+        self.refresh()
+
+    def post_init(self):
+        self.empty()
         self.append(self.ui.inflate('vh:main'))
 
-        self.manager = VHManager.get()
         self.binder = Binder(self.manager.config, self)
         self.find('websites').new_item = lambda c: Website.create('New Website')
         self.find('domains').new_item = lambda c: WebsiteDomain.create('example.com')
@@ -49,8 +67,18 @@ class WebsitesPlugin (SectionPlugin):
             for ext in item.extensions:
                 item.extension_configs[ext.classname] = ext.config
 
+        def ws_delete(ws, collection):
+            for ext in ws.extensions:
+                try:
+                    ext.on_destroy()
+                except Exception, e:
+                    logging.error(str(e))
+            collection.remove(ws)
+            self.save()
+
         self.find('websites').post_item_bind = post_ws_bind
         self.find('websites').post_item_update = post_ws_update
+        self.find('websites').delete_item = ws_delete
 
         self.find('create-location-type').labels = []
         self.find('create-location-type').values = []
@@ -64,7 +92,8 @@ class WebsitesPlugin (SectionPlugin):
         self.refresh()
 
     def refresh(self):
-        self.binder.reset().populate()
+        if self.manager.is_configured:
+            self.binder.reset().populate()
 
     @on('save', 'click')
     def save(self):

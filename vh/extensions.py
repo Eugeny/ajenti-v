@@ -14,3 +14,6 @@ class BaseExtension (UIElement):
 
     def update(self):
         pass
+
+    def on_destroy(self):
+        pass

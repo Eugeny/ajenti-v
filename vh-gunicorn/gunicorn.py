@@ -44,7 +44,8 @@ class Gunicorn (ApplicationGatewayComponent):
         shutil.rmtree(self.config_dir)
         os.mkdir(self.config_dir)
         for website in config.websites:
-            self.__generate_website(website)
+            if website.enabled:
+                self.__generate_website(website)
 
     def apply_configuration(self):
         s = ServiceMultiplexor.get().get_one('gunicorn')

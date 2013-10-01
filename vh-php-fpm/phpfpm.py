@@ -73,7 +73,7 @@ class PHPFPM (ApplicationGatewayComponent):
         if os.path.exists(self.config_file):
             os.unlink(self.config_file)
         cfg = TEMPLATE_CONFIG_FILE % {
-            'pools': '\n'.join(self.__generate_website(_) for _ in config.websites)
+            'pools': '\n'.join(self.__generate_website(_) for _ in config.websites if _.enabled)
         }
         open(self.config_file, 'w').write(cfg)
 

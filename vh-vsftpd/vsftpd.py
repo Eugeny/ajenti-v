@@ -82,14 +82,15 @@ class VSFTPD (MiscComponent):
         pwfile = tempfile.NamedTemporaryFile(delete=False)
         pwpath = pwfile.name
         for website in config.websites:
-            cfg = website.extension_configs.get(VSFTPDExtension.classname)
-            if cfg and cfg['created']:
-                pwfile.write('%s\n%s\n' % (cfg['username'], cfg['password']))
-                open(os.path.join(self.config_root_users, cfg['username']), 'w').write(
-                    TEMPLATE_USER % {
-                        'root': website.root,
-                    }
-                )
+            if website.enabled:
+                cfg = website.extension_configs.get(VSFTPDExtension.classname)
+                if cfg and cfg['created']:
+                    pwfile.write('%s\n%s\n' % (cfg['username'], cfg['password']))
+                    open(os.path.join(self.config_root_users, cfg['username']), 'w').write(
+                        TEMPLATE_USER % {
+                            'root': website.root,
+                        }
+                    )
         pwfile.close()
 
         subprocess.call(['db_load', '-T', '-t', 'hash', '-f', pwpath, self.userdb_path])

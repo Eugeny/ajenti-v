@@ -199,8 +199,10 @@ class VHManager (object):
 
     def init(self):
         if os.path.exists(self.config_path):
+            self.is_configured = True
             self.config = Config(json.load(open(self.config_path)))
         else:
+            self.is_configured = False
             self.config = Config.create()
 
         self.components = ApplicationGatewayComponent.get_all()
@@ -219,3 +221,4 @@ class VHManager (object):
     def save(self):
         j = json.dumps(self.config.save(), indent=4)
         open(self.config_path, 'w').write(j)
+        self.is_configured = True

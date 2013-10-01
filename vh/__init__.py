@@ -7,7 +7,7 @@ ajenti.edition += '+vh'
 
 
 info = PluginInfo(
-    title='Ajenti VH Virtual Hosting',
+    title='Ajenti V Virtual Hosting',
     icon='globe',
     dependencies=[
         PluginDependency('main'),
@@ -16,6 +16,7 @@ info = PluginInfo(
     ],
 )
 
+destroyed_configs = []
 
 def init():
     import api

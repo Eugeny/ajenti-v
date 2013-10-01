@@ -15,6 +15,9 @@ info = PluginInfo(
 
 
 def init():
+    from ajenti.plugins.vh import destroyed_configs
+    destroyed_configs.append('nginx')
+
     import nginx
     import nginx_templates
 

@@ -2,13 +2,13 @@
     <box bind:visible="created">
         <vc>
             <formline text="{Database name}">
-                <label bind="name" />
+                <textbox readonly="True" bind="name" />
             </formline>
             <formline text="{Username}">
-                <label bind="username" />
+                <textbox readonly="True" bind="username" />
             </formline>
             <formline text="{Password}">
-                <label bind="password" />
+                <textbox readonly="True" bind="password" />
             </formline>
             <button icon="remove" text="{Destroy}" id="delete" warning="{Database contents will be deleted!}" />
         </vc>

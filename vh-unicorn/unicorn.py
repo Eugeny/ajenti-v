@@ -64,13 +64,14 @@ class Gunicorn (ApplicationGatewayComponent):
                 sup.tree.programs.remove(p)
 
         for website in config.websites:
-            for location in website.locations:
-                if location.backend.type == 'ruby-unicorn':
-                    self.__generate_website(website)
-                    p = ProgramData()
-                    p.name = location.backend.id
-                    p.command = 'unicorn_rails -E production -c %s/%s.rb' % (self.config_dir, location.backend.id)
-                    sup.tree.programs.append(p)
+            if website.enabled:
+                for location in website.locations:
+                    if location.backend.type == 'ruby-unicorn':
+                        self.__generate_website(website)
+                        p = ProgramData()
+                        p.name = location.backend.id
+                        p.command = 'unicorn_rails -E production -c %s/%s.rb' % (self.config_dir, location.backend.id)
+                        sup.tree.programs.append(p)
 
         sup.save()
 

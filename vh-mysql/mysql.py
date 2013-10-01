@@ -32,6 +32,10 @@ class MySQLExtension (BaseExtension):
     def update(self):
         self.binder.update()
 
+    def on_destroy(self):
+        if self.config['created']:
+            self.on_delete()
+
     @on('create', 'click')
     def on_create(self):
         self.config['username'] = self.website.slug
