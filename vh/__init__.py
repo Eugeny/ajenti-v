@@ -12,7 +12,6 @@ info = PluginInfo(
     dependencies=[
         PluginDependency('main'),
         PluginDependency('services'),
-        ModuleDependency('slugify'),
     ],
 )
 

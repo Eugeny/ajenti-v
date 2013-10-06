@@ -12,6 +12,10 @@ class BaseExtension (UIElement):
         self.website = website
         self.config = config or self.default_config
 
+    @staticmethod
+    def selftest():
+        pass
+
     def update(self):
         pass
 

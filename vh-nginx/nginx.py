@@ -50,6 +50,12 @@ class NginxWebserver (WebserverComponent):
                 'id': location.backend.id,
             }
 
+        if location.backend.type == 'nodejs':
+            params = location.backend.params
+            content = TEMPLATE_LOCATION_CONTENT_NODEJS % {
+                'port': location.backend.params.get('port', 8000),
+            }
+
         return TEMPLATE_LOCATION % {
             'pattern': location.pattern,
             'match': {

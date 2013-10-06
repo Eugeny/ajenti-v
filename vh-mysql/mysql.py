@@ -26,6 +26,13 @@ class MySQLExtension (BaseExtension):
         self.refresh()
         self.db = MySQLDB.get()
 
+    @staticmethod
+    def selftest():
+        try:
+            MySQLDB.get().query_databases()
+        except:
+            pass
+
     def refresh(self):
         self.binder.reset().populate()
         

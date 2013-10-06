@@ -11,6 +11,7 @@ events {
 http {
     include mime.conf;
     include proxy.conf;
+    include fcgi.conf;
 
     default_type application/octet-stream;
 
@@ -178,6 +179,7 @@ TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
         fastcgi_index index.php;
         include fcgi.conf;
         fastcgi_pass unix:/var/run/php-fcgi-%(id)s.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 """
 
 TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
@@ -189,6 +191,13 @@ TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
 
 TEMPLATE_LOCATION_CONTENT_RUBY_UNICORN = """
         proxy_pass http://unix:/var/run/unicorn-%(id)s.sock;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+"""
+
+TEMPLATE_LOCATION_CONTENT_NODEJS = """
+        proxy_pass http://127.0.0.1:%(port)i;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

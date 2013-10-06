@@ -48,7 +48,6 @@ class WebsiteLocation (object):
         templates = {
             'static': {
                 'pattern': '/',
-                'root': '',
                 'match': 'exact',
                 'backend': Backend.create().save(),
             },
@@ -69,6 +68,11 @@ class WebsiteLocation (object):
                 'backend': Backend.create().save(),
             },
             'ruby-unicorn': {
+                'pattern': '/',
+                'match': 'exact',
+                'backend': Backend.create().save(),
+            },
+            'nodejs': {
                 'pattern': '/',
                 'match': 'exact',
                 'backend': Backend.create().save(),
@@ -117,13 +121,9 @@ class Backend (object):
 
     @property
     def typename(self):
-        return {
-            'static': _('Static files'),
-            'proxy': _('Reverse proxy'),
-            'python-wsgi': 'Python WSGI',
-            'php-fcgi': 'PHP FastCGI',
-            'ruby-unicorn': 'Ruby Unicorn',
-        }[self.type]
+        for cls in ApplicationGatewayComponent.get_classes():
+            if cls.id == self.type:
+                return cls.title
 
     def save(self):
         return {

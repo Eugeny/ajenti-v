@@ -74,5 +74,19 @@
             </bind:dict>
         </box>
 
+        <!-- Node.JS -->
+        <box bind:visible="type" bindtransform="lambda x: x == 'nodejs'">
+            <bind:dict bind="params">
+                <vc>
+                    <formline text="{App path}">
+                        <textbox bind="path" />
+                    </formline>
+                    <formline text="{HTTP port}">
+                        <textbox bind="port" type="integer" />
+                    </formline>
+                </vc>
+            </bind:dict>
+        </box>
+
     </box>
 </vc>

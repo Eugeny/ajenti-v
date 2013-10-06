@@ -89,6 +89,8 @@ class WebsitesPlugin (SectionPlugin):
         self.binder.autodiscover()
 
     def on_page_load(self):
+        for ext in BaseExtension.get_classes():
+            ext.selftest()
         self.refresh()
 
     def refresh(self):
