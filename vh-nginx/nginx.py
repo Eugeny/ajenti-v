@@ -50,6 +50,12 @@ class NginxWebserver (WebserverComponent):
                 'id': location.backend.id,
             }
 
+        if location.backend.type == 'ruby-puma':
+            params = location.backend.params
+            content = TEMPLATE_LOCATION_CONTENT_RUBY_PUMA % {
+                'id': location.backend.id,
+            }
+
         if location.backend.type == 'nodejs':
             params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_NODEJS % {

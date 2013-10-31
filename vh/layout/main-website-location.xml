@@ -74,6 +74,23 @@
             </bind:dict>
         </box>
 
+        <!-- Ruby Puma -->
+        <box bind:visible="type" bindtransform="lambda x: x == 'ruby-puma'">
+            <bind:dict bind="params">
+                <vc>
+                    <formline text="{Workers}">
+                        <textbox bind="workers" type="integer" />
+                    </formline>
+                    <formline text="{Environment}">
+                        <dropdown bind="environment" 
+                            labels="['development', 'production']"
+                            values="['development', 'production']"
+                    />
+                    </formline>
+                </vc>
+            </bind:dict>
+        </box>
+
         <!-- Node.JS -->
         <box bind:visible="type" bindtransform="lambda x: x == 'nodejs'">
             <bind:dict bind="params">

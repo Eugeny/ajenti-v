@@ -46,39 +46,20 @@ class WebsiteLocation (object):
     @staticmethod
     def create(template=None):
         templates = {
-            'static': {
-                'pattern': '/',
-                'match': 'exact',
-                'backend': Backend.create().save(),
-            },
-            'proxy': {
-                'pattern': '/',
-                'url': '',
-                'match': 'exact',
-                'backend': Backend.create().save(),
-            },
             'php-fcgi': {
                 'pattern': r'[^/]\.php(/|$)',
                 'match': 'regex',
                 'backend': Backend.create().save(),
             },
-            'python-wsgi': {
-                'pattern': '/',
-                'match': 'exact',
-                'backend': Backend.create().save(),
-            },
-            'ruby-unicorn': {
-                'pattern': '/',
-                'match': 'exact',
-                'backend': Backend.create().save(),
-            },
-            'nodejs': {
-                'pattern': '/',
-                'match': 'exact',
-                'backend': Backend.create().save(),
-            },
         }
-        return WebsiteLocation(templates[template])
+
+        default_template = {
+            'pattern': '/',
+            'match': 'exact',
+            'backend': Backend.create().save(),
+        }
+        
+        return WebsiteLocation(templates[template] if template in templates else default_template)
 
     def save(self):
         return {

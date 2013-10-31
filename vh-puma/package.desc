@@ -1,0 +1,7 @@
+PACKAGE=ajenti-v-ruby-puma
+VERSION=0.1
+DEPENDS="ajenti-v"
+PROVIDES=ajenti-v-appgate
+DESCRIPTION="Ruby support for Ajenti V (via Puma.io)"
+read -d '' POSTINST <<END
+END
