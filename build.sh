@@ -7,3 +7,4 @@ find -name '*.pyc' | xargs rm
 ./deb.sh vh-php-fpm
 ./deb.sh vh-unicorn
 ./deb.sh vh-vsftpd
+./deb.sh vh-puma
