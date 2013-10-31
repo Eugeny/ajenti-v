@@ -27,7 +27,7 @@ class Puma (ApplicationGatewayComponent):
         sup = SupervisorConfig(path='/etc/supervisor/supervisord.conf')
         sup.load()
         for p in sup.tree.programs:
-            if p.command.startswith('puma'):
+            if p.command.startswith('puma') or p.command.startswith('bundle exec puma'):
                 sup.tree.programs.remove(p)
 
         for website in config.websites:
@@ -37,11 +37,14 @@ class Puma (ApplicationGatewayComponent):
                         self.__generate_website(website)
                         p = ProgramData()
                         p.name = location.backend.id
+                        bundler = location.backend.params.get('bundler', True)
                         workers = location.backend.params.get('workers', 4)
                         environment = location.backend.params.get('environment', 4)
                         p.command = 'puma -e %s -t %i -b unix:///var/run/puma-%s.sock' % (
                             environment, workers, location.backend.id
                         )
+                        if bundler:
+                            p.command = 'bundle exec ' + p.command
                         p.environment = 'HOME="%s"' % website.root
                         p.directory = website.root
                         sup.tree.programs.append(p)
