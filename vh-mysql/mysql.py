@@ -47,7 +47,6 @@ class MySQLExtension (BaseExtension):
     def on_create(self):
         self.config['username'] = self.website.slug
         self.config['password'] = str(uuid.uuid4())
-        self.config['created'] = True
         self.config['name'] = self.website.slug
 
         while True:
@@ -61,7 +60,15 @@ class MySQLExtension (BaseExtension):
             else:
                 self.config['name'] += '_'
         
-        self.db.query_create(self.config['name'])
+        try:
+            self.db.query_create(self.config['name'])
+        except Exception, e:
+            self.context.notify('error', str(e))
+            self.context.launch('configure-plugin', plugin=self.db)
+
+
+        self.config['created'] = True
+
         db = Database()
         db.name = self.config['name']
 
