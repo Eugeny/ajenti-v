@@ -88,12 +88,21 @@ class MySQLExtension (BaseExtension):
     def on_delete(self):
         db = Database()
         db.name = self.config['name']
-        self.db.query_drop(db)
+        try:
+            self.db.query_drop(db)
+        except Exception, e:
+            # I'm gonna burn in hell for this...
+            if not 'ERROR 1008' in e:
+                raise e
         
         user = User()
         user.name = self.config['username']
         user.host = 'localhost'
         
-        self.db.query_drop_user(user)
+        try:
+            self.db.query_drop_user(user)
+        except Exception, e:
+            if not 'ERROR 1008' in e:
+                raise e
         self.config['created'] = False
         self.refresh()
