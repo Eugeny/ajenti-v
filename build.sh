@@ -1,4 +1,5 @@
 #!/bin/bash
+rm dist/*
 find -name '*.pyc' | xargs rm 
 ./deb.sh vh
 ./deb.sh vh-gunicorn

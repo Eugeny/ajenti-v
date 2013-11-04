@@ -1,4 +1,5 @@
 import logging
+import os
 
 from ajenti.api import *
 from ajenti.plugins.main.api import SectionPlugin
@@ -52,6 +53,8 @@ class WebsitesPlugin (SectionPlugin):
                 self.refresh()
             ui.find('create-location').on('click', create_location)
 
+            # Extensions
+            
             if hasattr(item, 'extensions'):
                 for ext in item.extensions:
                     ext._ui_container.delete()
@@ -62,6 +65,44 @@ class WebsitesPlugin (SectionPlugin):
                 ext._ui_container = self.ui.create('tab', children=[ext], title=ext.name)
                 item.extensions.append(ext)
                 ui.find('tabs').append(ext._ui_container)
+
+            # Root creator
+
+            ui.find('root-not-created').visible = not os.path.exists(item.root)
+
+            def create_root():
+                try:
+                    os.mkdir(item.root)
+                    self.save()
+                except:
+                    pass
+
+            ui.find('create-root-directory').on('click', create_root)
+            ui.find('set-path').on('click', self.save)
+
+            # Downloader
+
+            def download():
+                url = ui.find('download-url').value
+                self.save()
+                tmppath = '/tmp/ajenti-v-download'
+                script = 'wget "%s" -O "%s" ' % (url, tmppath)
+                if url.lower().endswith('.tar.gz') or url.lower().endswith('.tgz'):
+                    script += '&& tar xf "%s" -C "%s"' % (tmppath, item.root)
+                elif url.lower().endswith('.zip'):
+                    script += '&& unzip "%s" -d "%s"' % (tmppath, item.root)
+
+                def callback():
+                    self.save()
+                    self.activate()
+                    if os.path.exists(tmppath):
+                        os.unlink(tmppath)
+                    self.context.notify('info', _('Download complete'))
+
+                self.context.launch('terminal', command=script, callback=callback)
+
+            ui.find('download').on('click', download)
+
 
         def post_ws_update(object, collection, item, ui):
             for ext in item.extensions:
@@ -82,7 +123,7 @@ class WebsitesPlugin (SectionPlugin):
 
         self.find('create-location-type').labels = []
         self.find('create-location-type').values = []
-        for g in ApplicationGatewayComponent.get_classes():
+        for g in sorted(ApplicationGatewayComponent.get_classes(), key=lambda x: x.title):
             self.find('create-location-type').labels.append(g.title)
             self.find('create-location-type').values.append(g.id)
             
@@ -95,7 +136,7 @@ class WebsitesPlugin (SectionPlugin):
 
     def refresh(self):
         if self.manager.is_configured:
-            self.binder.reset().populate()
+            self.binder.unpopulate().populate()
 
     @on('save', 'click')
     def save(self):

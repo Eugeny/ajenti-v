@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v
-VERSION=0.1.3
+VERSION=0.1.4
 DEPENDS="ajenti, ajenti-v-webserver, python-unidecode"
 PROVIDES=ajenti-v-core
 DESCRIPTION="Virtual hosting solution for Ajenti"

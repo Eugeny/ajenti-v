@@ -3,18 +3,40 @@
         <right>
             <button bind="__delete" icon="remove" text="{Delete}" warning="{All website data will be lost. Continue?}" />
         </right>
-        
-        <formline text="{Name}">
-            <textbox bind="name" />
-        </formline>
-        
-        <formline>
-            <checkbox bind="enabled" text="{Enabled}" />
-        </formline>
-        
-        <formline>
-            <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
-        </formline>
+
+        <formgroup text="{General}">
+            <formline text="{Name}">
+                <textbox bind="name" />
+            </formline>
+            
+            <formline>
+                <checkbox bind="enabled" text="{Enabled}" />
+            </formline>
+            
+            <formline>
+                <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
+            </formline>
+        </formgroup>
+
+        <formgroup text="{Website files}">
+            <formline text="{Path}">
+                <vc>
+                    <hc>
+                        <pathbox bind="root" directory="True" />        
+                        <button icon="ok" text="{Set}" id="set-path" />
+                    </hc>
+                    <vc id="root-not-created">
+                        <button text="{Create directory}" style="normal big" id="create-root-directory" />
+                    </vc>
+                </vc>
+            </formline>
+            <formline text="{From URL}">
+                <vc>
+                    <textbox id="download-url" />
+                    <button icon="download-alt" text="{Download and unpack}" id="download" style="normal big" />
+                </vc>
+            </formline>
+        </formgroup>
     </tab>
 
     <tab title="{Identification}">
@@ -82,10 +104,6 @@
     </tab>
 
     <tab title="{Content}">
-        <formline text="{Website root}">
-            <pathbox bind="root" directory="True" />        
-        </formline>
-                    
         <bind:collection bind="locations" id="locations">
             <vc>
                 <sortabledt bind="__items" />

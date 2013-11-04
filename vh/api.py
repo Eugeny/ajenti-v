@@ -121,7 +121,7 @@ class Website (object):
         self.locations = [WebsiteLocation(_) for _ in j.get('locations', [])]
         self.enabled = j.get('enabled', True)
         self.maintenance_mode = j.get('maintenance_mode', True)
-        self.root = j.get('root', '/')
+        self.root = j.get('root', '/srv/new-website')
         self.extension_configs = j.get('extensions', {})
 
     @property
