@@ -17,6 +17,7 @@ class NginxWebserver (WebserverComponent):
         self.config_file_fastcgi = '/etc/nginx/fcgi.conf'
         self.config_file_proxy = '/etc/nginx/proxy.conf'
         self.config_vhost_root = '/etc/nginx/conf.d'
+        self.config_custom_root = '/etc/nginx.custom.d'
 
     def __generate_website_location(self, ws, location):
         if location.backend.type == 'static':
@@ -90,6 +91,10 @@ class NginxWebserver (WebserverComponent):
         shutil.rmtree(self.config_root)
         os.mkdir(self.config_root)
         os.mkdir(self.config_vhost_root)
+
+        if not os.path.exists(self.config_custom_root):
+            os.mkdir(self.config_custom_root)
+            
         open(self.config_file, 'w').write(TEMPLATE_CONFIG_FILE)
         open(self.config_file_mime, 'w').write(TEMPLATE_CONFIG_MIME)
         open(self.config_file_fastcgi, 'w').write(TEMPLATE_CONFIG_FCGI)

@@ -30,6 +30,7 @@ http {
     server_names_hash_bucket_size 128;
 
     include conf.d/*.conf;
+    include /etc/nginx.custom.d/*.conf;
 }
 """ % {
     'log_root': '/var/log/nginx',
