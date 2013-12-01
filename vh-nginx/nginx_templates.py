@@ -1,33 +1,49 @@
 TEMPLATE_CONFIG_FILE = """
 user %(user)s %(user)s;
-worker_processes 5;
 pid /var/run/nginx.pid;
-worker_rlimit_nofile 8192;
+worker_rlimit_nofile 100000;
  
 events {
     worker_connections  4096;
+    multi_accept on;
 }
  
 http {
-    include mime.conf;
-    include proxy.conf;
-    include fcgi.conf;
-
     default_type application/octet-stream;
 
-    access_log %(log_root)s/access.log;
-    error_log  %(log_root)s/error.log;
+    access_log off;
+    error_log  %(log_root)s/error.log crit;
  
     sendfile on;
     tcp_nopush on;
-    tcp_nodelay on;
-    keepalive_timeout 65;
+
+    keepalive_timeout 20;
+    client_header_timeout 20;
+    client_body_timeout 20;
+    reset_timedout_connection on;
+    send_timeout 20;
+
     types_hash_max_size 2048;
 
     gzip on;
     gzip_disable "msie6";
+    gzip_proxied any;
+    gzip_min_length 256;
+    gzip_comp_level 4;
 
     server_names_hash_bucket_size 128;
+
+    include mime.conf;
+    default_type text/html;
+    charset UTF-8;
+
+    open_file_cache max=100000 inactive=20s; 
+    open_file_cache_valid 30s; 
+    open_file_cache_min_uses 2;
+    open_file_cache_errors on;
+
+    include proxy.conf;
+    include fcgi.conf;
 
     include conf.d/*.conf;
     include /etc/nginx.custom.d/*.conf;
