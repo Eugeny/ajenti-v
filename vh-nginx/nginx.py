@@ -20,51 +20,47 @@ class NginxWebserver (WebserverComponent):
         self.config_custom_root = '/etc/nginx.custom.d'
 
     def __generate_website_location(self, ws, location):
+        params = location.backend.params
+        
         if location.backend.type == 'static':
-            params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_STATIC % {
                 'root': ('root %s;' % params['root']) if params.get('root', '') else '',
                 'autoindex': 'autoindex on;' if params['autoindex'] else '',
             }
 
         if location.backend.type == 'proxy':
-            params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_PROXY % {
                 'url': params.get('url', 'http://127.0.0.1/'),
             }
 
         if location.backend.type == 'php-fcgi':
-            params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_PHP_FCGI % {
                 'id': location.backend.id,
             }
 
         if location.backend.type == 'python-wsgi':
-            params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI % {
                 'id': location.backend.id,
             }
 
         if location.backend.type == 'ruby-unicorn':
-            params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_RUBY_UNICORN % {
                 'id': location.backend.id,
             }
 
         if location.backend.type == 'ruby-puma':
-            params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_RUBY_PUMA % {
                 'id': location.backend.id,
             }
 
         if location.backend.type == 'nodejs':
-            params = location.backend.params
             content = TEMPLATE_LOCATION_CONTENT_NODEJS % {
                 'port': location.backend.params.get('port', 8000),
             }
 
         return TEMPLATE_LOCATION % {
             'pattern': location.pattern,
+            'custom_conf': location.custom_conf,
             'match': {
                 'exact': '',
                 'regex': '~',
@@ -81,6 +77,7 @@ class NginxWebserver (WebserverComponent):
             ) if website.domains else '',
             'maintenance': TEMPLATE_MAINTENANCE if website.maintenance_mode else '',
             'root': website.root,
+            'custom_conf': website.custom_conf,
             'locations': (
                 '\n'.join(self.__generate_website_location(website, location) for location in website.locations)
             ) if not website.maintenance_mode else '',

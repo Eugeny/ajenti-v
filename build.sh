@@ -9,4 +9,5 @@ find -name '*.pyc' | xargs rm
 ./deb.sh vh-unicorn
 ./deb.sh vh-vsftpd
 ./deb.sh vh-puma
+./deb.sh vh-nodejs
 rm -r build

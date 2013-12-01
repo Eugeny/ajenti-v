@@ -16,6 +16,10 @@
             <formline>
                 <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
             </formline>
+
+            <formline text="{Custom configuration}">
+                <codearea bind="custom_conf" width="300" height="150" />
+            </formline>
         </formgroup>
 
         <formgroup text="{Website files}">

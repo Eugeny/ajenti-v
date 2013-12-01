@@ -9,7 +9,7 @@ info = PluginInfo(
     dependencies=[
         PluginDependency('vh'),
         PluginDependency('services'),
-        BinaryDependency('nginx'),
+        #BinaryDependency('nginx'),
     ],
 )
 

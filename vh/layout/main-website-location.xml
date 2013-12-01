@@ -109,4 +109,8 @@
         </box>
 
     </box>
+    
+    <formline text="{Custom configuration}">
+        <codearea bind="custom_conf" width="300" height="150" />
+    </formline>
 </vc>

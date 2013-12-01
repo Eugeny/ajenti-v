@@ -42,6 +42,7 @@ class WebsiteLocation (object):
         self.pattern = j['pattern']
         self.match = j['match']
         self.backend = Backend(j['backend'])
+        self.custom_conf = j.get('custom_conf', '')
 
     @staticmethod
     def create(template=None):
@@ -66,6 +67,7 @@ class WebsiteLocation (object):
             'pattern': self.pattern,
             'match': self.match,
             'backend': self.backend.save(),
+            'custom_conf': self.custom_conf,
         }
 
 
@@ -123,6 +125,7 @@ class Website (object):
         self.maintenance_mode = j.get('maintenance_mode', True)
         self.root = j.get('root', '/srv/new-website')
         self.extension_configs = j.get('extensions', {})
+        self.custom_conf = j.get('custom_conf', '')
 
     @property
     def slug(self):
@@ -146,6 +149,7 @@ class Website (object):
             'maintenance_mode': self.maintenance_mode,
             'root': self.root,
             'extensions': self.extension_configs,
+            'custom_conf': self.custom_conf,
         }
 
 

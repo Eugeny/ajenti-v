@@ -140,6 +140,8 @@ server {
     root %(root)s;
     index index.html index.htm index.php;
 
+    %(custom_conf)s
+
     %(maintenance)s
     %(locations)s 
 }
@@ -159,6 +161,7 @@ TEMPLATE_MAINTENANCE = """
 
 TEMPLATE_LOCATION = """
     location %(match)s %(pattern)s {
+        %(custom_conf)s
         %(content)s
     }
 """
