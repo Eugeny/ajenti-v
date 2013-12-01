@@ -24,7 +24,6 @@ class NginxWebserver (WebserverComponent):
         
         if location.backend.type == 'static':
             content = TEMPLATE_LOCATION_CONTENT_STATIC % {
-                'root': ('root %s;' % params['root']) if params.get('root', '') else '',
                 'autoindex': 'autoindex on;' if params['autoindex'] else '',
             }
 
@@ -61,6 +60,7 @@ class NginxWebserver (WebserverComponent):
         return TEMPLATE_LOCATION % {
             'pattern': location.pattern,
             'custom_conf': location.custom_conf,
+            'path': ('root %s;' % location.path) if location.path else '',
             'match': {
                 'exact': '',
                 'regex': '~',

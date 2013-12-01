@@ -43,6 +43,7 @@ class WebsiteLocation (object):
         self.match = j['match']
         self.backend = Backend(j['backend'])
         self.custom_conf = j.get('custom_conf', '')
+        self.path = j.get('path', '')
 
     @staticmethod
     def create(template=None):
@@ -68,6 +69,7 @@ class WebsiteLocation (object):
             'match': self.match,
             'backend': self.backend.save(),
             'custom_conf': self.custom_conf,
+            'path': self.path,
         }
 
 

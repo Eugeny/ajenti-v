@@ -34,7 +34,6 @@ http {
     server_names_hash_bucket_size 128;
 
     include mime.conf;
-    default_type text/html;
     charset UTF-8;
 
     open_file_cache max=100000 inactive=20s; 
@@ -177,13 +176,13 @@ TEMPLATE_MAINTENANCE = """
 
 TEMPLATE_LOCATION = """
     location %(match)s %(pattern)s {
+        %(path)s
         %(custom_conf)s
         %(content)s
     }
 """
 
 TEMPLATE_LOCATION_CONTENT_STATIC = """
-        %(root)s
         %(autoindex)s
 """
 
@@ -195,7 +194,6 @@ TEMPLATE_LOCATION_CONTENT_PROXY = """
 """
 
 TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
-        fastcgi_split_path_info ^(.+?\.php)(/.*)$;
         fastcgi_index index.php;
         include fcgi.conf;
         fastcgi_pass unix:/var/run/php-fcgi-%(id)s.sock;

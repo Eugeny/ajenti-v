@@ -9,14 +9,15 @@
         </hc>
     </formline>
 
+    <formline text="{Custom path}">
+        <pathbox bind="path" directory="True" />
+    </formline>
+
     <box binder:context="backend">
         <!-- Static files -->
         <box bind:visible="type" bindtransform="lambda x: x == 'static'">
             <bind:dict bind="params">
                 <vc>
-                    <formline text="{Path}">
-                        <pathbox bind="root" directory="True" />
-                    </formline>
                     <formline>
                         <checkbox bind="autoindex" text="{Show directory content}" />
                     </formline>
@@ -98,9 +99,6 @@
         <box bind:visible="type" bindtransform="lambda x: x == 'nodejs'">
             <bind:dict bind="params">
                 <vc>
-                    <formline text="{App path}">
-                        <textbox bind="path" />
-                    </formline>
                     <formline text="{HTTP port}">
                         <textbox bind="port" type="integer" />
                     </formline>
@@ -109,7 +107,7 @@
         </box>
 
     </box>
-    
+
     <formline text="{Custom configuration}">
         <codearea bind="custom_conf" width="300" height="150" />
     </formline>
