@@ -146,7 +146,7 @@ types {
 
 TEMPLATE_WEBSITE = """
 server {
-    listen 80;
+    %(ports)s
     %(server_name)s
 
     access_log /var/log/nginx/%(slug)s.access.log;

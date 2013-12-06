@@ -75,6 +75,12 @@ class NginxWebserver (WebserverComponent):
             'server_name': (
                 'server_name %s;' % (' '.join(domain.domain for domain in website.domains))
             ) if website.domains else '',
+            'ports': (
+                '\n'.join(
+                    'listen %s %s;' % (x.port, 'ssl' if x.ssl else '')
+                    for x in website.ports
+                )
+            ),
             'maintenance': TEMPLATE_MAINTENANCE if website.maintenance_mode else '',
             'root': website.root,
             'custom_conf': website.custom_conf,
