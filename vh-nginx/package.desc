@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-nginx
-VERSION=0.1.5
+VERSION=0.1.6
 DEPENDS="ajenti-v, nginx-full"
 PROVIDES=ajenti-v-webserver
 DESCRIPTION="NGINX support for Ajenti V"
