@@ -1,5 +1,6 @@
 import logging
 import os
+import subprocess
 
 from ajenti.api import *
 from ajenti.plugins.main.api import SectionPlugin
@@ -73,9 +74,10 @@ class WebsitesPlugin (SectionPlugin):
             def create_root():
                 try:
                     os.mkdir(item.root)
-                    self.save()
                 except:
                     pass
+                subprocess.call(['chown', 'www-data:', item.root])
+                self.save()
 
             ui.find('create-root-directory').on('click', create_root)
             ui.find('set-path').on('click', self.save)
@@ -92,6 +94,7 @@ class WebsitesPlugin (SectionPlugin):
                 elif url.lower().endswith('.zip'):
                     script += '&& unzip "%s" -d "%s"' % (tmppath, item.root)
 
+                script += ' && chown www-data: -R "%s"' % item.root
                 def callback():
                     self.save()
                     self.activate()
@@ -141,7 +144,9 @@ class WebsitesPlugin (SectionPlugin):
     @on('save', 'click')
     def save(self):
         self.binder.update()
+        self.context.endpoint.send_progress(_('Saving changes'))
         self.manager.save()
+        self.context.endpoint.send_progress(_('Applying changes'))
         self.manager.update_configuration()
         self.refresh()
         self.context.notify('info', _('Saved'))
