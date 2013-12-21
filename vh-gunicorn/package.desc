@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-python-gunicorn
-VERSION=0.1
+VERSION=0.1.1
 DEPENDS="ajenti-v, gunicorn"
 PROVIDES=ajenti-v-appgate
 DESCRIPTION="Python support for Ajenti V (via gunicorn)"

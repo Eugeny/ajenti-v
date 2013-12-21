@@ -27,7 +27,8 @@ Description: $DESCRIPTION
 
 END
 
-echo "$POSTINST" > $DEBIANDIR/postinst
+echo "#!/bin/bash" > $DEBIANDIR/postinst
+echo "$POSTINST" >> $DEBIANDIR/postinst
 chmod 755 $DEBIANDIR/postinst
 
 mkdir -p $BUILDDIR/$PLUGINDIR/$PLUGIN
