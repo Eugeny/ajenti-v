@@ -76,7 +76,7 @@ class WebsitesPlugin (SectionPlugin):
                     os.mkdir(item.root)
                 except:
                     pass
-                subprocess.call(['chown', 'www-data:', item.root])
+                subprocess.call(['chown', 'www-data', item.root])
                 self.save()
 
             ui.find('create-root-directory').on('click', create_root)
@@ -94,7 +94,7 @@ class WebsitesPlugin (SectionPlugin):
                 elif url.lower().endswith('.zip'):
                     script += '&& unzip "%s" -d "%s"' % (tmppath, item.root)
 
-                script += ' && chown www-data: -R "%s"' % item.root
+                script += ' && chown www-data -R "%s"' % item.root
                 def callback():
                     self.save()
                     self.activate()

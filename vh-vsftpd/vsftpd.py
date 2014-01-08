@@ -46,6 +46,7 @@ background=NO
 anonymous_enable=NO
 local_enable=YES
 guest_enable=YES
+guest_username=ftp
 virtual_use_local_privs=YES
 pam_service_name=vsftpd_virtual
 user_config_dir=%s
@@ -61,6 +62,8 @@ session required        pam_loginuid.so
 
 TEMPLATE_USER = """
 local_root=%(root)s
+allow_writeable_chroot=YES
+write_enable=YES
 """
 
 
@@ -82,6 +85,8 @@ class VSFTPD (MiscComponent):
         pwfile = tempfile.NamedTemporaryFile(delete=False)
         pwpath = pwfile.name
         for website in config.websites:
+            subprocess.call(['chgrp', 'ftp', website.root])
+            subprocess.call(['chmod', 'g+w', website.root])
             if website.enabled:
                 cfg = website.extension_configs.get(VSFTPDExtension.classname)
                 if cfg and cfg['created']:
