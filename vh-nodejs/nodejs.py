@@ -17,7 +17,7 @@ class NodeJS (ApplicationGatewayComponent):
         sup = SupervisorConfig(path='/etc/supervisor/supervisord.conf')
         sup.load()
         for p in sup.tree.programs:
-            if p.command.startswith('node '):
+            if p.command and p.command.startswith('node '):
                 sup.tree.programs.remove(p)
 
         for website in config.websites:
