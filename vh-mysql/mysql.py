@@ -22,7 +22,6 @@ class MySQLExtension (BaseExtension):
     def init(self):
         self.append(self.ui.inflate('vh-mysql:ext'))
         self.binder = Binder(self, self)
-        self.binder.autodiscover()
         self.refresh()
         self.db = MySQLDB.get()
 
@@ -34,7 +33,7 @@ class MySQLExtension (BaseExtension):
             pass
 
     def refresh(self):
-        self.binder.reset().populate()
+        self.binder.setup().populate()
         
     def update(self):
         self.binder.update()

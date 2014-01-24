@@ -24,7 +24,6 @@ class VSFTPDExtension (BaseExtension):
     def init(self):
         self.append(self.ui.inflate('vh-vsftpd:ext'))
         self.binder = Binder(self, self)
-        self.binder.autodiscover()
 
         if not self.config['created']:
             self.config['username'] = self.website.slug
@@ -34,7 +33,7 @@ class VSFTPDExtension (BaseExtension):
         self.refresh()
 
     def refresh(self):
-        self.binder.reset().populate()
+        self.binder.setup().populate()
         
     def update(self):
         pass

@@ -37,7 +37,7 @@ class WebsitesPlugin (SectionPlugin):
         self.empty()
         self.append(self.ui.inflate('vh:main'))
 
-        self.binder = Binder(self.manager.config, self)
+        self.binder = Binder(None, self)
         self.find('websites').new_item = lambda c: Website.create('New Website')
         self.find('domains').new_item = lambda c: WebsiteDomain.create('example.com')
         self.find('ports').new_item = lambda c: WebsitePort.create(80)
@@ -130,7 +130,7 @@ class WebsitesPlugin (SectionPlugin):
             self.find('create-location-type').labels.append(g.title)
             self.find('create-location-type').values.append(g.id)
             
-        self.binder.autodiscover()
+        self.binder.setup(self.manager.config)
 
     def on_page_load(self):
         for ext in BaseExtension.get_classes():

@@ -60,7 +60,7 @@ class Gunicorn (ApplicationGatewayComponent):
         sup = SupervisorConfig(path='/etc/supervisor/supervisord.conf')
         sup.load()
         for p in sup.tree.programs:
-            if p.command.startswith('unicorn'):
+            if p.command and p.command.startswith('unicorn'):
                 sup.tree.programs.remove(p)
 
         for website in config.websites:
