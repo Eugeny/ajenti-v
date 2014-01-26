@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+from slugify import slugify
 
 from ajenti.api import *
 from ajenti.plugins.main.api import SectionPlugin
@@ -38,7 +39,6 @@ class WebsitesPlugin (SectionPlugin):
         self.append(self.ui.inflate('vh:main'))
 
         self.binder = Binder(None, self)
-        self.find('websites').new_item = lambda c: Website.create('New Website')
         self.find('domains').new_item = lambda c: WebsiteDomain.create('example.com')
         self.find('ports').new_item = lambda c: WebsitePort.create(80)
         
@@ -131,6 +131,25 @@ class WebsitesPlugin (SectionPlugin):
             self.find('create-location-type').values.append(g.id)
             
         self.binder.setup(self.manager.config)
+
+    @on('new-website', 'click')
+    def on_new_website(self):
+        self.binder.update()
+        name = self.find('new-website-name').value
+        self.find('new-website-name').value = ''
+        if not name:
+            name = '_'
+
+        slug = slugify(name)
+        slugs = [x.slug for x in self.manager.config.websites]
+        while slug in slugs:
+            slug += '_'
+
+        w = Website.create(name)
+        w.slug = slug
+        self.manager.config.websites.append(w)
+        self.manager.save()
+        self.binder.populate()
 
     def on_page_load(self):
         for ext in BaseExtension.get_classes():

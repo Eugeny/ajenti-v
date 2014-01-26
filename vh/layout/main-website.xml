@@ -94,6 +94,9 @@
                         </box>
 
                         <pad>
+                            <formline text="{Address}">
+                                <textbox bind="host" />
+                            </formline>
                             <formline text="{Port number}">
                                 <textbox bind="port" type="integer" />
                             </formline>

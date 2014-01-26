@@ -25,8 +25,9 @@ class VSFTPDExtension (BaseExtension):
         self.append(self.ui.inflate('vh-vsftpd:ext'))
         self.binder = Binder(self, self)
 
+        self.config['username'] = self.website.slug
+        
         if not self.config['created']:
-            self.config['username'] = self.website.slug
             self.config['password'] = str(uuid.uuid4())
             self.config['created'] = True
 

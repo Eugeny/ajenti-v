@@ -75,6 +75,7 @@ class WebsiteLocation (object):
 
 class WebsitePort (object):
     def __init__(self, j):
+        self.host = j.get('host', '*')
         self.port = j['port']
         self.ssl = j['ssl']
 
@@ -87,6 +88,7 @@ class WebsitePort (object):
 
     def save(self):
         return {
+            'host': self.host,
             'port': self.port,
             'ssl': self.ssl,
         }
@@ -128,10 +130,7 @@ class Website (object):
         self.root = j.get('root', '/srv/new-website')
         self.extension_configs = j.get('extensions', {})
         self.custom_conf = j.get('custom_conf', '')
-
-    @property
-    def slug(self):
-        return slugify(self.name)
+        self.slug = j.get('slug', slugify(self.name))
 
     @staticmethod
     def create(name):

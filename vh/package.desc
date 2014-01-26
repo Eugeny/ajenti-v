@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v
-VERSION=0.1.11
+VERSION=0.1.12
 DEPENDS="ajenti (>=1.2.15), ajenti-v-webserver"
 PROVIDES=ajenti-v-core
 DESCRIPTION="Virtual hosting solution for Ajenti"

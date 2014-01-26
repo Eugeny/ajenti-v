@@ -6,7 +6,17 @@
             <bind:collection bind="websites" id="websites">                
                 <vc>
                     <dt bind="__items" />
-                    <button bind="__add" icon="plus" text="{Create}" />
+
+                    <formgroup text="{New website}">
+                        <vc>
+                            <formline text="{Name}">
+                                <textbox id="new-website-name" />
+                            </formline>
+                            <formline>
+                                <button id="new-website" icon="plus" text="{Create}" />
+                            </formline>
+                        </vc>
+                    </formgroup>
                 </vc>
                 <bind:template>
                    <collapserow>

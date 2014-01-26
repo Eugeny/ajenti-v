@@ -77,7 +77,7 @@ class NginxWebserver (WebserverComponent):
             ) if website.domains else '',
             'ports': (
                 '\n'.join(
-                    'listen %s %s;' % (x.port, 'ssl' if x.ssl else '')
+                    'listen %s:%s %s;' % (x.host, x.port, 'ssl' if x.ssl else '')
                     for x in website.ports
                 )
             ),
