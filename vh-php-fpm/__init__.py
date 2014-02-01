@@ -1,6 +1,7 @@
 import ajenti
 from ajenti.api import *
 from ajenti.plugins import *
+from ajenti.util import platform_select
 
 
 info = PluginInfo(
@@ -9,7 +10,10 @@ info = PluginInfo(
     dependencies=[
         PluginDependency('vh'),
         PluginDependency('services'),
-        BinaryDependency('php5-fpm'),
+        BinaryDependency(platform_select(
+            debian='php5-fpm',
+            default='php-fpm'
+        )),
     ],
 )
 

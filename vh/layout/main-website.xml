@@ -5,41 +5,45 @@
         </right>
 
         <formgroup text="{General}">
-            <formline text="{Name}">
-                <textbox bind="name" />
-            </formline>
-            
-            <formline>
-                <checkbox bind="enabled" text="{Enabled}" />
-            </formline>
-            
-            <formline>
-                <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
-            </formline>
+            <vc>
+                <formline text="{Name}">
+                    <textbox bind="name" />
+                </formline>
+                
+                <formline>
+                    <checkbox bind="enabled" text="{Enabled}" />
+                </formline>
+                
+                <formline>
+                    <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
+                </formline>
 
-            <formline text="{Custom configuration}">
-                <codearea bind="custom_conf" width="300" height="150" />
-            </formline>
+                <formline text="{Custom configuration}">
+                    <codearea bind="custom_conf" width="300" height="150" />
+                </formline>
+            </vc>
         </formgroup>
 
         <formgroup text="{Website files}">
-            <formline text="{Path}">
-                <vc>
-                    <hc>
-                        <pathbox bind="root" directory="True" />        
-                        <button icon="ok" text="{Set}" id="set-path" />
-                    </hc>
-                    <vc id="root-not-created">
-                        <button text="{Create directory}" style="normal big" id="create-root-directory" />
+            <vc>
+                <formline text="{Path}">
+                    <vc>
+                        <hc>
+                            <pathbox bind="root" directory="True" />        
+                            <button icon="ok" text="{Set}" id="set-path" />
+                        </hc>
+                        <vc id="root-not-created">
+                            <button text="{Create directory}" style="normal big" id="create-root-directory" />
+                        </vc>
                     </vc>
-                </vc>
-            </formline>
-            <formline text="{From URL}">
-                <vc>
-                    <textbox id="download-url" />
-                    <button icon="download-alt" text="{Download and unpack}" id="download" style="normal big" />
-                </vc>
-            </formline>
+                </formline>
+                <formline text="{From URL}">
+                    <vc>
+                        <textbox id="download-url" />
+                        <button icon="download-alt" text="{Download and unpack}" id="download" style="normal big" />
+                    </vc>
+                </formline>
+            </vc>
         </formgroup>
     </tab>
 
