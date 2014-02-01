@@ -92,7 +92,7 @@ class Gunicorn (ApplicationGatewayComponent):
 
         s = ServiceMultiplexor.get().get_one(platform_select(
             debian='supervisor',
-            centos='supervisor',
+            centos='supervisord',
         ))
         if not s.running:
             s.start()
