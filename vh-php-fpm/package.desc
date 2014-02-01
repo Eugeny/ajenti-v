@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-php-fpm
-VERSION=0.1
+VERSION=0.1.1
 DEPENDS="ajenti-v, php5-fpm"
 PROVIDES=ajenti-v-appgate
 DESCRIPTION="PHP support for Ajenti V (via PHP-FPM)"

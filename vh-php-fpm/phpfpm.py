@@ -3,6 +3,7 @@ import os
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
 from ajenti.plugins.vh.api import ApplicationGatewayComponent
+from ajenti.util import platform_select
 
 
 TEMPLATE_CONFIG_FILE = """
@@ -46,7 +47,10 @@ class PHPFPM (ApplicationGatewayComponent):
     title = 'PHP FastCGI'
 
     def init(self):
-        self.config_file = '/etc/php5/fpm/php-fpm.conf'
+        self.config_file = platform_select(
+            debian='/etc/php5/fpm/php-fpm.conf',
+            centos='/etc/php-fpm.conf',
+        )
 
     def __generate_pool(self, backend, name):
         pm_min = backend.params.get('pm_min', 1)
