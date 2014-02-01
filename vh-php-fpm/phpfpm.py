@@ -82,7 +82,10 @@ class PHPFPM (ApplicationGatewayComponent):
         open(self.config_file, 'w').write(cfg)
 
     def apply_configuration(self):
-        s = ServiceMultiplexor.get().get_one('php5-fpm')
+        s = ServiceMultiplexor.get().get_one(platform_select(
+            debian='php5-fpm',
+            centos='php-fpm',
+        ))
         if not s.running:
             s.start()
         else:
