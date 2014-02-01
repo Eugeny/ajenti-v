@@ -5,6 +5,7 @@ import subprocess
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
 from ajenti.plugins.vh.api import ApplicationGatewayComponent
+from ajenti.util import platform_select
 
 from reconfigure.configs import SupervisorConfig
 from reconfigure.items.supervisor import ProgramData
@@ -24,7 +25,10 @@ class Puma (ApplicationGatewayComponent):
                 location.backend.id = website.slug + '-ruby-puma-' + str(i)
 
     def create_configuration(self, config):
-        sup = SupervisorConfig(path='/etc/supervisor/supervisord.conf')
+        sup = SupervisorConfig(path=platform_select(
+            debian='/etc/supervisor/supervisord.conf',
+            centos='/etc/supervisord.conf',
+        ))
         sup.load()
         for p in sup.tree.programs:
             if p.command.startswith('puma') or p.command.startswith('bundle exec puma'):
@@ -52,7 +56,10 @@ class Puma (ApplicationGatewayComponent):
         sup.save()
 
     def apply_configuration(self):
-        s = ServiceMultiplexor.get().get_one('supervisor')
+        s = ServiceMultiplexor.get().get_one(platform_select(
+            debian='supervisor',
+            centos='supervisor',
+        ))
         if not s.running:
             s.start()
         else:

@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-ruby-puma
-VERSION=0.1.2
+VERSION=0.1.3
 DEPENDS="ajenti-v"
 PROVIDES=ajenti-v-appgate
 DESCRIPTION="Ruby support for Ajenti V (via Puma.io)"

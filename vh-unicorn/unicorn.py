@@ -5,6 +5,7 @@ import subprocess
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
 from ajenti.plugins.vh.api import ApplicationGatewayComponent
+from ajenti.util import platform_select
 
 from reconfigure.configs import SupervisorConfig
 from reconfigure.items.supervisor import ProgramData
@@ -57,7 +58,10 @@ class Gunicorn (ApplicationGatewayComponent):
             shutil.rmtree(self.config_dir)
         os.mkdir(self.config_dir)
 
-        sup = SupervisorConfig(path='/etc/supervisor/supervisord.conf')
+        sup = SupervisorConfig(path=platform_select(
+            debian='/etc/supervisor/supervisord.conf',
+            centos='/etc/supervisord.conf',
+        ))
         sup.load()
         for p in sup.tree.programs:
             if p.command and p.command.startswith('unicorn'):
@@ -86,7 +90,10 @@ class Gunicorn (ApplicationGatewayComponent):
         else:
             s.command('reload')
 
-        s = ServiceMultiplexor.get().get_one('supervisor')
+        s = ServiceMultiplexor.get().get_one(platform_select(
+            debian='supervisor',
+            centos='supervisor',
+        ))
         if not s.running:
             s.start()
         else:
