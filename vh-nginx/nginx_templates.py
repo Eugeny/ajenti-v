@@ -30,6 +30,7 @@ http {
     gzip_proxied any;
     gzip_min_length 256;
     gzip_comp_level 4;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js;
 
     server_names_hash_bucket_size 128;
 
@@ -40,6 +41,8 @@ http {
     open_file_cache_valid 30s; 
     open_file_cache_min_uses 2;
     open_file_cache_errors on;
+
+    server_tokens off;
 
     include proxy.conf;
     include fcgi.conf;
