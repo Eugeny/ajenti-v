@@ -9,14 +9,12 @@ info = PluginInfo(
     dependencies=[
         PluginDependency('vh'),
         PluginDependency('services'),
-        BinaryDependency('gunicorn'),
     ],
 )
 
 
 def init():
     from ajenti.plugins.vh import destroyed_configs
-    destroyed_configs.append('gunicorn')
     destroyed_configs.append('supervisord')
 
     import gunicorn

@@ -1,0 +1,9 @@
+<box bind:visible="type" bindtransform="lambda x: x == 'nodejs'">
+    <bind:dict bind="params">
+        <vc>
+            <formline text="{HTTP port}">
+                <textbox bind="port" type="integer" />
+            </formline>
+        </vc>
+    </bind:dict>
+</box>

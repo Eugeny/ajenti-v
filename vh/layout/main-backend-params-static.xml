@@ -1,0 +1,9 @@
+<box bind:visible="type" bindtransform="lambda x: x == 'static'">
+    <bind:dict bind="params">
+        <vc>
+            <formline>
+                <checkbox bind="autoindex" text="{Show directory content}" />
+            </formline>
+        </vc>
+    </bind:dict>
+</box>

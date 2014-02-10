@@ -1,0 +1,9 @@
+<box bind:visible="type" bindtransform="lambda x: x == 'proxy'">
+    <bind:dict bind="params">
+        <vc>
+            <formline text="{URL}">
+                <textbox bind="url" />
+            </formline>
+        </vc>
+    </bind:dict>
+</box>

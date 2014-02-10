@@ -1,0 +1,12 @@
+<box bind:visible="type" bindtransform="lambda x: x == 'php-fcgi'">
+    <bind:dict bind="params">
+        <vc>
+            <formline text="{Min processes}">
+                <textbox bind="pm_min" type="integer" />
+            </formline>
+            <formline text="{Max processes}">
+                <textbox bind="pm_max" type="integer" />
+            </formline>
+        </vc>
+    </bind:dict>
+</box>

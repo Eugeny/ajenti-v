@@ -120,9 +120,21 @@ class WebsitesPlugin (SectionPlugin):
             collection.remove(ws)
             self.save()
 
+        def post_location_bind(object, collection, item, ui):
+            ui.find('backend-params').empty()
+            ui.find('backend-params').append(self.ui.inflate('vh:main-backend-params-%s' % item.backend.type))
+            item.backend.__binder = Binder(item.backend, ui.find('backend-params'))
+            item.backend.__binder.populate()
+
+        def post_location_update(object, collection, item, ui):
+            item.backend.__binder.update()
+
         self.find('websites').post_item_bind = post_ws_bind
         self.find('websites').post_item_update = post_ws_update
         self.find('websites').delete_item = ws_delete
+
+        self.find('locations').post_item_bind = post_location_bind
+        self.find('locations').post_item_update = post_location_update
 
         self.find('create-location-type').labels = []
         self.find('create-location-type').values = []
