@@ -1,150 +1,174 @@
-<tabs id="tabs">
-    <tab title="{General}">
-        <right>
-            <button bind="__delete" icon="remove" text="{Delete}" warning="{All website data will be lost. Continue?}" />
-        </right>
+<vc>
+    <button id="go-back" icon="arrow-left" text="{Back}" />
 
-        <formgroup text="{General}">
-            <vc>
-                <formline text="{Name}">
-                    <textbox bind="name" />
-                </formline>
-                
-                <formline>
-                    <checkbox bind="enabled" text="{Enabled}" />
-                </formline>
-                
-                <formline>
-                    <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
-                </formline>
+    <tabs id="tabs">
+        <tab title="{General}">
+            <body>
+                <pad>
+                    <right>
+                        <button id="destroy" icon="remove" text="{Delete}" warning="{All website data will be lost. Continue?}" />
+                    </right>
 
-                <formline text="{Custom configuration}">
-                    <codearea bind="custom_conf" width="300" height="150" />
-                </formline>
-            </vc>
-        </formgroup>
-
-        <formgroup text="{Website files}">
-            <vc>
-                <formline text="{Path}">
-                    <vc>
-                        <hc>
-                            <pathbox bind="root" directory="True" />        
-                            <button icon="ok" text="{Set}" id="set-path" />
-                        </hc>
-                        <vc id="root-not-created">
-                            <button text="{Create directory}" style="normal big" id="create-root-directory" />
-                        </vc>
-                    </vc>
-                </formline>
-                <formline text="{From URL}">
-                    <vc>
-                        <textbox id="download-url" />
-                        <button icon="download-alt" text="{Download and unpack}" id="download" style="normal big" />
-                    </vc>
-                </formline>
-            </vc>
-        </formgroup>
-    </tab>
-
-    <tab title="{Identification}">
-        <formline text="{Domains}">
-            <bind:collection bind="domains" id="domains">
-                <vc>
-                    <dt bind="__items" width="400" />
-                    <button bind="__add" icon="plus" text="{Create}" />
-                </vc>
-
-                <bind:template>
-                   <collapserow>
-                        <box>
-                            <right> 
-                                <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
-                            </right>
-                            <hc>
-                                <icon icon="globe" />
-                                <label bind="domain" />
-                            </hc>   
-                        </box>
-
-                        <pad>
-                            <formline text="{Domain name}">
-                                <textbox bind="domain" />
+                    <formgroup text="{General}">
+                        <vc>
+                            <formline text="{Name}">
+                                <textbox bind="name" />
                             </formline>
-                        </pad>
-                    </collapserow>
-                </bind:template>
-            </bind:collection>
-        </formline>
-
-        <formline text="{Ports}">
-            <bind:collection bind="ports" id="ports">
-                <vc>
-                    <dt bind="__items" width="400" />
-                    <button bind="__add" icon="plus" text="{Create}" />
-                </vc>
-
-                <bind:template>
-                   <collapserow>
-                        <box>
-                            <right> 
-                                <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
-                            </right>
-                            <hc>
-                                <icon icon="arrow-right" />
-                                <label bind="port" />
-                                <icon icon="lock" bind:visible="ssl" />
-                            </hc>   
-                        </box>
-
-                        <pad>
-                            <formline text="{Address}">
-                                <textbox bind="host" />
-                            </formline>
-                            <formline text="{Port number}">
-                                <textbox bind="port" type="integer" />
-                            </formline>
+                            
                             <formline>
-                                <checkbox bind="ssl" text="SSL" />
+                                <checkbox bind="enabled" text="{Enabled}" />
                             </formline>
-                        </pad>
-                    </collapserow>
-                </bind:template>
-            </bind:collection>
-        </formline>
-    </tab>
+                            
+                            <formline>
+                                <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
+                            </formline>
+                        </vc>
+                    </formgroup>
 
-    <tab title="{Content}">
-        <bind:collection bind="locations" id="locations">
-            <vc>
-                <sortabledt bind="__items" />
-                <hc>
-                    <dropdown id="create-location-type" />
+                    <formgroup text="{Website files}">
+                        <vc>
+                            <formline text="{Path}">
+                                <vc>
+                                    <hc>
+                                        <pathbox bind="root" directory="True" />        
+                                        <button icon="ok" text="{Set}" id="set-path" />
+                                    </hc>
+                                    <vc id="root-not-created">
+                                        <button text="{Create directory}" style="normal big" id="create-root-directory" />
+                                    </vc>
+                                </vc>
+                            </formline>
+                            <formline text="{From URL}">
+                                <vc>
+                                    <textbox id="download-url" />
+                                    <button icon="download-alt" text="{Download and unpack}" id="download" style="normal big" />
+                                </vc>
+                            </formline>
+                        </vc>
+                    </formgroup>
+                </pad>
+            </body>
+        </tab>
 
-                    <button id="create-location" icon="plus" text="{Create}" />
-                </hc>
-            </vc>
 
-            <bind:template>
-               <collapserow>
-                    <box>
-                        <right> 
-                            <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
-                        </right>
-                        <hc>
-                            <icon icon="home" />
-                            <label bind="pattern" />
-                            <box binder:context="backend">
-                                <label bind="typename" style="bold" />
-                            </box>
-                        </hc>   
-                    </box>
+        <tab title="{Advanced}">
+            <body>
+                <pad>
+                    <vc>
+                        <formline text="{Custom configuration}">
+                            <codearea bind="custom_conf" width="300" height="150" />
+                        </formline>
+                    </vc>
+                </pad>
+            </body>
+        </tab>
 
-                    <pad>
-                        <include layout="vh:main-website-location" />
-                    </pad>
-                </collapserow>
-            </bind:template>
-        </bind:collection>        
-    </tab>
-</tabs>
+        <tab title="{Identification}">
+            <body>
+                <pad>
+                    <formline text="{Domains}">
+                        <bind:collection bind="domains" id="domains">
+                            <vc>
+                                <dt bind="__items" width="400">
+                                    <dth />
+                                    <dth text="Domain" />
+                                    <dth />
+                                </dt>
+                                <button bind="__add" icon="plus" text="{Create}" />
+                            </vc>
+
+                            <bind:template>
+                                <dtr>
+                                    <dtd width="1">
+                                        <icon icon="globe" />
+                                    </dtd>
+                                    <dtd>
+                                        <textbox bind="domain" />
+                                    </dtd>
+                                    <dtd width="1"> 
+                                        <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                    </dtd>
+                                </dtr>
+                            </bind:template>
+                        </bind:collection>
+                    </formline>
+
+                    <formline text="{Ports}">
+                        <bind:collection bind="ports" id="ports">
+                            <vc>
+                                <dt bind="__items" width="400">
+                                    <dth />
+                                    <dth text="Host" />
+                                    <dth text="Port" />
+                                    <dth text="SSL" />
+                                    <dth />
+                                </dt>
+                                <button bind="__add" icon="plus" text="{Create}" />
+                            </vc>
+
+                            <bind:template>
+                               <dtr>
+                                    <dtd>
+                                        <icon icon="arrow-right" />
+                                    </dtd>
+                                    <dtd> 
+                                        <textbox bind="host" />
+                                    </dtd>
+                                    <dtd> 
+                                        <textbox type="integer" bind="port" />
+                                    </dtd>
+                                    <dtd> 
+                                        <checkbox bind="ssl" />
+                                    </dtd>
+                                    <dtd> 
+                                        <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                    </dtd>
+                                </dtr>
+                            </bind:template>
+                        </bind:collection>
+                    </formline>
+                </pad>
+            </body>
+        </tab>
+
+        <tab title="{Content}">
+            <body>
+                <pad>
+                    <bind:collection bind="locations" id="locations">
+                        <vc>
+                            <sortabledt bind="__items" />
+                            <hc>
+                                <dropdown id="create-location-type" />
+
+                                <button id="create-location" icon="plus" text="{Create}" />
+                            </hc>
+                        </vc>
+
+                        <bind:template>
+                           <collapserow expanded="True">
+                                <box>
+                                    <right> 
+                                        <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                    </right>
+                                    <hc>
+                                        <icon icon="home" />
+                                        <label bind="pattern" />
+                                        <box binder:context="backend">
+                                            <label bind="typename" style="bold" />
+                                        </box>
+                                    </hc>   
+                                </box>
+
+                                <pad>
+                                    <include layout="vh:main-website-location" />
+                                </pad>
+                            </collapserow>
+                        </bind:template>
+                    </bind:collection>        
+                </pad>
+            </body>
+        </tab>
+    </tabs>
+
+    <button style="normal big" icon="ok" id="save" text="{Apply changes}" />
+</vc>

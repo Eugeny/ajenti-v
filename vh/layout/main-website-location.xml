@@ -1,22 +1,32 @@
 <vc>
-    <formline text="{URL Pattern}">
-        <hc>
-            <textbox bind="pattern" />
-            <dropdown bind="match" style="mini"
-                labels="['Exact', 'Regex', 'Regex (forced)']"
-                values="['exact', 'regex', 'force-regex']"
-                />
-        </hc>
-    </formline>
+    <tabs>
+        <tab title="{General}">
+            <vc>
+                <formline text="{URL Pattern}">
+                    <hc>
+                        <textbox bind="pattern" />
+                        <dropdown bind="match" style="mini"
+                            labels="['Exact', 'Regex', 'Regex (forced)']"
+                            values="['exact', 'regex', 'force-regex']"
+                            />
+                    </hc>
+                </formline>
 
-    <formline text="{Custom path}">
-        <pathbox bind="path" directory="True" />
-    </formline>
+                <box id="backend-params">
+                </box>
+            </vc>
+        </tab>
+        <tab title="{Advanced}">
+            <vc>
+                <formline text="{Custom path}">
+                    <pathbox bind="path" directory="True" />
+                </formline>
 
-    <box id="backend-params">
-    </box>
 
-    <formline text="{Custom configuration}">
-        <codearea bind="custom_conf" width="300" height="150" />
-    </formline>
+                <formline text="{Custom configuration}">
+                    <codearea bind="custom_conf" width="300" height="150" />
+                </formline>
+            </vc>
+        </tab>
+    </tabs>
 </vc>

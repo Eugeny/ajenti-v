@@ -1,39 +1,42 @@
 <vc>
     <body>
-        <pad>
-            <label style="bold" text="{Websites}" />
-            
-            <bind:collection bind="websites" id="websites">                
-                <vc>
-                    <dt bind="__items" />
-
-                    <formgroup text="{New website}">
-                        <vc>
-                            <formline text="{Name}">
-                                <textbox id="new-website-name" />
-                            </formline>
-                            <formline>
-                                <button id="new-website" icon="plus" text="{Create}" />
-                            </formline>
-                        </vc>
-                    </formgroup>
-                </vc>
-                <bind:template>
-                   <collapserow>
-                        <box>
-                            <hc>
+        <vc>
+            <pad>
+                <bind:collection bind="websites" id="websites">                
+                    <vc>
+                        <dt bind="__items" />
+                    </vc>
+                    <bind:template>
+                        <dtr>
+                            <dtd width="1">
                                 <icon icon="globe" />
-                                <label bind="name" />
-                            </hc>   
-                        </box>
-
-                        <pad>
-                            <include layout="vh:main-website" />
-                        </pad>
-                    </collapserow>
-                </bind:template>
-            </bind:collection>
-        </pad>
+                            </dtd>
+                            <dtd>
+                                <label bind="name" />   
+                            </dtd>
+                            <dtd width="1">
+                                <button id="manage" icon="cog" text="{Manage}" />
+                            </dtd>
+                            <!--pad>
+                                <include layout="vh:main-website" />
+                            </pad-->
+                        </dtr>
+                    </bind:template>
+                </bind:collection>
+            </pad>
+            <pad>
+                <formgroup text="{New website}">
+                    <vc>
+                        <formline text="{Name}">
+                            <textbox id="new-website-name" />
+                        </formline>
+                        <formline>
+                            <button id="new-website" icon="plus" text="{Create}" />
+                        </formline>
+                    </vc>
+                </formgroup>
+            </pad>
+        </vc>
     </body>
 
     <hc>
