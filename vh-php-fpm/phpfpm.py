@@ -53,8 +53,9 @@ class PHPFPM (ApplicationGatewayComponent):
         )
 
     def __generate_pool(self, backend, name):
-        pm_min = backend.params.get('pm_min', 1)
-        pm_max = backend.params.get('pm_max', 5)
+        pm_min = backend.params.get('pm_min', 1) or 1
+        pm_max = backend.params.get('pm_max', 5) or 5
+        print repr(pm_min)
         return TEMPLATE_POOL % {
             'name': name,
             'min': pm_min,
