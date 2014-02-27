@@ -34,6 +34,7 @@ class MySQLExtension (BaseExtension):
 
     def refresh(self):
         self.binder.setup().populate()
+        self.find('db-name').value = self.website.slug
         
     def update(self):
         self.binder.update()
@@ -51,23 +52,21 @@ class MySQLExtension (BaseExtension):
             self.context.launch('configure-plugin', plugin=self.db)
             return
 
+        dbname = self.find('db-name').value
+        for db in self.db.query_databases():
+            if db.name == dbname:
+                self.context.notify('error', 'This DB name is already used')
+                return
+        
         self.config['username'] = self.website.slug
         self.config['password'] = str(uuid.uuid4())
-        self.config['name'] = self.website.slug
-
-        while True:
-            exists = False
-            for db in self.db.query_databases():
-                if db.name == self.config['name']:
-                    exists = True
-                    break
-            if not exists:
-                break
-            else:
-                self.config['name'] += '_'
+        self.config['name'] = dbname
         
-        self.db.query_create(self.config['name'])
-
+        try:
+            self.db.query_create(self.config['name'])
+        except Exception, e:
+            self.context.notify('error', str(e))
+            return
 
         self.config['created'] = True
 

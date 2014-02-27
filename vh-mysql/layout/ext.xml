@@ -18,7 +18,12 @@
             <box bind:visible="created" bindtransform="lambda x: not x">
                 <vc>
                     <label text="{No database created}" />
-                    <button icon="plus" text="{Create}" id="create" />
+                    <formline text="{Name}">
+                        <textbox id="db-name" />
+                    </formline>
+                    <formline>
+                        <button icon="plus" text="{Create}" id="create" />
+                    </formline>
                 </vc>
             </box>
         </pad>
