@@ -71,7 +71,11 @@ tls_verify_certificates = MAIN_TLS_VERIFY_CERTIFICATES
 
 AUTH_SERVER_ALLOW_NOTLS_PASSWORDS = true
 
+%(custom_mta_config)s
+
 begin acl
+
+%(custom_mta_acl)s
 
 acl_check_mail:
   .ifdef CHECK_MAIL_HELO_ISSUED
@@ -195,6 +199,7 @@ acl_check_data:
 
 begin routers
 
+%(custom_mta_routers)s
 
 vdomains:
   driver = accept
@@ -284,6 +289,8 @@ mail4root:
 
 
 begin transports
+
+%(custom_mta_transports)s
 
 
 vmail:

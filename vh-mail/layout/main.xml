@@ -1,49 +1,83 @@
 <vc>
     <body>
-        <vc>
-            <pad>
-                <bind:collection bind="mailboxes" id="mailboxes">                
+        <pad>
+            <tabs>
+                <tab title="{General}">
                     <vc>
-                        <dt bind="__items" />
-                    </vc>
-                    <bind:template>
-                        <collapserow>
-                            <box>
-                                <right>
-                                    <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
-                                </right>
-                                <hc>
-                                    <icon icon="envelope" />
-                                    <label bind="name" />
-                                </hc>
-                            </box>
-                            <indent>
+                        <bind:collection bind="mailboxes" id="mailboxes">                
+                            <vc>
+                                <dt bind="__items" />
+                            </vc>
+                            <bind:template>
+                                <collapserow>
+                                    <box>
+                                        <right>
+                                            <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                        </right>
+                                        <hc>
+                                            <icon icon="envelope" />
+                                            <label bind="name" />
+                                        </hc>
+                                    </box>
+                                    <indent>
+                                        <vc>
+                                            <formline text="{Username}">
+                                                <label bind="name" />
+                                            </formline>
+                                            <formline text="{Password}">
+                                                <editable id="password" placeholder="{Change password}" icon="lock" />
+                                            </formline>
+                                            <formline text="{Size}">
+                                                <label id="size" />
+                                            </formline>
+                                        </vc>
+                                    </indent>
+                                </collapserow>
+                            </bind:template>
+                        </bind:collection>
+
+                        <pad>
+                            <formgroup text="{New mailbox}">
                                 <vc>
-                                    <formline text="{Username}">
-                                        <label bind="name" />
+                                    <formline text="{Address}">
+                                        <hc>
+                                            <textbox id="new-mailbox-local" />
+                                            <label text="@" />
+                                            <dropdown id="new-mailbox-domain" />
+                                        </hc>
                                     </formline>
-                                    <formline text="{Password}">
-                                        <editable id="password" placeholder="{Change password}" icon="lock" />
+                                    <formline text="{Custom domain}">
+                                        <textbox id="new-mailbox-domain-custom" />
+                                    </formline>
+                                    <formline>
+                                        <button id="new-mailbox" icon="plus" text="{Create}" />
                                     </formline>
                                 </vc>
-                            </indent>
-                        </collapserow>
-                    </bind:template>
-                </bind:collection>
-            </pad>
-            <pad>
-                <formgroup text="{New mailbox}">
-                    <pad>
-                        <hc>
-                            <textbox id="new-mailbox-local" />
-                            <label text="@" />
-                            <textbox id="new-mailbox-domain" />
-                            <button id="new-mailbox" icon="plus" text="{Create}" />
-                        </hc>
-                    </pad>
-                </formgroup>
-            </pad>
-        </vc>
+                            </formgroup>
+                        </pad>
+                    </vc>
+                </tab>
+
+                <tab title="{Advanced}">
+                    <formgroup text="{Custom MTA configuration}">
+                        <vc>
+                            <formline text="{Custom configuration}">
+                                <codearea bind="custom_mta_config" width="500" height="100" />
+                            </formline>
+                            <formline text="{Custom ACLs}">
+                                <codearea bind="custom_mta_acl" width="500" height="100" />
+                            </formline>
+                            <formline text="{Custom routers}">
+                                <codearea bind="custom_mta_routers" width="500" height="100" />
+                            </formline>
+                            <formline text="{Custom transports}">
+                                <codearea bind="custom_mta_transports" width="500" height="100" />
+                            </formline>
+                        </vc>
+                    </formgroup>
+                </tab>
+            </tabs>
+        </pad>
     </body>
 
     <hc>

@@ -15,6 +15,10 @@ class Config (object):
     def __init__(self, j):
         self.mailboxes = [Mailbox(_) for _ in j.get('mailboxes', [])]
         self.mailroot = j.get('mailroot', '/var/vmail')
+        self.custom_mta_config = j.get('custom_mta_config', '')
+        self.custom_mta_acl = j.get('custom_mta_acl', '')
+        self.custom_mta_routers = j.get('custom_mta_routers', '')
+        self.custom_mta_transports = j.get('custom_mta_transports', '')
 
     @staticmethod
     def create():
@@ -23,6 +27,10 @@ class Config (object):
     def save(self):
         return {
             'mailboxes': [_.save() for _ in self.mailboxes],
+            'custom_mta_acl': self.custom_mta_acl,
+            'custom_mta_routers': self.custom_mta_routers,
+            'custom_mta_config': self.custom_mta_config,
+            'custom_mta_transports': self.custom_mta_transports,
         }
 
 
@@ -69,12 +77,16 @@ class MailEximCourierBackend (MailBackend):
             'mailname': open('/etc/mailname').read().strip(),
             'maildomains': self.maildomains,
             'mailroot': config.mailroot,
+            'custom_mta_acl': config.custom_mta_acl,
+            'custom_mta_routers': config.custom_mta_routers,
+            'custom_mta_config': config.custom_mta_config,
+            'custom_mta_transports': config.custom_mta_transports,
         })
         open(self.courier_authdaemonrc, 'w').write(templates.COURIER_AUTHRC)
         open(self.courier_imaprc, 'w').write(templates.COURIER_IMAP)
 
         os.chmod('/var/run/courier/authdaemon', 0755)
-        
+
         if os.path.exists(self.courier_userdb):
             os.unlink(self.courier_userdb)
 
@@ -130,6 +142,11 @@ class MailManager (object):
         else:
             self.is_configured = False
             self.config = Config.create()
+
+    def get_usage(self, mb):
+        return int(subprocess.check_output(
+            ['du', '-sb', os.path.join(self.config.mailroot, mb.name)]
+        ).split()[0])
 
     def save(self):
         j = json.dumps(self.config.save(), indent=4)

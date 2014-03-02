@@ -1,10 +1,10 @@
-import os
-import subprocess
-
 from ajenti.api import *
 from ajenti.plugins.main.api import SectionPlugin
 from ajenti.ui import on
 from ajenti.ui.binder import Binder
+from ajenti.util import str_fsize
+
+from ajenti.plugins.vh.api import VHManager
 
 from api import MailManager, Mailbox
 
@@ -36,10 +36,7 @@ class MailPlugin (SectionPlugin):
         self.binder = Binder(None, self)
 
         def post_mb_bind(object, collection, item, ui):
-            #def manage():
-            #    self.context.launch('v:manage-website', website=item)
-            #ui.find('manage').on('click', manage)
-            pass
+            ui.find('size').text = str_fsize(self.manager.get_usage(item))
 
         def post_mb_update(object, collection, item, ui):
             if ui.find('password').value:
@@ -55,7 +52,7 @@ class MailPlugin (SectionPlugin):
         self.binder.update()
         mb = Mailbox.create()
         mb.local = self.find('new-mailbox-local').value
-        mb.domain = self.find('new-mailbox-domain').value
+        mb.domain = self.find('new-mailbox-domain').value or self.find('new-mailbox-domain-custom').value
         mb.password = ''
         self.find('new-mailbox-local').value = ''
         if not mb.local:
@@ -71,6 +68,14 @@ class MailPlugin (SectionPlugin):
         self.refresh()
 
     def refresh(self):
+        domains = []
+        for ws in VHManager.get().config.websites:
+            domains += [d.domain for d in ws.domains]
+        domains = sorted(list(set(domains)))
+
+        self.find('new-mailbox-domain').labels = domains + [_('Custom domain')]
+        self.find('new-mailbox-domain').values = domains + [None]
+
         if self.manager.is_configured:
             self.binder.unpopulate().populate()
 
