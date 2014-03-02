@@ -23,7 +23,7 @@
                                         <label bind="name" />
                                     </formline>
                                     <formline text="{Password}">
-                                        <editable id="password" placeholder="{Change password}" />
+                                        <editable id="password" placeholder="{Change password}" icon="lock" />
                                     </formline>
                                 </vc>
                             </indent>
