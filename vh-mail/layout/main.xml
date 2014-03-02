@@ -1,0 +1,52 @@
+<vc>
+    <body>
+        <vc>
+            <pad>
+                <bind:collection bind="mailboxes" id="mailboxes">                
+                    <vc>
+                        <dt bind="__items" />
+                    </vc>
+                    <bind:template>
+                        <collapserow>
+                            <box>
+                                <right>
+                                    <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                </right>
+                                <hc>
+                                    <icon icon="envelope" />
+                                    <label bind="name" />
+                                </hc>
+                            </box>
+                            <indent>
+                                <vc>
+                                    <formline text="{Username}">
+                                        <label bind="name" />
+                                    </formline>
+                                    <formline text="{Password}">
+                                        <editable id="password" placeholder="{Change password}" />
+                                    </formline>
+                                </vc>
+                            </indent>
+                        </collapserow>
+                    </bind:template>
+                </bind:collection>
+            </pad>
+            <pad>
+                <formgroup text="{New mailbox}">
+                    <pad>
+                        <hc>
+                            <textbox id="new-mailbox-local" />
+                            <label text="@" />
+                            <textbox id="new-mailbox-domain" />
+                            <button id="new-mailbox" icon="plus" text="{Create}" />
+                        </hc>
+                    </pad>
+                </formgroup>
+            </pad>
+        </vc>
+    </body>
+
+    <hc>
+        <button style="normal big" icon="ok" id="save" text="{Apply changes}" />
+    </hc>
+</vc>
