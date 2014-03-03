@@ -141,15 +141,15 @@ class WebsiteEditorPlugin (SectionPlugin):
         self.find('create-location').on('click', create_location)
 
         # Extensions
-        
-        if hasattr(self.website, 'extensions'):
-            for ext in self.website.extensions:
-                ext._ui_container.delete()
+        for tab in self.find('tabs').children:
+            if hasattr(tab, '-is-extension'):
+                tab.delete()
 
         self.website.extensions = []
         for ext in extensions:
             ext = ext.new(self.ui, self.website, config=self.website.extension_configs.get(ext.classname, None))
             ext._ui_container = self.ui.create('tab', children=[ext], title=ext.name)
+            setattr(ext._ui_container, '-is-extension', True)
             self.website.extensions.append(ext)
             self.find('tabs').append(ext._ui_container)
 
