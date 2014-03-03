@@ -150,6 +150,8 @@ types {
 TEMPLATE_WEBSITE = """
 server {
     %(ports)s
+    %(ssl_cert)s
+    %(ssl_key)s
     %(server_name)s
 
     access_log /var/log/nginx/%(slug)s.access.log;

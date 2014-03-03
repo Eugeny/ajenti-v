@@ -127,6 +127,14 @@
                             </bind:template>
                         </bind:collection>
                     </formline>
+                    
+                    <formline text="{SSL certificate path}">
+                        <pathbox bind="ssl_cert_path" />
+                    </formline>
+
+                    <formline text="{SSL key path}">
+                        <pathbox bind="ssl_key_path" />
+                    </formline>
                 </pad>
             </body>
         </tab>

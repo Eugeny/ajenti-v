@@ -123,6 +123,8 @@ class Website (object):
     def __init__(self, j):
         self.name = j['name']
         self.owner = j.get('owner', 'root')
+        self.ssl_cert_path = j.get('ssl_cert_path', '')
+        self.ssl_key_path = j.get('ssl_key_path', '')
         self.domains = [WebsiteDomain(_) for _ in j['domains']]
         self.ports = [WebsitePort(_) for _ in j.get('ports', [])]
         self.locations = [WebsiteLocation(_) for _ in j.get('locations', [])]
@@ -153,6 +155,8 @@ class Website (object):
             'root': self.root,
             'extensions': self.extension_configs,
             'custom_conf': self.custom_conf,
+            'ssl_cert_path': self.ssl_cert_path,
+            'ssl_key_path': self.ssl_key_path,
         }
 
 

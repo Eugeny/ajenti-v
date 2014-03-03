@@ -81,6 +81,8 @@ class NginxWebserver (WebserverComponent):
                     for x in website.ports
                 )
             ),
+            'ssl_cert': 'ssl_certificate %s;' % website.ssl_cert_path if website.ssl_cert_path else '',
+            'ssl_key': 'ssl_certificate_key %s;' % website.ssl_key_path if website.ssl_key_path else '',
             'maintenance': TEMPLATE_MAINTENANCE if website.maintenance_mode else '',
             'root': website.root,
             'custom_conf': website.custom_conf,
