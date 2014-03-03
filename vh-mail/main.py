@@ -44,6 +44,7 @@ class MailPlugin (SectionPlugin):
 
         self.find('mailboxes').post_item_bind = post_mb_bind
         self.find('mailboxes').post_item_update = post_mb_update
+        self.find('mailboxes').filter = lambda mb: self.context.session.identity in ['root', mb.owner]
 
         self.binder.setup(self.manager.config)
 
@@ -53,13 +54,23 @@ class MailPlugin (SectionPlugin):
         mb = Mailbox.create()
         mb.local = self.find('new-mailbox-local').value
         mb.domain = self.find('new-mailbox-domain').value or self.find('new-mailbox-domain-custom').value
+        mb.owner = self.context.session.identity
         mb.password = ''
-        self.find('new-mailbox-local').value = ''
+        
         if not mb.local:
-            self.context.error(_('Invalid mailbox name'))
-        if not mb.domain:
-            self.context.error(_('Invalid mailbox domain'))
+            self.context.notify('error', _('Invalid mailbox name'))
+            return
 
+        if not mb.domain:
+            self.context.notify('error', _('Invalid mailbox domain'))
+            return
+
+        for existing in self.manager.config.mailboxes:
+            if existing.name == mb.name:
+                self.context.notify('error', _('This address is already taken'))
+                return
+
+        self.find('new-mailbox-local').value = ''
         self.manager.config.mailboxes.append(mb)
         self.manager.save()
         self.binder.populate()
@@ -70,7 +81,8 @@ class MailPlugin (SectionPlugin):
     def refresh(self):
         domains = []
         for ws in VHManager.get().config.websites:
-            domains += [d.domain for d in ws.domains]
+            if self.context.session.identity in ['root', ws.owner]:
+                domains += [d.domain for d in ws.domains]
         domains = sorted(list(set(domains)))
 
         self.find('new-mailbox-domain').labels = domains + [_('Custom domain')]

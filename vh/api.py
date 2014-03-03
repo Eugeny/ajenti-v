@@ -122,6 +122,7 @@ class Backend (object):
 class Website (object):
     def __init__(self, j):
         self.name = j['name']
+        self.owner = j.get('owner', 'root')
         self.domains = [WebsiteDomain(_) for _ in j['domains']]
         self.ports = [WebsitePort(_) for _ in j.get('ports', [])]
         self.locations = [WebsiteLocation(_) for _ in j.get('locations', [])]
@@ -143,6 +144,7 @@ class Website (object):
     def save(self):
         return {
             'name': self.name,
+            'owner': self.owner,
             'domains': [_.save() for _ in self.domains],
             'ports': [_.save() for _ in self.ports],
             'locations': [_.save() for _ in self.locations],

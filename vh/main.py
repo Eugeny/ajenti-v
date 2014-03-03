@@ -46,6 +46,7 @@ class WebsitesPlugin (SectionPlugin):
             ui.find('manage').on('click', manage)
 
         self.find('websites').post_item_bind = post_ws_bind
+        self.find('websites').filter = lambda ws: self.context.session.identity in ['root', ws.owner]
 
         self.binder.setup(self.manager.config)
 
@@ -64,6 +65,7 @@ class WebsitesPlugin (SectionPlugin):
 
         w = Website.create(name)
         w.slug = slug
+        w.owner = self.context.session.identity
         self.manager.config.websites.append(w)
         self.manager.save()
         self.binder.populate()

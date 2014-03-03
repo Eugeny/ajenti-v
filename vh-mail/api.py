@@ -39,6 +39,7 @@ class Mailbox (object):
         self.local = j.get('local', 'someone')
         self.domain = j.get('domain', 'example.com')
         self.password = j.get('password', 'example.com')
+        self.owner = j.get('owner', 'root')
 
     @property
     def name(self):
@@ -53,6 +54,7 @@ class Mailbox (object):
             'local': self.local,
             'domain': self.domain,
             'password': self.password,
+            'owner': self.owner,
         }
 
 
@@ -99,7 +101,7 @@ class MailEximCourierBackend (MailBackend):
             root = os.path.join(config.mailroot, mb.name)
             if not os.path.exists(root):
                 os.makedirs(root)
-                os.chown(root, mailuid, mailgid)
+                os.chown(root, self.mailuid, self.mailgid)
 
 
             with open(os.path.join(self.maildomains, mb.domain), 'a+') as f:
