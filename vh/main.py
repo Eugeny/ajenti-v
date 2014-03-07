@@ -204,6 +204,7 @@ class WebsiteEditorPlugin (SectionPlugin):
                 ext.on_destroy()
             except Exception, e:
                 logging.error(str(e))
+        self.manager.config.websites.remove(self.website)
         self.save()
         self.on_go_back()
 
