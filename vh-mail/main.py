@@ -85,11 +85,12 @@ class MailPlugin (SectionPlugin):
                 domains += [d.domain for d in ws.domains]
         domains = sorted(list(set(domains)))
 
-        self.find('new-mailbox-domain').labels = domains + [_('Custom domain')]
-        self.find('new-mailbox-domain').values = domains + [None]
+        if self.find('new-mailbox-domain'):
+            self.find('new-mailbox-domain').labels = domains + [_('Custom domain')]
+            self.find('new-mailbox-domain').values = domains + [None]
 
-        if self.manager.is_configured:
-            self.binder.unpopulate().populate()
+            if self.manager.is_configured:
+                self.binder.unpopulate().populate()
 
     @on('save', 'click')
     def save(self):
