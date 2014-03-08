@@ -35,6 +35,7 @@ class MySQLExtension (BaseExtension):
     def refresh(self):
         self.binder.setup().populate()
         self.find('db-name').value = self.website.slug
+        self.find('db-username').value = self.website.slug
         
     def update(self):
         self.binder.update()
@@ -53,14 +54,21 @@ class MySQLExtension (BaseExtension):
             return
 
         dbname = self.find('db-name').value
+        username = self.find('db-username').value
+
         for db in self.db.query_databases():
             if db.name == dbname:
-                self.context.notify('error', 'This DB name is already used')
+                self.context.notify('error', _('This database name is already used'))
                 return
         
-        self.config['username'] = self.website.slug
-        self.config['password'] = str(uuid.uuid4())
+        for user in self.db.query_users():
+            if user.name == username:
+                self.context.notify('error', _('This username is already used'))
+                return
+
         self.config['name'] = dbname
+        self.config['username'] = username
+        self.config['password'] = str(uuid.uuid4())
         
         try:
             self.db.query_create(self.config['name'])
@@ -73,22 +81,17 @@ class MySQLExtension (BaseExtension):
         db = Database()
         db.name = self.config['name']
 
-        while True:
-            exists = False
-            for user in self.db.query_users():
-                if user.name == self.config['username']:
-                    exists = True
-                    break
-            if not exists:
-                break
-            else:
-                self.config['username'] += '_'
-        
         user = User()
         user.name = self.config['username']
         user.password = self.config['password']
         user.host = 'localhost'
-        self.db.query_create_user(user)
+        try:
+            self.db.query_create_user(user)
+        except Exception, e:
+            self.db.query_drop(db)
+            self.context.notify('error', str(e))
+            return
+
         self.db.query_grant(user, db)
         self.refresh()
 
