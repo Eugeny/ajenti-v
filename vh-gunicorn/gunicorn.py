@@ -74,6 +74,7 @@ class Gunicorn (ApplicationGatewayComponent):
                         virtualenv = location.backend.params.get('venv', None)
                         if virtualenv:
                             p.environment = 'PATH="%s"' % os.path.join(virtualenv, 'bin')
+                            p.command = os.path.join(virtualenv, 'bin') + '/' + p.command
 
                         sup.tree.programs.append(p)
 
