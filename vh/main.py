@@ -143,7 +143,7 @@ class WebsiteEditorPlugin (SectionPlugin):
         self.find('create-location').on('click', create_location)
 
         # Extensions
-        for tab in self.find('tabs').children:
+        for tab in list(self.find('tabs').children):
             if hasattr(tab, '-is-extension'):
                 tab.delete()
 
