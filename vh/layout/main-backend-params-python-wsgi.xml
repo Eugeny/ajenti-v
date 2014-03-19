@@ -1,4 +1,4 @@
-<box bind:visible="type" bindtransform="lambda x: x == 'python-wsgi'">
+<box>
     <bind:dict bind="params">
         <vc>
             <formline text="{Application module}">

@@ -1,4 +1,4 @@
-<box bind:visible="type" bindtransform="lambda x: x == 'php-fcgi'">
+<box>
     <bind:dict bind="params">
         <vc>
             <formline text="{Min processes}">

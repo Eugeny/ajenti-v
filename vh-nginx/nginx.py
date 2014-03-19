@@ -32,6 +32,11 @@ class NginxWebserver (WebserverComponent):
                 'url': params.get('url', 'http://127.0.0.1/'),
             }
 
+        if location.backend.type == 'fcgi':
+            content = TEMPLATE_LOCATION_CONTENT_FCGI % {
+                'url': params.get('url', '127.0.0.1:9000'),
+            }
+
         if location.backend.type == 'php-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP_FCGI % {
                 'id': location.backend.id,
@@ -56,6 +61,9 @@ class NginxWebserver (WebserverComponent):
             content = TEMPLATE_LOCATION_CONTENT_NODEJS % {
                 'port': location.backend.params.get('port', 8000),
             }
+
+        if location.custom_conf_override:
+            content = ''
 
         return TEMPLATE_LOCATION % {
             'pattern': location.pattern,

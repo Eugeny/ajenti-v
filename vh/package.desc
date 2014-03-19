@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v
-VERSION=0.2.5
+VERSION=0.2.6
 DEPENDS="ajenti (>=1.2.16.2), ajenti-v-webserver, python-reconfigure (>=0.1.39)"
 PROVIDES=ajenti-v-core
 DESCRIPTION="Virtual hosting solution for Ajenti"

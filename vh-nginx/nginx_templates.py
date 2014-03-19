@@ -198,6 +198,11 @@ TEMPLATE_LOCATION_CONTENT_PROXY = """
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 """
 
+TEMPLATE_LOCATION_CONTENT_FCGI = """
+        include fcgi.conf;
+        fastcgi_pass %(url)s;
+"""
+
 TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
         fastcgi_index index.php;
         include fcgi.conf;

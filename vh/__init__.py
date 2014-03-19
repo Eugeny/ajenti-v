@@ -24,3 +24,4 @@ def init():
 
     import gate_static
     import gate_proxy
+    import gate_fcgi

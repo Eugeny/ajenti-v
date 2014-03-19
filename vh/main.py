@@ -79,8 +79,8 @@ class WebsitesPlugin (SectionPlugin):
 
     @on('save', 'click')
     def save(self):
-        self.binder.update()
         self.context.endpoint.send_progress(_('Saving changes'))
+        self.binder.update()
         self.manager.save()
         self.context.endpoint.send_progress(_('Applying changes'))
         self.manager.update_configuration()
