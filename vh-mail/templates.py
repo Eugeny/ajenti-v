@@ -1,10 +1,12 @@
 EXIM_CONFIG = r"""
+#AUTOMATICALLY GENERATED - DO NO EDIT!
+
 exim_path = /usr/sbin/exim4
 
 CONFDIR = /etc/exim4
 
 #UPEX4CmacrosUPEX4C = 1
-domainlist local_domains = %(mailname)s : localhost
+domainlist local_domains = %(local_domains)s
 
 ETC_MAILNAME = %(mailname)s
 qualify_domain = ETC_MAILNAME
@@ -19,15 +21,10 @@ gecos_name = $1
 CHECK_RCPT_LOCAL_LOCALPARTS = ^[.] : ^.*[@%%!/|`#&?]
 CHECK_RCPT_REMOTE_LOCALPARTS = ^[./|] : ^.*[@%%!`#&?] : ^.*/\\.\\./
 
-MAIN_LOG_SELECTOR = +tls_peerdn
 
-
-MAIN_ACL_CHECK_MAIL = acl_check_mail
-acl_smtp_mail = MAIN_ACL_CHECK_MAIL
-MAIN_ACL_CHECK_RCPT = acl_check_rcpt
-acl_smtp_rcpt = MAIN_ACL_CHECK_RCPT
-MAIN_ACL_CHECK_DATA = acl_check_data
-acl_smtp_data = MAIN_ACL_CHECK_DATA
+acl_smtp_mail = acl_check_mail
+acl_smtp_rcpt = acl_check_rcpt
+acl_smtp_data = acl_check_data
 
 # spamd_address = 127.0.0.1 783
 
@@ -36,20 +33,12 @@ local_sender_retain = true
 untrusted_set_sender = *
 
 
-MAIN_IGNORE_BOUNCE_ERRORS_AFTER = 2d
-ignore_bounce_errors_after = MAIN_IGNORE_BOUNCE_ERRORS_AFTER
+ignore_bounce_errors_after = 2d
+timeout_frozen_after = 7d
+freeze_tell = postmaster
+spool_directory = /var/spool/exim4
 
-MAIN_TIMEOUT_FROZEN_AFTER = 7d
-timeout_frozen_after = MAIN_TIMEOUT_FROZEN_AFTER
-
-MAIN_FREEZE_TELL = postmaster
-freeze_tell = MAIN_FREEZE_TELL
-
-SPOOLDIR = /var/spool/exim4
-spool_directory = SPOOLDIR
-
-MAIN_TRUSTED_USERS = uucp
-trusted_users = MAIN_TRUSTED_USERS
+trusted_users = uucp
 #trusted_groups = MAIN_TRUSTED_GROUPS
 
 

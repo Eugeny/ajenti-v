@@ -75,8 +75,17 @@ class MailEximCourierBackend (MailBackend):
         self.mailgid = grp.getgrnam('mail').gr_gid
 
     def configure(self, config):
+        mailname = open('/etc/mailname').read().strip()
+        domains = list(set(x.domain for x in config.mailboxes))
+        print domains
+        if not mailname in domains:
+            domains.append(mailname)
+        if not 'localhost' in domains:
+            domains.append('localhost')
+
         open(self.exim_cfg_path, 'w').write(templates.EXIM_CONFIG % {
-            'mailname': open('/etc/mailname').read().strip(),
+            'local_domains': ' : '.join(domains),
+            'mailname': mailname,
             'maildomains': self.maildomains,
             'mailroot': config.mailroot,
             'custom_mta_acl': config.custom_mta_acl,

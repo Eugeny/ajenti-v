@@ -1,4 +1,6 @@
 TEMPLATE_CONFIG_FILE = """
+#AUTOMATICALLY GENERATED - DO NO EDIT!
+
 user %(user)s %(user)s;
 pid /var/run/nginx.pid;
 worker_rlimit_nofile 100000;
@@ -148,6 +150,8 @@ types {
 """
 
 TEMPLATE_WEBSITE = """
+#AUTOMATICALLY GENERATED - DO NO EDIT!
+
 server {
     %(ports)s
     %(ssl_cert)s
