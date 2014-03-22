@@ -87,6 +87,9 @@ class MailPlugin (SectionPlugin):
         self.refresh()
 
     def refresh(self):
+        if not self.manager.is_configured:
+            return
+
         domains = []
         for ws in VHManager.get().config.websites:
             if self.context.session.identity in ['root', ws.owner]:
