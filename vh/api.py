@@ -61,7 +61,7 @@ class WebsiteLocation (object):
             'match': 'exact',
             'backend': Backend.create().save(),
         }
-        
+
         return WebsiteLocation(templates[template] if template in templates else default_template)
 
     def save(self):

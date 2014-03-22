@@ -93,12 +93,12 @@ class WebsiteEditorPlugin (SectionPlugin):
     def init(self):
         self.title = 'Website editor'
         self.icon = 'globe'
-        self.category = 'Web'        
+        self.category = 'Web'
         self.hidden = True
 
         self.manager = VHManager.get()
         self.binder = Binder(None, self)
-        
+
         self.append(self.ui.inflate('vh:main-website'))
         self.find('domains').new_item = lambda c: WebsiteDomain.create('example.com')
         self.find('ports').new_item = lambda c: WebsitePort.create(80)
@@ -159,6 +159,7 @@ class WebsiteEditorPlugin (SectionPlugin):
         self.find('root-not-created').visible = not os.path.exists(self.website.root)
 
         def create_root():
+            self.binder.update()
             try:
                 os.mkdir(self.website.root)
             except:

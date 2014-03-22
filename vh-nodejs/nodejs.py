@@ -33,7 +33,8 @@ class NodeJS (ApplicationGatewayComponent):
                         location.backend.id = website.slug + '-nodejs-' + str(i)
                         p = ProgramData()
                         p.name = location.backend.id
-                        p.command = 'node %s' % location.backend.params.get('path', '/')
+                        p.command = 'node %s' % location.backend.params.get('script', None) or '.'
+                        p.directory = location.path or website.root
                         sup.tree.programs.append(p)
 
         sup.save()

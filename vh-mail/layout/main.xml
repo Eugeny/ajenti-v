@@ -79,6 +79,9 @@
                 <tab title="{Advanced}">
                     <formgroup text="TLS">
                         <vc>
+                            <formline text="{Enable}">
+                                <checkbox bind="tls_enable" />
+                            </formline>
                             <formline text="{Certificate path}">
                                 <pathbox bind="tls_certificate" />
                             </formline>

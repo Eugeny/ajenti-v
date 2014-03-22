@@ -1,6 +1,9 @@
 <box>
     <bind:dict bind="params">
         <vc>
+            <formline text="{Script}">
+                <textbox bind="script" />
+            </formline>
             <formline text="{HTTP port}">
                 <textbox bind="port" type="integer" />
             </formline>
