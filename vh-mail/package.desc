@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-mail
-VERSION=0.0.7
+VERSION=0.0.8
 DEPENDS="ajenti-v, courier-imap, exim4"
 PROVIDES=ajenti-v-mailserver
 DESCRIPTION="Mail for Ajenti V"

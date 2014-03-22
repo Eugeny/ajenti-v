@@ -77,6 +77,19 @@
                 </tab>
 
                 <tab title="{Advanced}">
+                    <formgroup text="TLS">
+                        <vc>
+                            <formline text="{Certificate path}">
+                                <pathbox bind="tls_certificate" />
+                            </formline>
+                            <formline text="{Private key path}">
+                                <pathbox bind="tls_privatekey" />
+                            </formline>
+                            <formline>
+                                <button id="generate-tls-cert" text="{Generate new certificate}" style="normal big" icon="cogs" />
+                            </formline>
+                        </vc>
+                    </formgroup>
                     <formgroup text="{Custom MTA configuration}">
                         <vc>
                             <formline text="{Custom configuration}">

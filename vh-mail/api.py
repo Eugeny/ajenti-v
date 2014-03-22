@@ -22,6 +22,9 @@ class Config (object):
         self.dkim_enable = j.get('dkim_enable', False)
         self.dkim_selector = j.get('dkim_selector', 'x')
         self.dkim_private_key = j.get('dkim_private_key', '')
+        self.tls_enable = j.get('tls_enable', False)
+        self.tls_certificate = j.get('tls_certificate', '')
+        self.tls_privatekey = j.get('tls_privatekey', '')
 
     @staticmethod
     def create():
@@ -37,6 +40,9 @@ class Config (object):
             'dkim_enable': self.dkim_enable,
             'dkim_selector': self.dkim_selector,
             'dkim_private_key': self.dkim_private_key,
+            'tls_enable': self.tls_enable,
+            'tls_certificate': self.tls_certificate,
+            'tls_privatekey': self.tls_privatekey,
         }
 
 
@@ -100,6 +106,9 @@ class MailEximCourierBackend (MailBackend):
             'dkim_enable': 'DKIM_ENABLE=1' if config.dkim_enable else '',
             'dkim_selector': config.dkim_selector,
             'dkim_private_key': config.dkim_private_key,
+            'tls_enable': 'TLS_ENABLE=1' if config.tls_enable else '',
+            'tls_certificate': config.tls_certificate,
+            'tls_privatekey': config.tls_privatekey,
         })
         open(self.courier_authdaemonrc, 'w').write(templates.COURIER_AUTHRC)
         open(self.courier_imaprc, 'w').write(templates.COURIER_IMAP)
@@ -160,6 +169,7 @@ class MailEximCourierBackend (MailBackend):
 class MailManager (BasePlugin):
     config_path = '/etc/ajenti/mail.json'
     dkim_path = '/etc/exim4/dkim/'
+    tls_path = '/etc/exim4/tls/'
 
     def init(self):
         self.backend = MailBackend.get()
@@ -185,6 +195,18 @@ class MailManager (BasePlugin):
 
         self.backend.configure(self.config)
 
+    def generate_tls_cert(self):
+        key_path = os.path.join(self.tls_path, 'exim.key')
+        cert_path = os.path.join(self.tls_path, 'exim.crt')
+        subprocess.call([
+            'openssl', 'req', '-x509', '-newkey', 'rsa:1024',
+            '-keyout', key_path, '-out', cert_path, '-days', '4096',
+            '-nodes'
+        ])
+        self.config.tls_enable = True
+        self.config.tls_certificate = cert_path
+        self.config.tls_privatekey = key_path
+
     def generate_dkim_key(self):
         if not os.path.exists(self.dkim_path):
             os.mkdir(self.dkim_path)
@@ -195,4 +217,5 @@ class MailManager (BasePlugin):
             'openssl', 'genrsa', '-out', privkey_path, '2048'
         ])
 
+        self.config.dkim_enable = True
         self.config.dkim_private_key = privkey_path

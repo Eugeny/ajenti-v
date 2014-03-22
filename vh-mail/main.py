@@ -126,6 +126,13 @@ class MailPlugin (SectionPlugin):
         self.binder.populate()
         self.save()
 
+    @on('generate-tls-cert', 'click')
+    def on_generate_tls_cert(self):
+        self.binder.update()
+        self.manager.generate_tls_cert()
+        self.binder.populate()
+        self.save()
+
     @on('save', 'click')
     def save(self):
         self.binder.update()

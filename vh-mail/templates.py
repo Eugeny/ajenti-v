@@ -20,11 +20,11 @@ DKIM_PRIVATE_KEY = %(dkim_private_key)s
 DKIM_CANON = relaxed
 DKIM_STRICT = 1
 
-MAIN_TLS_ADVERTISE_HOSTS = *
-MAIN_TLS_ENABLE =
-MAIN_TLS_CERTIFICATE =
-MAIN_TLS_PRIVATEKEY =
-MAIN_TLS_VERIFY_CERTIFICATES = ${if exists{/etc/ssl/certs/ca-certificates.crt} {/etc/ssl/certs/ca-certificates.crt} {/dev/null}}
+%(tls_enable)s
+TLS_ADVERTISE_HOSTS = *
+TLS_CERTIFICATE = %(tls_certificate)s
+TLS_PRIVATEKEY = %(tls_privatekey)s
+TLS_VERIFY_CERTIFICATES = ${if exists{/etc/ssl/certs/ca-certificates.crt} {/etc/ssl/certs/ca-certificates.crt} {/dev/null}}
 
 #--CONFIGURATION
 
@@ -54,11 +54,11 @@ spool_directory = /var/spool/exim4
 
 trusted_users = uucp
 
-.ifdef MAIN_TLS_ENABLE
-tls_advertise_hosts = MAIN_TLS_ADVERTISE_HOSTS
-tls_certificate = MAIN_TLS_CERTIFICATE
-tls_privatekey = MAIN_TLS_PRIVATEKEY
-tls_verify_certificates = MAIN_TLS_VERIFY_CERTIFICATES
+.ifdef TLS_ENABLE
+tls_advertise_hosts = TLS_ADVERTISE_HOSTS
+tls_certificate = TLS_CERTIFICATE
+tls_privatekey = TLS_PRIVATEKEY
+tls_verify_certificates = TLS_VERIFY_CERTIFICATES
 .endif
 
 
