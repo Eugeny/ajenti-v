@@ -19,6 +19,9 @@ class Config (object):
         self.custom_mta_acl = j.get('custom_mta_acl', '')
         self.custom_mta_routers = j.get('custom_mta_routers', '')
         self.custom_mta_transports = j.get('custom_mta_transports', '')
+        self.dkim_enable = j.get('dkim_enable', False)
+        self.dkim_selector = j.get('dkim_selector', 'x')
+        self.dkim_private_key = j.get('dkim_private_key', '')
 
     @staticmethod
     def create():
@@ -31,6 +34,9 @@ class Config (object):
             'custom_mta_routers': self.custom_mta_routers,
             'custom_mta_config': self.custom_mta_config,
             'custom_mta_transports': self.custom_mta_transports,
+            'dkim_enable': self.dkim_enable,
+            'dkim_selector': self.dkim_selector,
+            'dkim_private_key': self.dkim_private_key,
         }
 
 
@@ -77,7 +83,6 @@ class MailEximCourierBackend (MailBackend):
     def configure(self, config):
         mailname = open('/etc/mailname').read().strip()
         domains = list(set(x.domain for x in config.mailboxes))
-        print domains
         if not mailname in domains:
             domains.append(mailname)
         if not 'localhost' in domains:
@@ -92,6 +97,9 @@ class MailEximCourierBackend (MailBackend):
             'custom_mta_routers': config.custom_mta_routers,
             'custom_mta_config': config.custom_mta_config,
             'custom_mta_transports': config.custom_mta_transports,
+            'dkim_enable': 'DKIM_ENABLE=1' if config.dkim_enable else '',
+            'dkim_selector': config.dkim_selector,
+            'dkim_private_key': config.dkim_private_key,
         })
         open(self.courier_authdaemonrc, 'w').write(templates.COURIER_AUTHRC)
         open(self.courier_imaprc, 'w').write(templates.COURIER_IMAP)
@@ -112,25 +120,33 @@ class MailEximCourierBackend (MailBackend):
                 os.makedirs(root)
                 os.chown(root, self.mailuid, self.mailgid)
 
-
             with open(os.path.join(self.maildomains, mb.domain), 'a+') as f:
                 f.write(mb.local + '\n')
 
             subprocess.call([
-                'userdb', 
-                mb.name, 
-                'set', 
+                'userdb',
+                mb.name,
+                'set',
                 'uid=mail',
                 'gid=mail',
                 'home=%s' % root,
                 'mail=%s' % root,
             ])
 
-            udbpw = subprocess.Popen(['userdbpw', '-md5'], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-            o, e = udbpw.communicate('%s\n%s\n' % (mb.password, mb.password))
+            udbpw = subprocess.Popen(
+                ['userdbpw', '-md5'],
+                stdout=subprocess.PIPE,
+                stdin=subprocess.PIPE
+            )
+            o, e = udbpw.communicate(
+                '%s\n%s\n' % (mb.password, mb.password)
+            )
             md5pw = o
 
-            udb = subprocess.Popen(['userdb', mb.name, 'set', 'systempw'], stdin=subprocess.PIPE)
+            udb = subprocess.Popen(
+                ['userdb', mb.name, 'set', 'systempw'],
+                stdin=subprocess.PIPE
+            )
             udb.communicate(md5pw)
 
         subprocess.call(['makeuserdb'])
@@ -141,8 +157,9 @@ class MailEximCourierBackend (MailBackend):
 
 
 @plugin
-class MailManager (object):
+class MailManager (BasePlugin):
     config_path = '/etc/ajenti/mail.json'
+    dkim_path = '/etc/exim4/dkim/'
 
     def init(self):
         self.backend = MailBackend.get()
@@ -167,3 +184,15 @@ class MailManager (object):
         self.is_configured = True
 
         self.backend.configure(self.config)
+
+    def generate_dkim_key(self):
+        if not os.path.exists(self.dkim_path):
+            os.mkdir(self.dkim_path)
+
+        privkey_path = os.path.join(self.dkim_path, 'private.key')
+
+        subprocess.call([
+            'openssl', 'genrsa', '-out', privkey_path, '2048'
+        ])
+
+        self.config.dkim_private_key = privkey_path

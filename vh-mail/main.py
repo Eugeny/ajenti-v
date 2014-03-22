@@ -1,3 +1,6 @@
+import os
+import subprocess
+
 from ajenti.api import *
 from ajenti.plugins.main.api import SectionPlugin
 from ajenti.ui import on
@@ -44,7 +47,8 @@ class MailPlugin (SectionPlugin):
 
         self.find('mailboxes').post_item_bind = post_mb_bind
         self.find('mailboxes').post_item_update = post_mb_update
-        self.find('mailboxes').filter = lambda mb: self.context.session.identity in ['root', mb.owner]
+        self.find('mailboxes').filter = \
+            lambda mb: self.context.session.identity in ['root', mb.owner]
 
         self.binder.setup(self.manager.config)
 
@@ -53,10 +57,11 @@ class MailPlugin (SectionPlugin):
         self.binder.update()
         mb = Mailbox.create()
         mb.local = self.find('new-mailbox-local').value
-        mb.domain = self.find('new-mailbox-domain').value or self.find('new-mailbox-domain-custom').value
+        mb.domain = self.find('new-mailbox-domain').value or \
+            self.find('new-mailbox-domain-custom').value
         mb.owner = self.context.session.identity
         mb.password = ''
-        
+
         if not mb.local:
             self.context.notify('error', _('Invalid mailbox name'))
             return
@@ -67,7 +72,10 @@ class MailPlugin (SectionPlugin):
 
         for existing in self.manager.config.mailboxes:
             if existing.name == mb.name:
-                self.context.notify('error', _('This address is already taken'))
+                self.context.notify(
+                    'error',
+                    _('This address is already taken')
+                )
                 return
 
         self.find('new-mailbox-local').value = ''
@@ -86,11 +94,37 @@ class MailPlugin (SectionPlugin):
         domains = sorted(list(set(domains)))
 
         if self.find('new-mailbox-domain'):
-            self.find('new-mailbox-domain').labels = domains + [_('Custom domain')]
+            self.find('new-mailbox-domain').labels = \
+                domains + [_('Custom domain')]
             self.find('new-mailbox-domain').values = domains + [None]
 
             if self.manager.is_configured:
                 self.binder.unpopulate().populate()
+
+        if os.path.exists(self.manager.config.dkim_private_key):
+            pubkey = subprocess.check_output([
+                'openssl', 'rsa', '-in', self.manager.config.dkim_private_key,
+                '-pubout'
+            ])
+            pubkey = filter(None, pubkey.split('-'))[1].replace('\n', '')
+            dns = '@\t\t\t\t10800 IN TXT "v=spf1 a -all"\n'
+            dns += '_domainkey\t\t10800 IN TXT "o=~; r=postmaster@<domain>"\n'
+            dns += '%s._domainkey\t10800 IN TXT "v=DKIM1; k=rsa; p="%s"\n' % (
+                self.manager.config.dkim_selector,
+                pubkey
+            )
+            dns += '_dmarc\t\t\t10800 IN TXT "v=DMARC1; p=quarantine; sp=r"\n'
+
+            self.find('dkim-domain-entry').value = dns
+        else:
+            self.find('dkim-domain-entry').value = _('No valid key exists')
+
+    @on('generate-dkim-key', 'click')
+    def on_generate_dkim_key(self):
+        self.binder.update()
+        self.manager.generate_dkim_key()
+        self.binder.populate()
+        self.save()
 
     @on('save', 'click')
     def save(self):

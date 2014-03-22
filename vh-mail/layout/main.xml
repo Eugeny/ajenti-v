@@ -58,6 +58,24 @@
                     </vc>
                 </tab>
 
+                <tab title="DKIM">
+                    <formline text="{Enable}">
+                        <checkbox bind="dkim_enable" />
+                    </formline>
+                    <formline text="{Selector}">
+                        <textbox bind="dkim_selector" />
+                    </formline>
+                    <formline text="{Private key}">
+                        <pathbox bind="dkim_private_key" />
+                    </formline>
+                    <formline text="{DNS entry template}">
+                        <codearea readonly="True" id="dkim-domain-entry" width="500" height="100" />
+                    </formline>
+                    <formline>
+                        <button id="generate-dkim-key" text="{Generate new DKIM key}" style="normal big" icon="cogs" />
+                    </formline>
+                </tab>
+
                 <tab title="{Advanced}">
                     <formgroup text="{Custom MTA configuration}">
                         <vc>

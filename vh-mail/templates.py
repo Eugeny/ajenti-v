@@ -1,26 +1,41 @@
 EXIM_CONFIG = r"""
-#AUTOMATICALLY GENERATED - DO NO EDIT!
+#--AUTOMATICALLY GENERATED - DO NO EDIT!
 
 exim_path = /usr/sbin/exim4
 
+#--MACROS
+
 CONFDIR = /etc/exim4
 
-#UPEX4CmacrosUPEX4C = 1
-domainlist local_domains = %(local_domains)s
-
+LOCAL_DOMAINS = %(local_domains)s
 ETC_MAILNAME = %(mailname)s
-qualify_domain = ETC_MAILNAME
-
-#local_interfaces = MAIN_LOCAL_INTERFACES
-
-LOCAL_DELIVERY=mail_spool
-
-gecos_pattern = ^([^,:]*)
-gecos_name = $1
-
+MAIN_LOCAL_INTERFACES =
+LOCAL_DELIVERY = mail_spool
 CHECK_RCPT_LOCAL_LOCALPARTS = ^[.] : ^.*[@%%!/|`#&?]
 CHECK_RCPT_REMOTE_LOCALPARTS = ^[./|] : ^.*[@%%!`#&?] : ^.*/\\.\\./
 
+%(dkim_enable)s
+DKIM_SELECTOR = %(dkim_selector)s
+DKIM_PRIVATE_KEY = %(dkim_private_key)s
+DKIM_CANON = relaxed
+DKIM_STRICT = 1
+
+MAIN_TLS_ADVERTISE_HOSTS = *
+MAIN_TLS_ENABLE =
+MAIN_TLS_CERTIFICATE =
+MAIN_TLS_PRIVATEKEY =
+MAIN_TLS_VERIFY_CERTIFICATES = ${if exists{/etc/ssl/certs/ca-certificates.crt} {/etc/ssl/certs/ca-certificates.crt} {/dev/null}}
+
+#--CONFIGURATION
+
+%(custom_mta_config)s
+
+domainlist local_domains = LOCAL_DOMAINS
+qualify_domain = ETC_MAILNAME
+local_interfaces = MAIN_LOCAL_INTERFACES
+
+gecos_pattern = ^([^,:]*)
+gecos_name = $1
 
 acl_smtp_mail = acl_check_mail
 acl_smtp_rcpt = acl_check_rcpt
@@ -32,35 +47,20 @@ local_from_check = false
 local_sender_retain = true
 untrusted_set_sender = *
 
-
 ignore_bounce_errors_after = 2d
 timeout_frozen_after = 7d
 freeze_tell = postmaster
 spool_directory = /var/spool/exim4
 
 trusted_users = uucp
-#trusted_groups = MAIN_TRUSTED_GROUPS
-
 
 .ifdef MAIN_TLS_ENABLE
-MAIN_TLS_ADVERTISE_HOSTS = *
 tls_advertise_hosts = MAIN_TLS_ADVERTISE_HOSTS
-
-MAIN_TLS_CERTIFICATE = CONFDIR/exim.crt
 tls_certificate = MAIN_TLS_CERTIFICATE
-
-MAIN_TLS_PRIVATEKEY = CONFDIR/exim.key
 tls_privatekey = MAIN_TLS_PRIVATEKEY
-
-MAIN_TLS_VERIFY_CERTIFICATES = ${if exists{/etc/ssl/certs/ca-certificates.crt}\
-                                    {/etc/ssl/certs/ca-certificates.crt}\
-                    {/dev/null}}
 tls_verify_certificates = MAIN_TLS_VERIFY_CERTIFICATES
 .endif
 
-AUTH_SERVER_ALLOW_NOTLS_PASSWORDS = true
-
-%(custom_mta_config)s
 
 begin acl
 
@@ -356,24 +356,41 @@ procmail_pipe:
 remote_smtp:
   debug_print = "T: remote_smtp for $local_part@$domain"
   driver = smtp
-.ifdef DKIM_DOMAIN
-dkim_domain = DKIM_DOMAIN
-.endif
-.ifdef DKIM_SELECTOR
-dkim_selector = DKIM_SELECTOR
-.endif
-.ifdef DKIM_PRIVATE_KEY
-dkim_private_key = DKIM_PRIVATE_KEY
-.endif
-.ifdef DKIM_CANON
-dkim_canon = DKIM_CANON
-.endif
-.ifdef DKIM_STRICT
-dkim_strict = DKIM_STRICT
-.endif
-.ifdef DKIM_SIGN_HEADERS
-dkim_sign_headers = DKIM_SIGN_HEADERS
-.endif
+  .ifdef DKIM_ENABLE
+    dkim_domain = $sender_address_domain
+    .ifdef DKIM_SELECTOR
+    dkim_selector = DKIM_SELECTOR
+    .endif
+    .ifdef DKIM_PRIVATE_KEY
+    dkim_private_key = DKIM_PRIVATE_KEY
+    .endif
+    .ifdef DKIM_CANON
+    dkim_canon = DKIM_CANON
+    .endif
+    .ifdef DKIM_STRICT
+    dkim_strict = DKIM_STRICT
+    .endif
+    .ifdef DKIM_SIGN_HEADERS
+    dkim_sign_headers = DKIM_SIGN_HEADERS
+    .endif
+  .endif
+
+address_file:
+  debug_print = "T: address_file for $local_part@$domain"
+  driver = appendfile
+  delivery_date_add
+  envelope_to_add
+  return_path_add
+
+address_pipe:
+  debug_print = "T: address_pipe for $local_part@$domain"
+  driver = pipe
+  return_fail_output
+
+address_reply:
+  debug_print = "T: autoreply for $local_part@$domain"
+  driver = autoreply
+
 
 
 begin retry
