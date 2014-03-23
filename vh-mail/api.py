@@ -86,10 +86,23 @@ class MailEximCourierBackend (MailBackend):
 
         if not os.path.exists('/etc/courier'):
             os.mkdir('/etc/courier')
-        self.courier_authdaemonrc = '/etc/courier/authdaemonrc'
-        self.courier_imaprc = '/etc/courier/imapd'
-        self.courier_imapsrc = '/etc/courier/imapd-ssl'
-        self.courier_userdb = '/etc/courier/userdb'
+        self.courier_authdaemonrc = platform_select(
+            debian='/etc/courier/authdaemonrc',
+            centos='/etc/authlib/authdaemonrc',
+        )
+        self.courier_imaprc = platform_select(
+            debian='/etc/courier/imapd',
+            centos='/usr/lib/courier-imap/etc/imapd',
+        )
+        self.courier_imapsrc = platform_select(
+            debian='/etc/courier/imapd-ssl',
+            centos='/usr/lib/courier-imap/etc/imapd-ssl',
+        )
+        self.courier_userdb = platform_select(
+            debian='/etc/courier/userdb',
+            centos='/etc/authlib/userdb',
+        )
+
         self.maildomains = '/etc/maildomains'
         self.mailuid = pwd.getpwnam('mail').pw_uid
         self.mailgid = grp.getgrnam('mail').gr_gid
