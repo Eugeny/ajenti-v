@@ -186,9 +186,15 @@ class MailEximCourierBackend (MailBackend):
 
         subprocess.call(['makeuserdb'])
 
-        ServiceMultiplexor.get().get_one('courier-authdaemon').restart()
+        ServiceMultiplexor.get().get_one(platform_select(
+            debian='courier-authdaemon',
+            centos='courier-authlib',
+        ).restart()
         ServiceMultiplexor.get().get_one('courier-imap').restart()
-        ServiceMultiplexor.get().get_one('courier-imap-ssl').restart()
+        ServiceMultiplexor.get().get_one(platform_select(
+            debian='courier-imap-ssl',
+            centos='courier-imap',
+        ).restart()
         ServiceMultiplexor.get().get_one('exim4').command('restart')
 
 
