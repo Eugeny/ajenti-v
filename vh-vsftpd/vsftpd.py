@@ -46,7 +46,6 @@ listen=YES
 anonymous_enable=NO
 local_enable=YES
 guest_enable=YES
-ftp_username=ftp
 guest_username=ftp
 nopriv_user=ftp
 anon_root=/
@@ -75,6 +74,7 @@ TEMPLATE_USER = """
 local_root=%(root)s
 allow_writeable_chroot=YES
 write_enable=YES
+guest_username=www-data
 """
 
 
