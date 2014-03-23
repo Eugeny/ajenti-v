@@ -138,7 +138,8 @@ class MailEximCourierBackend (MailBackend):
             'tls_pem': pem_path,
         })
 
-        os.chmod('/var/run/courier/authdaemon', 0755)
+        if os.path.exists('/var/run/courier/authdaemon'):
+            os.chmod('/var/run/courier/authdaemon', 0755)
 
         if os.path.exists(self.courier_userdb):
             os.unlink(self.courier_userdb)
