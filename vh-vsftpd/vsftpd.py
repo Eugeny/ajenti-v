@@ -46,8 +46,8 @@ listen=YES
 anonymous_enable=NO
 local_enable=YES
 guest_enable=YES
-guest_username=ftp
-nopriv_user=ftp
+guest_username=www-data
+nopriv_user=www-data
 anon_root=/
 xferlog_enable=YES
 virtual_use_local_privs=YES
@@ -74,7 +74,6 @@ TEMPLATE_USER = """
 local_root=%(root)s
 allow_writeable_chroot=YES
 write_enable=YES
-guest_username=www-data
 """
 
 

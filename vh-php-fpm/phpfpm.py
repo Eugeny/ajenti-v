@@ -15,7 +15,7 @@ error_log = /var/log/php5-fpm.log
 user = www-data
 group = www-data
 listen = /var/run/php-fcgi.sock
- 
+
 pm = dynamic
 pm.start_servers = 1
 pm.max_children = 5
@@ -31,7 +31,7 @@ user = www-data
 group = www-data
 
 listen = /var/run/php-fcgi-%(name)s.sock
- 
+
 pm = dynamic
 pm.max_children = %(max)s
 pm.start_servers = %(min)s

@@ -1,6 +1,7 @@
 PACKAGE=ajenti-v-python-gunicorn
 VERSION=0.2.2
-DEB_DEPENDS="ajenti-v (>=0.1.15)"
+DEB_DEPENDS="ajenti-v (>=0.1.15), supervisor >= 3.0"
+RPM_DEPENDS="ajenti-v, supervisor >= 3.0"
 PROVIDES=ajenti-v-appgate
 DESCRIPTION="Python support for Ajenti V (via gunicorn)"
 read -d '' POSTINST <<END
