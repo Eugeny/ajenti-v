@@ -5,11 +5,12 @@ exim_path = /usr/sbin/exim4
 
 #--MACROS
 
+SMTP_PORT = 25
+LOCAL_INTERFACES = 0.0.0.0.25 : 0.0.0.0.465
 CONFDIR = /etc/exim4
 
 LOCAL_DOMAINS = %(local_domains)s
 ETC_MAILNAME = %(mailname)s
-MAIN_LOCAL_INTERFACES =
 LOCAL_DELIVERY = mail_spool
 CHECK_RCPT_LOCAL_LOCALPARTS = ^[.] : ^.*[@%%!/|`#&?]
 CHECK_RCPT_REMOTE_LOCALPARTS = ^[./|] : ^.*[@%%!`#&?] : ^.*/\\.\\./
@@ -30,9 +31,10 @@ TLS_VERIFY_CERTIFICATES = ${if exists{/etc/ssl/certs/ca-certificates.crt} {/etc/
 
 %(custom_mta_config)s
 
+daemon_smtp_ports = SMTP_PORT
+local_interfaces = LOCAL_INTERFACES
 domainlist local_domains = LOCAL_DOMAINS
 qualify_domain = ETC_MAILNAME
-local_interfaces = MAIN_LOCAL_INTERFACES
 
 gecos_pattern = ^([^,:]*)
 gecos_name = $1
@@ -55,6 +57,7 @@ spool_directory = /var/spool/exim4
 trusted_users = uucp
 
 .ifdef TLS_ENABLE
+tls_on_connect_ports = 465
 tls_advertise_hosts = TLS_ADVERTISE_HOSTS
 tls_certificate = TLS_CERTIFICATE
 tls_privatekey = TLS_PRIVATEKEY
@@ -449,5 +452,25 @@ IMAP_MOVE_EXPUNGE_TO_TRASH=0
 SENDMAIL=/usr/sbin/sendmail
 HEADERFROM=X-IMAP-Sender
 IMAPDSTART=YES
+MAILDIRPATH=Maildir
+"""
+
+COURIER_IMAPS = """
+SSLPORT=993
+SSLADDRESS=0
+SSLPIDFILE=/var/run/courier/imapd-ssl.pid
+SSLLOGGEROPTS="-name=imapd-ssl"
+IMAPDSSLSTART=YES
+IMAPDSTARTTLS=YES
+IMAP_TLS_REQUIRED=0
+COURIERTLS=/usr/bin/couriertls
+TLS_KX_LIST=ALL
+TLS_COMPRESSION=ALL
+TLS_CERTS=X509
+TLS_CERTFILE=%(tls_pem)s
+TLS_TRUSTCERTS=/etc/ssl/certs
+TLS_VERIFYPEER=NONE
+TLS_CACHEFILE=/var/lib/courier/couriersslcache
+TLS_CACHESIZE=524288
 MAILDIRPATH=Maildir
 """

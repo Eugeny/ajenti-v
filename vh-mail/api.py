@@ -81,6 +81,7 @@ class MailEximCourierBackend (MailBackend):
         self.exim_cfg_path = '/etc/exim4/exim4.conf'
         self.courier_authdaemonrc = '/etc/courier/authdaemonrc'
         self.courier_imaprc = '/etc/courier/imapd'
+        self.courier_imapsrc = '/etc/courier/imapd-ssl'
         self.courier_userdb = '/etc/courier/userdb'
         self.maildomains = '/etc/maildomains'
         self.mailuid = pwd.getpwnam('mail').pw_uid
@@ -93,6 +94,15 @@ class MailEximCourierBackend (MailBackend):
             domains.append(mailname)
         if not 'localhost' in domains:
             domains.append('localhost')
+
+        pem_path = os.path.join('/etc/courier/mail.pem')
+        pem = ''
+        if os.path.exists(config.tls_certificate):
+            pem += open(config.tls_certificate).read()
+        if os.path.exists(config.tls_privatekey):
+            pem += open(config.tls_privatekey).read()
+        with open(pem_path, 'w') as f:
+            f.write(pem)
 
         open(self.exim_cfg_path, 'w').write(templates.EXIM_CONFIG % {
             'local_domains': ' : '.join(domains),
@@ -111,7 +121,11 @@ class MailEximCourierBackend (MailBackend):
             'tls_privatekey': config.tls_privatekey,
         })
         open(self.courier_authdaemonrc, 'w').write(templates.COURIER_AUTHRC)
-        open(self.courier_imaprc, 'w').write(templates.COURIER_IMAP)
+        open(self.courier_imaprc, 'w').write(templates.COURIER_IMAP % {
+        })
+        open(self.courier_imapsrc, 'w').write(templates.COURIER_IMAPS % {
+            'tls_pem': pem_path,
+        })
 
         os.chmod('/var/run/courier/authdaemon', 0755)
 
@@ -136,8 +150,8 @@ class MailEximCourierBackend (MailBackend):
                 'userdb',
                 mb.name,
                 'set',
-                'uid=mail',
-                'gid=mail',
+                'uid=%s' % self.mailuid,
+                'gid=%s' % self.mailgid,
                 'home=%s' % root,
                 'mail=%s' % root,
             ])
@@ -162,7 +176,8 @@ class MailEximCourierBackend (MailBackend):
 
         ServiceMultiplexor.get().get_one('courier-authdaemon').restart()
         ServiceMultiplexor.get().get_one('courier-imap').restart()
-        ServiceMultiplexor.get().get_one('exim4').command('reload')
+        ServiceMultiplexor.get().get_one('courier-imap-ssl').restart()
+        ServiceMultiplexor.get().get_one('exim4').command('restart')
 
 
 @plugin
@@ -196,13 +211,16 @@ class MailManager (BasePlugin):
         self.backend.configure(self.config)
 
     def generate_tls_cert(self):
-        key_path = os.path.join(self.tls_path, 'exim.key')
-        cert_path = os.path.join(self.tls_path, 'exim.crt')
-        subprocess.call([
+        if not os.path.exists(self.tls_path):
+            os.mkdir(self.tls_path)
+        key_path = os.path.join(self.tls_path, 'mail.key')
+        cert_path = os.path.join(self.tls_path, 'mail.crt')
+        openssl = subprocess.Popen([
             'openssl', 'req', '-x509', '-newkey', 'rsa:1024',
             '-keyout', key_path, '-out', cert_path, '-days', '4096',
             '-nodes'
         ])
+        openssl.communicate('\n\n\n\n\n\n\n\n\n\n\n\n')
         self.config.tls_enable = True
         self.config.tls_certificate = cert_path
         self.config.tls_privatekey = key_path

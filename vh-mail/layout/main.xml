@@ -4,7 +4,7 @@
             <tabs>
                 <tab title="{General}">
                     <vc>
-                        <bind:collection bind="mailboxes" id="mailboxes">                
+                        <bind:collection bind="mailboxes" id="mailboxes">
                             <vc>
                                 <dt bind="__items" />
                             </vc>
