@@ -106,7 +106,7 @@ class MailEximCourierBackend (MailBackend):
         )
         self.courier_authsocket = platform_select(
             debian='/var/run/courier/authdaemon',
-            centos='/var/spool/authdaemon/socket',
+            centos='/var/run/courier-authlib.sock',
         )
 
         self.maildomains = '/etc/maildomains'
