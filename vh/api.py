@@ -1,5 +1,7 @@
-import os
 import json
+import os
+import pwd
+import subprocess
 from slugify import slugify
 
 from ajenti.api import *
@@ -190,8 +192,15 @@ class MiscComponent (Component):
 @plugin
 class VHManager (object):
     config_path = '/etc/ajenti/vh.json'
+    www_user = 'www-data'
 
     def init(self):
+        try:
+            pwd.getpwnam(self.www_user)
+        except KeyError:
+            subprocess.call(['useradd', self.www_user])
+            subprocess.call(['groupadd', self.www_user])
+
         self.reload()
         self.components = ApplicationGatewayComponent.get_all()
         self.components += MiscComponent.get_all()
