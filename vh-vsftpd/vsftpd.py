@@ -58,7 +58,6 @@ hide_ids=YES
 background=YES
     """,
     centos="""
-one_process_model=yes
     """,
 )
 
