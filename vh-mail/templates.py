@@ -410,8 +410,7 @@ plain:
         driver = plaintext
         public_name = PLAIN
         server_prompts = :
-        server_condition = ${if eq{${readsocket{COURIERSOCKET}{AUTH
-${eval:13+${strlen:$2$3}}\nexim\n\login\n$2\n$3\n}{5s}{ } }}{FAIL }{no}{yes}}
+        server_condition = ${if eq{${readsocket{COURIERSOCKET}{AUTH ${eval:13+${strlen:$2$3}}\nexim\n\login\n$2\n$3\n}{5s}{ } }}{FAIL }{no}{yes}}
         server_set_id = $2
 
 login:
