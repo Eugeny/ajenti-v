@@ -79,6 +79,8 @@ class MailBackend (object):
 class MailEximCourierBackend (MailBackend):
     def init(self):
         self.exim_cfg_path = '/etc/exim4/exim4.conf'
+        if not os.path.exists('/etc/courier'):
+            os.mkdir('/etc/courier')
         self.courier_authdaemonrc = '/etc/courier/authdaemonrc'
         self.courier_imaprc = '/etc/courier/imapd'
         self.courier_imapsrc = '/etc/courier/imapd-ssl'
