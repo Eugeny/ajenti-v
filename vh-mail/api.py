@@ -104,6 +104,10 @@ class MailEximCourierBackend (MailBackend):
             debian='/etc/courier/userdb',
             centos='/etc/authlib/userdb',
         )
+        self.courier_authsocket = platform_select(
+            debian='/var/run/courier/authdaemon',
+            centos='/var/spool/authdaemon/socket',
+        )
 
         self.maildomains = '/etc/maildomains'
         self.mailuid = pwd.getpwnam('mail').pw_uid
@@ -145,8 +149,11 @@ class MailEximCourierBackend (MailBackend):
             'tls_enable': 'TLS_ENABLE=1' if config.tls_enable else '',
             'tls_certificate': config.tls_certificate,
             'tls_privatekey': config.tls_privatekey,
+            'courier_authsocket': self.courier_authsocket,
         })
-        open(self.courier_authdaemonrc, 'w').write(templates.COURIER_AUTHRC)
+        open(self.courier_authdaemonrc, 'w').write(templates.COURIER_AUTHRC % {
+            'courier_authsocket': self.courier_authsocket,
+        })
         open(self.courier_imaprc, 'w').write(templates.COURIER_IMAP % {
         })
         open(self.courier_imapsrc, 'w').write(templates.COURIER_IMAPS % {

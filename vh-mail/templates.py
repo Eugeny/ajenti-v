@@ -407,7 +407,7 @@ begin authenticators
    driver = plaintext
    public_name = LOGIN
    server_prompts = Username:: : Password::
-   server_condition = ${extract {ADDRESS} {${readsocket{/var/run/courier/authdaemon/socket} {AUTH ${strlen:exim\nlogin\n$auth1\n$auth2\n}\nexim\nlogin\n$auth1\n$auth2\n} }} {yes} fail}
+   server_condition = ${extract {ADDRESS} {${readsocket{%(courier_authsocket)s} {AUTH ${strlen:exim\nlogin\n$auth1\n$auth2\n}\nexim\nlogin\n$auth1\n$auth2\n} }} {yes} fail}
    server_set_id = $auth1
 
 """
@@ -415,7 +415,7 @@ begin authenticators
 COURIER_AUTHRC = """
 authmodulelist="authuserdb authpam"
 daemons=5
-authdaemonvar=/var/run/courier/authdaemon
+authdaemonvar=%(courier_authsocket)s
 DEBUG_LOGIN=0
 DEFAULTOPTIONS=""
 LOGGEROPTS=""
