@@ -1,6 +1,6 @@
 PACKAGE=ajenti-v-nodejs
 VERSION=0.1.4
-DEPENDS="ajenti-v, supervisor"
+DEB_DEPENDS="ajenti-v, supervisor"
 PROVIDES=ajenti-v-appgate
 DESCRIPTION="Node.JS support for Ajenti V"
 read -d '' POSTINST <<END

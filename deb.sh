@@ -21,7 +21,7 @@ Package: $PACKAGE
 Version: $VERSION
 Architecture: all
 Homepage: http://ajenti.org/
-Depends: $DEPENDS
+Depends: $DEB_DEPENDS
 Provides: $PROVIDES
 Description: $DESCRIPTION
 

@@ -11,7 +11,7 @@ info = PluginInfo(
         PluginDependency('services'),
         PluginDependency('mysql'),
         BinaryDependency('mysql'),
-        BinaryDependency('mysqld'),
+        BinaryDependency('mysqld_safe'),
     ],
 )
 

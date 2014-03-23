@@ -1,6 +1,6 @@
 PACKAGE=ajenti-v-mysql
 VERSION=0.2.2
-DEPENDS="ajenti-v (>=0.2.0), mysql-server, mysql-client"
+DEB_DEPENDS="ajenti-v (>=0.2.0), mysql-server, mysql-client"
 PROVIDES=ajenti-v-db
 DESCRIPTION="MySQL support for Ajenti V"
 read -d '' POSTINST <<END
