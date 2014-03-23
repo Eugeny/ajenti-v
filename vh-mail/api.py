@@ -198,7 +198,7 @@ class MailEximCourierBackend (MailBackend):
         ServiceMultiplexor.get().get_one(platform_select(
             debian='exim4',
             centos='exim',
-        ).command('restart')
+        )).command('restart')
 
 
 @plugin
