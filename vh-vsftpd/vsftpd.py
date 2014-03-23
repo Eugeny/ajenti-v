@@ -6,6 +6,7 @@ import uuid
 
 from ajenti.api import *
 from ajenti.ui.binder import Binder
+from ajenti.util import platform_select
 
 from ajenti.plugins.services.api import ServiceMultiplexor
 from ajenti.plugins.vh.api import MiscComponent
@@ -26,7 +27,7 @@ class VSFTPDExtension (BaseExtension):
         self.binder = Binder(self, self)
 
         self.config['username'] = self.website.slug
-        
+
         if not self.config['created']:
             self.config['password'] = str(uuid.uuid4())
             self.config['created'] = True
@@ -35,7 +36,7 @@ class VSFTPDExtension (BaseExtension):
 
     def refresh(self):
         self.binder.setup().populate()
-        
+
     def update(self):
         pass
 
@@ -71,7 +72,10 @@ write_enable=YES
 class VSFTPD (MiscComponent):
     config_root = '/etc/vsftpd'
     config_root_users = '/etc/vsftpd.users.d'
-    config_file = '/etc/vsftpd.conf'
+    config_file = platform_select(
+        debian='/etc/vsftpd.conf',
+        centos='/etc/vsftpd/vsftpd.conf',
+    )
     userdb_path = '/etc/vsftpd/users.db'
     pam_path = '/etc/pam.d/vsftpd_virtual'
 
