@@ -195,7 +195,10 @@ class MailEximCourierBackend (MailBackend):
             debian='courier-imap-ssl',
             centos='courier-imap',
         )).restart()
-        ServiceMultiplexor.get().get_one('exim4').command('restart')
+        ServiceMultiplexor.get().get_one(platform_select(
+            debian='exim4',
+            centos='exim',
+        ).command('restart')
 
 
 @plugin
