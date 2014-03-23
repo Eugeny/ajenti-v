@@ -84,8 +84,10 @@ class MailEximCourierBackend (MailBackend):
             centos='/etc/exim/exim.conf',
         )
 
-        if not os.path.exists('/etc/courier'):
-            os.mkdir('/etc/courier')
+        for d in ['/etc/courier', '/var/run/courier']:
+            if not os.path.exists(d):
+                os.mkdir(d)
+
         self.courier_authdaemonrc = platform_select(
             debian='/etc/courier/authdaemonrc',
             centos='/etc/authlib/authdaemonrc',
