@@ -189,7 +189,7 @@ class MailEximCourierBackend (MailBackend):
         ServiceMultiplexor.get().get_one(platform_select(
             debian='courier-authdaemon',
             centos='courier-authlib',
-        ).restart()
+        )).restart()
         ServiceMultiplexor.get().get_one('courier-imap').restart()
         ServiceMultiplexor.get().get_one(platform_select(
             debian='courier-imap-ssl',
