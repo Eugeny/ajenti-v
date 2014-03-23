@@ -91,7 +91,7 @@ class MailEximCourierBackend (MailBackend):
         try:
             mailname = open('/etc/mailname').read().strip()
         except:
-            mailname = open('/etc/hostname').read().strip()
+            mailname = 'localhost'
 
         domains = list(set(x.domain for x in config.mailboxes))
         if not mailname in domains:
