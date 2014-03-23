@@ -13,6 +13,8 @@ echo Building package $PACKAGE
 rm -rf $BUILDDIR > /dev/null
 mkdir $DISTDIR $BUILDDIR 2> /dev/null
 
+ACTUAL_RPM_BUILD_ROOT=$BUILDDIR/BUILDROOT/$PACKAGE-$VERSION-1.x86_64
+
 cat > $SPEC <<END
 %define name $PACKAGE
 %define version $VERSION
@@ -33,6 +35,7 @@ Vendor: Eugene Pankov <e@ajenti.org>
 Url: http://ajenti.org/
 
 requires: $RPM_DEPENDS
+provides: $PROVIDES
 
 %description
 $DESCRIPTION
@@ -43,13 +46,15 @@ $DESCRIPTION
 %build
 
 %install
-
-cp -r var $$RPM_BUILD_ROOT
+mkdir ../../../$ACTUAL_RPM_BUILD_ROOT
+cp -r var ../../../$ACTUAL_RPM_BUILD_ROOT
 
 %clean
-rm -rf $$RPM_BUILD_ROOT
+rm -rf ../../../$ACTUAL_RPM_BUILD_ROOT
 
 %files
+/var
+
 %post
 $POSTINST
 

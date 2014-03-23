@@ -1,7 +1,7 @@
 PACKAGE=ajenti-v-mail
 VERSION=0.0.12
 DEB_DEPENDS="ajenti-v, courier-imap, courier-imap-ssl, exim4"
-RPM_DEPENDS="ajenti-v, courier-imapd, exim"
+RPM_DEPENDS="ajenti-v, courier-imap >= 4.9.3, courier-authlib-userdb >= 0.64.0, exim"
 PROVIDES=ajenti-v-mailserver
 DESCRIPTION="Mail for Ajenti V"
 read -d '' POSTINST <<END
