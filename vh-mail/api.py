@@ -217,8 +217,14 @@ class MailEximCourierBackend (MailBackend):
 @plugin
 class MailManager (BasePlugin):
     config_path = '/etc/ajenti/mail.json'
-    dkim_path = '/etc/exim4/dkim/'
-    tls_path = '/etc/exim4/tls/'
+    dkim_path = platform_select(
+        debian='/etc/exim4/dkim/',
+        centos='/etc/exim/dkim/',
+    )
+    tls_path = platform_select(
+        debian='/etc/exim4/tls/',
+        centos='/etc/exim/tls/',
+    )
 
     def init(self):
         self.backend = MailBackend.get()
