@@ -21,6 +21,7 @@ def init():
     import api
     import extensions
     import main
+    import ipc
 
     import gate_static
     import gate_proxy

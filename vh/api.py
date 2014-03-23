@@ -192,16 +192,18 @@ class VHManager (object):
     config_path = '/etc/ajenti/vh.json'
 
     def init(self):
+        self.reload()
+        self.components = ApplicationGatewayComponent.get_all()
+        self.components += MiscComponent.get_all()
+        self.webserver = WebserverComponent.get()
+
+    def reload(self):
         if os.path.exists(self.config_path):
             self.is_configured = True
             self.config = Config(json.load(open(self.config_path)))
         else:
             self.is_configured = False
             self.config = Config.create()
-
-        self.components = ApplicationGatewayComponent.get_all()
-        self.components += MiscComponent.get_all()
-        self.webserver = WebserverComponent.get()
 
     def update_configuration(self):
         for c in self.components:
