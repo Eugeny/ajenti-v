@@ -160,8 +160,9 @@ class MailEximCourierBackend (MailBackend):
             'tls_pem': pem_path,
         })
 
-        if os.path.exists('/var/run/courier/authdaemon'):
-            os.chmod('/var/run/courier/authdaemon', 0755)
+        socketdir = os.path.split(self.courier_authsocket)[0]
+        if os.path.exists(socketdir):
+            os.chmod(socketdir, 0755)
 
         if os.path.exists(self.courier_userdb):
             os.unlink(self.courier_userdb)
