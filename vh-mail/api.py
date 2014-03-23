@@ -7,6 +7,7 @@ import subprocess
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
+from ajenti.util import platform_select
 
 import templates
 
@@ -78,7 +79,11 @@ class MailBackend (object):
 @plugin
 class MailEximCourierBackend (MailBackend):
     def init(self):
-        self.exim_cfg_path = '/etc/exim4/exim4.conf'
+        self.exim_cfg_path = platform_select(
+            debian='/etc/exim4/exim4.conf',
+            centos='/etc/exim/exim.conf',
+        )
+
         if not os.path.exists('/etc/courier'):
             os.mkdir('/etc/courier')
         self.courier_authdaemonrc = '/etc/courier/authdaemonrc'
