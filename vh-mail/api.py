@@ -88,7 +88,11 @@ class MailEximCourierBackend (MailBackend):
         self.mailgid = grp.getgrnam('mail').gr_gid
 
     def configure(self, config):
-        mailname = open('/etc/mailname').read().strip()
+        try:
+            mailname = open('/etc/mailname').read().strip()
+        except:
+            mailname = open('/etc/hostname').read().strip()
+
         domains = list(set(x.domain for x in config.mailboxes))
         if not mailname in domains:
             domains.append(mailname)

@@ -1,6 +1,7 @@
 #!/bin/bash
 rm dist/*
-find -name '*.pyc' | xargs rm 
+find -name '*.pyc' | xargs rm
+
 ./deb.sh vh
 ./deb.sh vh-gunicorn
 ./deb.sh vh-mysql
@@ -11,4 +12,16 @@ find -name '*.pyc' | xargs rm
 ./deb.sh vh-puma
 ./deb.sh vh-nodejs
 ./deb.sh vh-mail
+
+./rpm.sh vh
+./rpm.sh vh-gunicorn
+./rpm.sh vh-mysql
+./rpm.sh vh-nginx
+./rpm.sh vh-php-fpm
+./rpm.sh vh-unicorn
+./rpm.sh vh-vsftpd
+./rpm.sh vh-puma
+./rpm.sh vh-nodejs
+./rpm.sh vh-mail
+
 rm -r build
