@@ -43,7 +43,6 @@ class VSFTPDExtension (BaseExtension):
 
 TEMPLATE_CONFIG = """
 listen=YES
-background=NO
 anonymous_enable=NO
 local_enable=YES
 guest_enable=YES
@@ -53,7 +52,15 @@ pam_service_name=vsftpd_virtual
 user_config_dir=%s
 chroot_local_user=YES
 hide_ids=YES
-"""
+
+""" + platform_select(
+    debian="""
+background=YES
+    """,
+    centos="""
+one_process_model=yes
+    """,
+)
 
 TEMPLATE_PAM = """#%%PAM-1.0
 auth    required        pam_userdb.so   db=/etc/vsftpd/users
