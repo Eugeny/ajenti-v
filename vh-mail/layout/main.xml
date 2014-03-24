@@ -4,6 +4,8 @@
             <tabs>
                 <tab title="{General}">
                     <vc>
+                        <label style="bold" text="{Mailboxes}" />
+
                         <bind:collection bind="mailboxes" id="mailboxes">
                             <vc>
                                 <dt bind="__items" />
@@ -36,6 +38,56 @@
                             </bind:template>
                         </bind:collection>
 
+                        <label style="bold" text="{Forwarding}" />
+
+                        <bind:collection bind="forwarding_mailboxes" id="forwarding_mailboxes">
+                            <vc>
+                                <dt bind="__items" />
+                            </vc>
+                            <bind:template>
+                                <collapserow>
+                                    <box>
+                                        <right>
+                                            <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                        </right>
+                                        <hc>
+                                            <icon icon="mail-forward" />
+                                            <label bind="name" />
+                                        </hc>
+                                    </box>
+                                    <indent>
+                                        <bind:collection bind="targets" id="targets">
+                                            <vc>
+                                                <dt bind="__items" width="1">
+                                                    <dtr>
+                                                        <dth />
+                                                        <dth text="{Target address}" />
+                                                        <dth />
+                                                    </dtr>
+                                                </dt>
+                                                <box>
+                                                <button bind="__add" icon="plus" style="mini" />
+                                            </box>
+                                            </vc>
+                                            <bind:template>
+                                                <dtr>
+                                                    <dtd width="1">
+                                                        <icon icon="mail-forward" />
+                                                    </dtd>
+                                                    <dtd>
+                                                        <textbox bind="email" />
+                                                    </dtd>
+                                                    <dtd width="1">
+                                                        <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                                    </dtd>
+                                                </dtr>
+                                            </bind:template>
+                                        </bind:collection>
+                                    </indent>
+                                </collapserow>
+                            </bind:template>
+                        </bind:collection>
+
                         <pad>
                             <formgroup text="{New mailbox}">
                                 <vc>
@@ -50,7 +102,10 @@
                                         <textbox id="new-mailbox-domain-custom" />
                                     </formline>
                                     <formline>
-                                        <button id="new-mailbox" icon="plus" text="{Create}" />
+                                        <hc>
+                                            <button id="new-mailbox" icon="plus" text="{Mailbox}" />
+                                            <button id="new-forwarding-mailbox" icon="plus" text="{Forwarding}" />
+                                        </hc>
                                     </formline>
                                 </vc>
                             </formgroup>

@@ -195,12 +195,26 @@ begin routers
 
 %(custom_mta_routers)s
 
-vdomains:
+vdomain:
+  debug_print = "R: vdomain for $local_part@$domain"
   driver = accept
   domains = dsearch;%(maildomains)s
   local_parts = lsearch;%(maildomains)s/$domain
   transport = vmail
   no_more
+
+vforward:
+  debug_print = "R: virtualuserforward for $local_part@$domain"
+  driver = redirect
+  domains = +local_domains
+  file = %(mailforward)s/$local_part@$domain
+  no_verify
+  no_expn
+  check_ancestor
+  directory_transport = address_directory
+  file_transport = address_file
+  pipe_transport = address_pipe
+  reply_transport = address_reply
 
 
 dnslookup:

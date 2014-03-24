@@ -15,6 +15,10 @@ import templates
 class Config (object):
     def __init__(self, j):
         self.mailboxes = [Mailbox(_) for _ in j.get('mailboxes', [])]
+        self.forwarding_mailboxes = [
+            ForwardingMailbox(_)
+            for _ in j.get('forwarding_mailboxes', [])
+        ]
         self.mailroot = j.get('mailroot', '/var/vmail')
         self.custom_mta_config = j.get('custom_mta_config', '')
         self.custom_mta_acl = j.get('custom_mta_acl', '')
@@ -34,6 +38,10 @@ class Config (object):
     def save(self):
         return {
             'mailboxes': [_.save() for _ in self.mailboxes],
+            'forwarding_mailboxes': [
+                _.save()
+                for _ in self.forwarding_mailboxes
+            ],
             'custom_mta_acl': self.custom_mta_acl,
             'custom_mta_routers': self.custom_mta_routers,
             'custom_mta_config': self.custom_mta_config,
@@ -68,6 +76,44 @@ class Mailbox (object):
             'domain': self.domain,
             'password': self.password,
             'owner': self.owner,
+        }
+
+
+class ForwardingMailbox (object):
+    def __init__(self, j):
+        self.targets = [ForwardingTarget(_) for _ in j.get('targets', [])]
+        self.local = j.get('local', 'someone')
+        self.domain = j.get('domain', 'example.com')
+        self.owner = j.get('owner', 'root')
+
+    @property
+    def name(self):
+        return '%s@%s' % (self.local, self.domain)
+
+    @staticmethod
+    def create():
+        return ForwardingMailbox({})
+
+    def save(self):
+        return {
+            'targets': [_.save() for _ in self.targets],
+            'local': self.local,
+            'domain': self.domain,
+            'owner': self.owner,
+        }
+
+
+class ForwardingTarget (object):
+    def __init__(self, j):
+        self.email = j.get('email', 'someone@example.com')
+
+    @staticmethod
+    def create():
+        return ForwardingTarget({})
+
+    def save(self):
+        return {
+            'email': self.email,
         }
 
 
@@ -109,7 +155,8 @@ class MailEximCourierBackend (MailBackend):
             centos='/var/spool/authdaemon/socket',
         )
 
-        self.maildomains = '/etc/maildomains'
+        self.maildomains = '/etc/exim.domains'
+        self.mailforward = '/etc/exim.forward'
         self.mailuid = pwd.getpwnam('mail').pw_uid
         self.mailgid = grp.getgrnam('mail').gr_gid
 
@@ -138,6 +185,7 @@ class MailEximCourierBackend (MailBackend):
             'local_domains': ' : '.join(domains),
             'mailname': mailname,
             'maildomains': self.maildomains,
+            'mailforward': self.mailforward,
             'mailroot': config.mailroot,
             'custom_mta_acl': config.custom_mta_acl,
             'custom_mta_routers': config.custom_mta_routers,
@@ -164,12 +212,10 @@ class MailEximCourierBackend (MailBackend):
         if os.path.exists(socketdir):
             os.chmod(socketdir, 0755)
 
-        if os.path.exists(self.courier_userdb):
-            os.unlink(self.courier_userdb)
+        # Domain entries ----------------------------
 
         if os.path.exists(self.maildomains):
             shutil.rmtree(self.maildomains)
-
         os.makedirs(self.maildomains)
 
         for mb in config.mailboxes:
@@ -181,6 +227,27 @@ class MailEximCourierBackend (MailBackend):
             with open(os.path.join(self.maildomains, mb.domain), 'a+') as f:
                 f.write(mb.local + '\n')
 
+        # Forwarding entries ----------------------------
+
+        if os.path.exists(self.mailforward):
+            shutil.rmtree(self.mailforward)
+        os.makedirs(self.mailforward)
+
+        for mb in config.forwarding_mailboxes:
+            fpath = os.path.join(
+                self.mailforward,
+                '%s@%s' % (mb.local, mb.domain)
+            )
+            with open(fpath, 'a+') as f:
+                for target in mb.targets:
+                    f.write(target.email + '\n')
+
+        # UserDB ------------------------------------
+
+        if os.path.exists(self.courier_userdb):
+            os.unlink(self.courier_userdb)
+
+        for mb in config.mailboxes:
             subprocess.call([
                 'userdb',
                 mb.name,
@@ -206,6 +273,7 @@ class MailEximCourierBackend (MailBackend):
                 stdin=subprocess.PIPE
             )
             udb.communicate(md5pw)
+
 
         subprocess.call(['makeuserdb'])
 

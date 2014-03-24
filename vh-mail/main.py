@@ -9,7 +9,7 @@ from ajenti.util import str_fsize
 
 from ajenti.plugins.vh.api import VHManager
 
-from api import MailManager, Mailbox
+from api import MailManager, ForwardingMailbox, ForwardingTarget, Mailbox
 
 
 @plugin
@@ -49,18 +49,15 @@ class MailPlugin (SectionPlugin):
         self.find('mailboxes').post_item_update = post_mb_update
         self.find('mailboxes').filter = \
             lambda mb: self.context.session.identity in ['root', mb.owner]
+        self.find('targets').new_item = lambda c: ForwardingTarget.create()
 
         self.binder.setup(self.manager.config)
 
-    @on('new-mailbox', 'click')
-    def on_new_mailbox(self):
-        self.binder.update()
-        mb = Mailbox.create()
+    def _fetch_new_mailbox_name(self, cls):
+        mb = cls.create()
         mb.local = self.find('new-mailbox-local').value
         mb.domain = self.find('new-mailbox-domain').value or \
             self.find('new-mailbox-domain-custom').value
-        mb.owner = self.context.session.identity
-        mb.password = ''
 
         if not mb.local:
             self.context.notify('error', _('Invalid mailbox name'))
@@ -79,7 +76,28 @@ class MailPlugin (SectionPlugin):
                 return
 
         self.find('new-mailbox-local').value = ''
+        return mb
+
+    @on('new-mailbox', 'click')
+    def on_new_mailbox(self):
+        self.binder.update()
+        mb = self._fetch_new_mailbox_name(Mailbox)
+        if not mb:
+            return
+        mb.owner = self.context.session.identity
+        mb.password = ''
         self.manager.config.mailboxes.append(mb)
+        self.manager.save()
+        self.binder.populate()
+
+    @on('new-forwarding-mailbox', 'click')
+    def on_new_forwarding_mailbox(self):
+        self.binder.update()
+        mb = self._fetch_new_mailbox_name(ForwardingMailbox)
+        if not mb:
+            return
+        mb.owner = self.context.session.identity
+        self.manager.config.forwarding_mailboxes.append(mb)
         self.manager.save()
         self.binder.populate()
 
