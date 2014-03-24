@@ -14,11 +14,11 @@
                             <formline text="{Name}">
                                 <textbox bind="name" />
                             </formline>
-                            
+
                             <formline>
                                 <checkbox bind="enabled" text="{Enabled}" />
                             </formline>
-                            
+
                             <formline>
                                 <checkbox bind="maintenance_mode" text="{Maintenance mode}" />
                             </formline>
@@ -30,7 +30,7 @@
                             <formline text="{Path}">
                                 <vc>
                                     <hc>
-                                        <pathbox bind="root" directory="True" />        
+                                        <pathbox bind="root" directory="True" />
                                         <button icon="ok" text="{Set}" id="set-path" />
                                     </hc>
                                     <vc id="root-not-created">
@@ -46,19 +46,6 @@
                             </formline>
                         </vc>
                     </formgroup>
-                </pad>
-            </body>
-        </tab>
-
-
-        <tab title="{Advanced}">
-            <body>
-                <pad>
-                    <vc>
-                        <formline text="{Custom configuration}">
-                            <codearea bind="custom_conf" width="300" height="150" />
-                        </formline>
-                    </vc>
                 </pad>
             </body>
         </tab>
@@ -85,7 +72,7 @@
                                     <dtd>
                                         <textbox bind="domain" />
                                     </dtd>
-                                    <dtd width="1"> 
+                                    <dtd width="1">
                                         <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
                                     </dtd>
                                 </dtr>
@@ -111,23 +98,29 @@
                                     <dtd>
                                         <icon icon="arrow-right" />
                                     </dtd>
-                                    <dtd> 
+                                    <dtd>
                                         <textbox bind="host" />
                                     </dtd>
-                                    <dtd> 
+                                    <dtd>
                                         <textbox type="integer" bind="port" />
                                     </dtd>
-                                    <dtd> 
+                                    <dtd>
                                         <checkbox bind="ssl" />
                                     </dtd>
-                                    <dtd> 
+                                    <dtd>
                                         <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
                                     </dtd>
                                 </dtr>
                             </bind:template>
                         </bind:collection>
                     </formline>
-                    
+                </pad>
+            </body>
+        </tab>
+
+        <tab title="SSL">
+            <body>
+                <pad>
                     <formline text="{SSL certificate path}">
                         <pathbox bind="ssl_cert_path" />
                     </formline>
@@ -155,7 +148,7 @@
                         <bind:template>
                            <collapserow expanded="True">
                                 <box>
-                                    <right> 
+                                    <right>
                                         <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
                                     </right>
                                     <hc>
@@ -164,7 +157,7 @@
                                         <box binder:context="backend">
                                             <label bind="typename" style="bold" />
                                         </box>
-                                    </hc>   
+                                    </hc>
                                 </box>
 
                                 <pad>
@@ -172,7 +165,19 @@
                                 </pad>
                             </collapserow>
                         </bind:template>
-                    </bind:collection>        
+                    </bind:collection>
+                </pad>
+            </body>
+        </tab>
+
+        <tab title="{Advanced}">
+            <body>
+                <pad>
+                    <vc>
+                        <formline text="{Custom configuration}">
+                            <codearea bind="custom_conf" width="300" height="150" />
+                        </formline>
+                    </vc>
                 </pad>
             </body>
         </tab>
