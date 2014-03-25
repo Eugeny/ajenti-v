@@ -16,12 +16,12 @@
                 </box>
             </vc>
         </tab>
+
         <tab title="{Advanced}">
             <vc>
                 <formline text="{Custom path}">
                     <pathbox bind="path" directory="True" />
                 </formline>
-
 
                 <formline text="{Custom configuration}">
                     <vc>

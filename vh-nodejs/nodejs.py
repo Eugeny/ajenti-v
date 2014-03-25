@@ -15,6 +15,12 @@ class NodeJS (ApplicationGatewayComponent):
     title = 'Node.JS'
 
     def create_configuration(self, config):
+        node_bin = 'node'
+        try:
+            subprocess.call(['which', 'node'])
+        except:
+            node_bin = 'nodejs'
+
         sup = SupervisorConfig(path=platform_select(
             debian='/etc/supervisor/supervisord.conf',
             centos='/etc/supervisord.conf',
@@ -30,10 +36,14 @@ class NodeJS (ApplicationGatewayComponent):
                 for location in website.locations:
                     if location.backend.type == 'nodejs':
                         i += 1
-                        location.backend.id = website.slug + '-nodejs-' + str(i)
+                        location.backend.id = \
+                            website.slug + '-nodejs-' + str(i)
                         p = ProgramData()
                         p.name = location.backend.id
-                        p.command = 'node %s' % location.backend.params.get('script', None) or '.'
+                        p.command = '%s %s' % (
+                            node_bin,
+                            location.backend.params.get('script', None) or '.'
+                        )
                         p.directory = location.path or website.root
                         sup.tree.programs.append(p)
 
