@@ -190,6 +190,8 @@ class MiscComponent (Component):
 
 
 @plugin
+@persistent
+@rootcontext
 class VHManager (object):
     config_path = '/etc/ajenti/vh.json'
     www_user = 'www-data'

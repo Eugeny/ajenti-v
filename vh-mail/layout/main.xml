@@ -57,18 +57,13 @@
                                     </box>
                                     <indent>
                                         <bind:collection bind="targets" id="targets">
-                                            <vc>
-                                                <dt bind="__items" width="1">
-                                                    <dtr>
-                                                        <dth />
-                                                        <dth text="{Target address}" />
-                                                        <dth />
-                                                    </dtr>
-                                                </dt>
-                                                <box>
-                                                <button bind="__add" icon="plus" style="mini" />
-                                            </box>
-                                            </vc>
+                                            <dt bind="__items" width="1" addrow="{Add}">
+                                                <dtr>
+                                                    <dth />
+                                                    <dth text="{Target address}" />
+                                                    <dth />
+                                                </dtr>
+                                            </dt>
                                             <bind:template>
                                                 <dtr>
                                                     <dtd width="1">

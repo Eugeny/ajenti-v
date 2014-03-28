@@ -1,18 +1,26 @@
 <box>
     <bind:dict bind="params">
         <vc>
-            <formline text="{Workers}">
-                <textbox bind="workers" type="integer" />
-            </formline>
             <formline text="{Use Bundler}">
                 <checkbox bind="bundler" />
             </formline>
             <formline text="{Environment}">
-                <dropdown bind="environment" 
+                <dropdown bind="environment"
                     labels="['development', 'production']"
                     values="['development', 'production']"
             />
             </formline>
+            <dt>
+                <collapserow>
+                    <hc>
+                        <icon icon="cog" />
+                        <label text="Puma" />
+                    </hc>
+                    <formline text="{Workers}">
+                        <textbox bind="workers" type="integer" />
+                    </formline>
+                </collapserow>
+            </dt>
         </vc>
     </bind:dict>
 </box>

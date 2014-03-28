@@ -1,12 +1,18 @@
-<box>
-    <bind:dict bind="params">
-        <vc>
-            <formline text="{Min processes}">
-                <textbox bind="pm_min" type="integer" />
-            </formline>
-            <formline text="{Max processes}">
-                <textbox bind="pm_max" type="integer" />
-            </formline>
-        </vc>
-    </bind:dict>
-</box>
+<dt>
+    <collapserow>
+        <hc>
+            <icon icon="cog" />
+            <label text="PHP FPM" />
+        </hc>
+        <bind:dict bind="params">
+            <vc>
+                <formline text="{Min processes}">
+                    <textbox bind="pm_min" type="integer" />
+                </formline>
+                <formline text="{Max processes}">
+                    <textbox bind="pm_max" type="integer" />
+                </formline>
+            </vc>
+        </bind:dict>
+    </collapserow>
+</dt>

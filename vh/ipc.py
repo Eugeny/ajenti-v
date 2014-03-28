@@ -11,7 +11,7 @@ from api import VHManager
 @plugin
 class VIPC (IPCHandler):
     def init(self):
-        self.manager = VHManager.get(manager.context)
+        self.manager = VHManager.get()
 
     def get_name(self):
         return 'v'

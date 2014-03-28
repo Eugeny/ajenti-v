@@ -1,23 +1,23 @@
 <vc>
-    <tabs>
-        <tab title="{General}">
-            <vc>
-                <formline text="{URL Pattern}">
-                    <hc>
-                        <textbox bind="pattern" />
-                        <dropdown bind="match" style="mini"
-                            labels="['Exact', 'Regex', 'Regex (forced)']"
-                            values="['exact', 'regex', 'force-regex']"
-                            />
-                    </hc>
-                </formline>
+    <formline text="{URL Pattern}">
+        <hc>
+            <textbox bind="pattern" />
+            <dropdown bind="match" style="mini"
+                labels="['Exact', 'Regex', 'Regex (forced)']"
+                values="['exact', 'regex', 'force-regex']"
+                />
+        </hc>
+    </formline>
 
-                <box id="backend-params">
-                </box>
-            </vc>
-        </tab>
+    <box id="backend-params">
+    </box>
 
-        <tab title="{Advanced}">
+    <dt>
+        <collapserow>
+            <hc>
+                <icon icon="cog" />
+                <label text="{Advanced}" />
+            </hc>
             <vc>
                 <formline text="{Custom path}">
                     <pathbox bind="path" directory="True" />
@@ -30,6 +30,6 @@
                     </vc>
                 </formline>
             </vc>
-        </tab>
-    </tabs>
+        </collapserow>
+    </dt>
 </vc>

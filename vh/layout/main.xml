@@ -2,24 +2,21 @@
     <body>
         <vc>
             <pad>
-                <bind:collection bind="websites" id="websites">                
+                <bind:collection bind="websites" id="websites">
                     <vc>
                         <dt bind="__items" />
                     </vc>
                     <bind:template>
                         <dtr>
-                            <dtd width="1">
-                                <icon icon="globe" />
-                            </dtd>
                             <dtd>
-                                <label bind="name" />   
+                                <hc>
+                                    <icon icon="globe" />
+                                    <label bind="name" />
+                                </hc>
                             </dtd>
                             <dtd width="1">
                                 <button id="manage" icon="cog" text="{Manage}" />
                             </dtd>
-                            <!--pad>
-                                <include layout="vh:main-website" />
-                            </pad-->
                         </dtr>
                     </bind:template>
                 </bind:collection>
@@ -40,6 +37,6 @@
     </body>
 
     <hc>
-        <button style="normal big" icon="ok" id="save" text="{Apply changes}" />
+        <button style="normal big" icon="ok" id="save" text="{Restart websites}" />
     </hc>
 </vc>

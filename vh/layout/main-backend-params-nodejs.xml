@@ -1,10 +1,10 @@
 <box>
     <bind:dict bind="params">
         <vc>
-            <formline text="{Script}">
+            <formline text="{Script name}">
                 <textbox bind="script" />
             </formline>
-            <formline text="{HTTP port}">
+            <formline text="{Script's HTTP port}">
                 <textbox bind="port" type="integer" />
             </formline>
         </vc>

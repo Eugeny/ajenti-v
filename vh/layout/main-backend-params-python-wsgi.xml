@@ -4,9 +4,17 @@
             <formline text="{Application module}">
                 <textbox bind="module" />
             </formline>
-            <formline text="{Virtualenv path}">
-                <pathbox bind="venv" directory="True" />
-            </formline>
+            <dt>
+                <collapserow>
+                    <hc>
+                        <icon icon="cog" />
+                        <label text="Python" />
+                    </hc>
+                    <formline text="{Virtualenv path}">
+                        <pathbox bind="venv" directory="True" />
+                    </formline>
+                </collapserow>
+            </dt>
         </vc>
     </bind:dict>
 </box>

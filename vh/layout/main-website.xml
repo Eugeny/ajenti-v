@@ -26,94 +26,90 @@
                     </formgroup>
 
                     <formgroup text="{Website files}">
-                        <vc>
-                            <formline text="{Path}">
-                                <vc>
-                                    <hc>
-                                        <pathbox bind="root" directory="True" />
-                                        <button icon="ok" text="{Set}" id="set-path" />
-                                    </hc>
-                                    <vc id="root-not-created">
-                                        <button text="{Create directory}" style="normal big" id="create-root-directory" />
-                                    </vc>
+                        <formline text="{Path}">
+                            <vc>
+                                <hc>
+                                    <pathbox bind="root" directory="True" />
+                                    <button icon="ok" text="{Set}" id="set-path" />
+                                </hc>
+                                <vc id="root-not-created">
+                                    <button text="{Create directory}" style="normal big" id="create-root-directory" />
                                 </vc>
-                            </formline>
-                            <formline text="{From URL}">
-                                <vc>
-                                    <textbox id="download-url" />
-                                    <button icon="download-alt" text="{Download and unpack}" id="download" style="normal big" />
-                                </vc>
-                            </formline>
-                        </vc>
+                            </vc>
+                        </formline>
+                    </formgroup>
+
+                    <formgroup text="{Automatic downloader}">
+                        <formline text="{From URL}">
+                            <hc>
+                                <textbox id="download-url" />
+                                <button icon="download-alt" text="{Download and unpack}" id="download" style="normal big" />
+                            </hc>
+                        </formline>
                     </formgroup>
                 </pad>
             </body>
         </tab>
 
-        <tab title="{Identification}">
+        <tab title="{Domains}">
             <body>
                 <pad>
-                    <formline text="{Domains}">
-                        <bind:collection bind="domains" id="domains">
-                            <vc>
-                                <dt bind="__items" width="400">
-                                    <dth />
-                                    <dth text="Domain" />
-                                    <dth />
-                                </dt>
-                                <button bind="__add" icon="plus" text="{Create}" />
-                            </vc>
+                    <bind:collection bind="domains" id="domains">
+                        <dt bind="__items" width="200" addrow="{Add}">
+                            <dth text="{Domain}" />
+                            <dth />
+                        </dt>
 
-                            <bind:template>
-                                <dtr>
-                                    <dtd width="1">
+                        <bind:template>
+                            <dtr>
+                                <dtd>
+                                    <hc>
                                         <icon icon="globe" />
-                                    </dtd>
-                                    <dtd>
                                         <textbox bind="domain" />
-                                    </dtd>
-                                    <dtd width="1">
-                                        <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
-                                    </dtd>
-                                </dtr>
-                            </bind:template>
-                        </bind:collection>
-                    </formline>
+                                    </hc>
+                                </dtd>
+                                <dtd width="1">
+                                    <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                </dtd>
+                            </dtr>
+                        </bind:template>
+                    </bind:collection>
+                </pad>
+            </body>
+        </tab>
 
-                    <formline text="{Ports}">
-                        <bind:collection bind="ports" id="ports">
-                            <vc>
-                                <dt bind="__items" width="400">
-                                    <dth />
-                                    <dth text="Host" />
-                                    <dth text="Port" />
-                                    <dth text="SSL" />
-                                    <dth />
-                                </dt>
-                                <button bind="__add" icon="plus" text="{Create}" />
-                            </vc>
+        <tab title="{Ports}">
+            <body>
+                <pad>
+                    <bind:collection bind="ports" id="ports">
+                        <dt bind="__items" width="400" addrow="{Add}">
+                            <dth />
+                            <dth text="Host" />
+                            <dth text="Port" />
+                            <dth text="SSL" />
+                            <dth />
+                        </dt>
 
-                            <bind:template>
-                               <dtr>
-                                    <dtd>
-                                        <icon icon="arrow-right" />
-                                    </dtd>
-                                    <dtd>
-                                        <textbox bind="host" />
-                                    </dtd>
-                                    <dtd>
-                                        <textbox type="integer" bind="port" />
-                                    </dtd>
-                                    <dtd>
-                                        <checkbox bind="ssl" />
-                                    </dtd>
-                                    <dtd>
-                                        <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
-                                    </dtd>
-                                </dtr>
-                            </bind:template>
-                        </bind:collection>
-                    </formline>
+                        <bind:template>
+                           <dtr>
+                                <dtd>
+                                    <icon icon="arrow-right" />
+                                </dtd>
+                                <dtd>
+                                    <textbox bind="host" />
+                                </dtd>
+                                <dtd>
+                                    <textbox type="integer" bind="port" />
+                                </dtd>
+                                <dtd>
+                                    <checkbox bind="ssl" />
+                                </dtd>
+                                <dtd>
+                                    <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                                </dtd>
+                            </dtr>
+                        </bind:template>
+                    </bind:collection>
                 </pad>
             </body>
         </tab>
