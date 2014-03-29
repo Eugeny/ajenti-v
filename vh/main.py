@@ -183,8 +183,8 @@ class WebsiteEditorPlugin (SectionPlugin):
                 script += '&& unzip "%s" -d "%s"' % (tmppath, self.website.root)
 
             script += ' && chown www-data -R "%s"' % self.website.root
-            script += ' && find "%s" -type d -exec chmod 775 {}' % self.website.root
-            script += ' && find "%s" -type f -exec chmod 644 {}' % self.website.root
+            script += ' && find "%s" -type d -exec chmod 775 {} ";"' % self.website.root
+            script += ' && find "%s" -type f -exec chmod 644 {} ";"' % self.website.root
 
             def callback():
                 self.save()
@@ -214,7 +214,7 @@ class WebsiteEditorPlugin (SectionPlugin):
 
     def refresh(self):
         self.binder.unpopulate().populate()
-        
+
     @on('save', 'click')
     def save(self):
         self.binder.update()
