@@ -1,11 +1,32 @@
 import os
 import shutil
+import subprocess
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
-from ajenti.plugins.vh.api import WebserverComponent
+from ajenti.plugins.vh.api import WebserverComponent, SanityCheck
 
 from nginx_templates import *
+
+
+@plugin
+class NginxConfigTest (SanityCheck):
+    def init(self):
+        self.type = _('NGINX config test')
+
+    def check(self):
+        p = subprocess.Popen(['nginx', '-t'], stderr=subprocess.PIPE)
+        o, self.message = p.communicate()
+        return p.returncode == 0
+
+
+@plugin
+class NginxServiceTest (SanityCheck):
+    def init(self):
+        self.type = _('NGINX service')
+
+    def check(self):
+        return ServiceMultiplexor.get().get_one('nginx').running
 
 
 @plugin
@@ -21,7 +42,7 @@ class NginxWebserver (WebserverComponent):
 
     def __generate_website_location(self, ws, location):
         params = location.backend.params
-        
+
         if location.backend.type == 'static':
             content = TEMPLATE_LOCATION_CONTENT_STATIC % {
                 'autoindex': 'autoindex on;' if params['autoindex'] else '',
@@ -107,7 +128,7 @@ class NginxWebserver (WebserverComponent):
 
         if not os.path.exists(self.config_custom_root):
             os.mkdir(self.config_custom_root)
-            
+
         open(self.config_file, 'w').write(TEMPLATE_CONFIG_FILE)
         open(self.config_file_mime, 'w').write(TEMPLATE_CONFIG_MIME)
         open(self.config_file_fastcgi, 'w').write(TEMPLATE_CONFIG_FCGI)
@@ -124,3 +145,6 @@ class NginxWebserver (WebserverComponent):
             s.start()
         else:
             s.command('reload')
+
+    def get_checks(self):
+        return [NginxConfigTest.new(), NginxServiceTest.new()]

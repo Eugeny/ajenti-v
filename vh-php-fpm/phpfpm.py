@@ -2,7 +2,7 @@ import os
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
-from ajenti.plugins.vh.api import ApplicationGatewayComponent
+from ajenti.plugins.vh.api import ApplicationGatewayComponent, SanityCheck
 from ajenti.util import platform_select
 
 
@@ -41,6 +41,21 @@ pm.max_spare_servers = %(sp_max)s
 """
 
 
+fpm_service_name = platform_select(
+    debian='php5-fpm',
+    centos='php-fpm',
+)
+
+
+@plugin
+class FPMServiceTest (SanityCheck):
+    def __init__(self):
+        self.type = _('PHP-FPM service')
+
+    def check(self):
+        return ServiceMultiplexor.get().get_one(fpm_service_name).running
+
+
 @plugin
 class PHPFPM (ApplicationGatewayComponent):
     id = 'php-fcgi'
@@ -64,12 +79,9 @@ class PHPFPM (ApplicationGatewayComponent):
         }
 
     def __generate_website(self, website):
-        i = 0
         r = ''
         for location in website.locations:
             if location.backend.type == 'php-fcgi':
-                i += 1
-                location.backend.id = website.slug + '-php-fcgi-' + str(i)
                 r += self.__generate_pool(location.backend, location.backend.id)
         return r
 
@@ -82,11 +94,11 @@ class PHPFPM (ApplicationGatewayComponent):
         open(self.config_file, 'w').write(cfg)
 
     def apply_configuration(self):
-        s = ServiceMultiplexor.get().get_one(platform_select(
-            debian='php5-fpm',
-            centos='php-fpm',
-        ))
+        s = ServiceMultiplexor.get().get_one(fpm_service_name)
         if not s.running:
             s.start()
         else:
             s.command('reload')
+
+    def get_checks(self):
+        return [FPMServiceTest.new()]

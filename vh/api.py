@@ -40,31 +40,32 @@ class WebsiteDomain (object):
 
 
 class WebsiteLocation (object):
-    def __init__(self, j):
+    def __init__(self, website, j):
         self.pattern = j['pattern']
         self.match = j['match']
-        self.backend = Backend(j['backend'])
+        self.backend = Backend(self, j['backend'])
         self.custom_conf = j.get('custom_conf', '')
         self.custom_conf_override = j.get('custom_conf_override', False)
         self.path = j.get('path', '')
+        self.website = website
 
     @staticmethod
-    def create(template=None):
+    def create(website, template=None):
         templates = {
             'php-fcgi': {
                 'pattern': r'[^/]\.php(/|$)',
                 'match': 'regex',
-                'backend': Backend.create().save(),
+                'backend': Backend.create(None).save(),
             },
         }
 
         default_template = {
             'pattern': '/',
             'match': 'exact',
-            'backend': Backend.create().save(),
+            'backend': Backend.create(None).save(),
         }
 
-        return WebsiteLocation(templates[template] if template in templates else default_template)
+        return WebsiteLocation(website, templates[template] if template in templates else default_template)
 
     def save(self):
         return {
@@ -99,16 +100,21 @@ class WebsitePort (object):
 
 
 class Backend (object):
-    def __init__(self, j):
+    def __init__(self, location, j):
         self.type = j['type']
         self.params = j.get('params', {})
+        self.location = location
 
     @staticmethod
-    def create():
-        return Backend({
+    def create(l):
+        return Backend(l, {
             'type': 'static',
             'params': {}
         })
+
+    @property
+    def id(self):
+        return '%s-%s-%s' % (self.location.website.slug, self.type, self.location.website.locations.index(self.location))
 
     @property
     def typename(self):
@@ -131,7 +137,7 @@ class Website (object):
         self.ssl_key_path = j.get('ssl_key_path', '')
         self.domains = [WebsiteDomain(_) for _ in j['domains']]
         self.ports = [WebsitePort(_) for _ in j.get('ports', [])]
-        self.locations = [WebsiteLocation(_) for _ in j.get('locations', [])]
+        self.locations = [WebsiteLocation(self, _) for _ in j.get('locations', [])]
         self.enabled = j.get('enabled', True)
         self.maintenance_mode = j.get('maintenance_mode', True)
         self.root = j.get('root', '/srv/new-website')
@@ -164,6 +170,16 @@ class Website (object):
         }
 
 
+class SanityCheck (object):
+    def __init__(self):
+        self.name = ''
+        self.type = ''
+        self.message = ''
+
+    def check(self):
+        return False
+
+
 @interface
 class Component (object):
     def create_configuration(self, config):
@@ -171,6 +187,9 @@ class Component (object):
 
     def apply_configuration(self):
         pass
+
+    def get_checks(self):
+        return []
 
 
 @interface
@@ -207,6 +226,7 @@ class VHManager (object):
         self.components = ApplicationGatewayComponent.get_all()
         self.components += MiscComponent.get_all()
         self.webserver = WebserverComponent.get()
+        self.checks = []
 
     def reload(self):
         if os.path.exists(self.config_path):
@@ -224,6 +244,15 @@ class VHManager (object):
         for c in self.components:
             c.apply_configuration()
         self.webserver.apply_configuration()
+
+    def run_checks(self):
+        self.checks = []
+        for c in self.components:
+            self.checks += c.get_checks()
+        self.checks += self.webserver.get_checks()
+
+        for c in self.checks:
+            c.satisfied = c.check()
 
     def save(self):
         j = json.dumps(self.config.save(), indent=4)

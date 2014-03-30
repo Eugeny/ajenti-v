@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-nodejs
-VERSION=0.1.5
+VERSION=0.1.6
 DEB_DEPENDS="ajenti-v, supervisor"
 PROVIDES=ajenti-v-appgate
 DESCRIPTION="Node.JS support for Ajenti V"

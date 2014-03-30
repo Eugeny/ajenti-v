@@ -48,7 +48,7 @@ class WebsitesPlugin (SectionPlugin):
         self.find('websites').post_item_bind = post_ws_bind
         self.find('websites').filter = lambda ws: self.context.session.identity in ['root', ws.owner]
 
-        self.binder.setup(self.manager.config)
+        self.binder.setup(self.manager)
 
     @on('new-website', 'click')
     def on_new_website(self):
@@ -75,7 +75,7 @@ class WebsitesPlugin (SectionPlugin):
 
     def refresh(self):
         if self.manager.is_configured:
-            self.binder.unpopulate().populate()
+            self.binder.setup().populate()
 
     @on('save', 'click')
     def save(self):
@@ -84,6 +84,8 @@ class WebsitesPlugin (SectionPlugin):
         self.manager.save()
         self.context.endpoint.send_progress(_('Applying changes'))
         self.manager.update_configuration()
+        self.context.endpoint.send_progress(_('Testing configuration'))
+        self.manager.run_checks()
         self.refresh()
         self.context.notify('info', _('Saved'))
 
@@ -136,7 +138,7 @@ class WebsiteEditorPlugin (SectionPlugin):
         def create_location():
             self.binder.update()
             t = self.find('create-location-type').value
-            l = WebsiteLocation.create(template=t)
+            l = WebsiteLocation.create(self.website, template=t)
             l.backend.type = t
             self.website.locations.append(l)
             self.refresh()
@@ -226,5 +228,7 @@ class WebsiteEditorPlugin (SectionPlugin):
         self.manager.save()
         self.context.endpoint.send_progress(_('Applying changes'))
         self.manager.update_configuration()
+        self.context.endpoint.send_progress(_('Testing configuration'))
+        self.manager.run_checks()
         self.refresh()
         self.context.notify('info', _('Saved'))

@@ -4,12 +4,23 @@ import subprocess
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
-from ajenti.plugins.vh.api import ApplicationGatewayComponent
+from ajenti.plugins.supervisor.client import SupervisorServiceManager
+from ajenti.plugins.vh.api import ApplicationGatewayComponent, SanityCheck
 from ajenti.util import platform_select
 
 from reconfigure.configs import SupervisorConfig
 from reconfigure.items.supervisor import ProgramData
 
+
+class PumaServerTest (SanityCheck):
+    def __init__(self, backend):
+        SanityCheck.__init__(self)
+        self.backend = backend
+        self.type = _('PUMA service')
+        self.name = backend.id
+
+    def check(self):
+        return SupervisorServiceManager.get().get_one(self.backend.id).running
 
 
 @plugin
@@ -18,13 +29,10 @@ class Puma (ApplicationGatewayComponent):
     title = 'Ruby Puma'
 
     def __generate_website(self, website):
-        i = 0
-        for location in website.locations:
-            if location.backend.type == 'ruby-puma':
-                i += 1
-                location.backend.id = website.slug + '-ruby-puma-' + str(i)
+        pass
 
     def create_configuration(self, config):
+        self.checks = []
         sup = SupervisorConfig(path=platform_select(
             debian='/etc/supervisor/supervisord.conf',
             centos='/etc/supervisord.conf',
@@ -38,7 +46,7 @@ class Puma (ApplicationGatewayComponent):
             if website.enabled:
                 for location in website.locations:
                     if location.backend.type == 'ruby-puma':
-                        self.__generate_website(website)
+                        self.checks.append(PumaServerTest(location.backend))
                         p = ProgramData()
                         p.name = location.backend.id
                         bundler = location.backend.params.get('bundler', True)
@@ -64,3 +72,6 @@ class Puma (ApplicationGatewayComponent):
             s.start()
         else:
             subprocess.call(['supervisorctl', 'reload'])
+
+    def get_checks(self):
+        return self.checks

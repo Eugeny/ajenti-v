@@ -1,39 +1,62 @@
 <vc>
     <body>
-        <vc>
-            <pad>
-                <bind:collection bind="websites" id="websites">
-                    <vc>
-                        <dt bind="__items" />
-                    </vc>
-                    <bind:template>
-                        <dtr>
-                            <dtd>
+        <pad>
+            <vc>
+                <formgroup text="{Websites}" binder:context="config">
+                    <pad>
+                        <bind:collection bind="websites" id="websites">
+                            <vc>
+                                <dt bind="__items" />
+                            </vc>
+                            <bind:template>
+                                <dtr>
+                                    <dtd>
+                                        <hc>
+                                            <icon icon="globe" />
+                                            <label bind="name" />
+                                        </hc>
+                                    </dtd>
+                                    <dtd width="1">
+                                        <button id="manage" icon="cog" text="{Manage}" />
+                                    </dtd>
+                                </dtr>
+                            </bind:template>
+                        </bind:collection>
+                    </pad>
+                    <pad>
+                        <formgroup text="{New website}">
+                            <formline text="{Name}">
                                 <hc>
-                                    <icon icon="globe" />
-                                    <label bind="name" />
+                                    <textbox id="new-website-name" />
+                                    <button id="new-website" icon="plus" text="{Create}" />
                                 </hc>
-                            </dtd>
-                            <dtd width="1">
-                                <button id="manage" icon="cog" text="{Manage}" />
-                            </dtd>
-                        </dtr>
-                    </bind:template>
-                </bind:collection>
-            </pad>
-            <pad>
-                <formgroup text="{New website}">
-                    <vc>
-                        <formline text="{Name}">
-                            <textbox id="new-website-name" />
-                        </formline>
-                        <formline>
-                            <button id="new-website" icon="plus" text="{Create}" />
-                        </formline>
-                    </vc>
+                            </formline>
+                        </formgroup>
+                    </pad>
                 </formgroup>
-            </pad>
-        </vc>
+                <formgroup text="{Configuration checks}">
+                    <pad>
+                        <bind:collection bind="checks">
+                            <vc>
+                                <dt bind="__items" />
+                            </vc>
+                            <bind:template>
+                                <collapserow>
+                                    <hc>
+                                        <icon bind:icon="satisfied" bindtransform="lambda x: 'ok' if x else 'remove'" />
+                                        <label bind="type" style="bold" />
+                                        <label bind="name" />
+                                    </hc>
+                                    <indent>
+                                        <label bind="message" />
+                                    </indent>
+                                </collapserow>
+                            </bind:template>
+                        </bind:collection>
+                    </pad>
+                </formgroup>
+            </vc>
+        </pad>
     </body>
 
     <hc>

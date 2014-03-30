@@ -41,11 +41,8 @@ class Gunicorn (ApplicationGatewayComponent):
         self.config_dir = '/etc/unicorn.d'
 
     def __generate_website(self, website):
-        i = 0
         for location in website.locations:
             if location.backend.type == 'ruby-unicorn':
-                i += 1
-                location.backend.id = website.slug + '-ruby-unicorn-' + str(i)
                 c = TEMPLATE_PROCESS % {
                     'id': location.backend.id,
                     'workers': location.backend.params.get('workers', 4),

@@ -4,7 +4,8 @@ import subprocess
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
-from ajenti.plugins.vh.api import ApplicationGatewayComponent
+from ajenti.plugins.supervisor.client import SupervisorServiceManager
+from ajenti.plugins.vh.api import ApplicationGatewayComponent, SanityCheck
 from ajenti.util import platform_select
 
 from reconfigure.configs import SupervisorConfig
@@ -20,6 +21,17 @@ workers = multiprocessing.cpu_count() * 2 + 1
 """
 
 
+class GUnicornServerTest (SanityCheck):
+    def __init__(self, backend):
+        SanityCheck.__init__(self)
+        self.backend = backend
+        self.type = _('GUnicorn service')
+        self.name = backend.id
+
+    def check(self):
+        return SupervisorServiceManager.get().get_one(self.backend.id).running
+
+
 @plugin
 class Gunicorn (ApplicationGatewayComponent):
     id = 'python-wsgi'
@@ -29,11 +41,8 @@ class Gunicorn (ApplicationGatewayComponent):
         self.config_dir = '/etc/gunicorn.ajenti.d/'
 
     def __generate_website(self, website):
-        i = 0
         for location in website.locations:
             if location.backend.type == 'python-wsgi':
-                i += 1
-                location.backend.id = website.slug + '-python-wsgi-' + str(i)
                 c = TEMPLATE_PROCESS % {
                     'id': location.backend.id,
                     'root': location.path or website.root,
@@ -41,6 +50,7 @@ class Gunicorn (ApplicationGatewayComponent):
                 open(os.path.join(self.config_dir, location.backend.id), 'w').write(c)
 
     def create_configuration(self, config):
+        self.checks = []
         if os.path.exists(self.config_dir):
             shutil.rmtree(self.config_dir)
         os.mkdir(self.config_dir)
@@ -65,6 +75,7 @@ class Gunicorn (ApplicationGatewayComponent):
             if website.enabled:
                 for location in website.locations:
                     if location.backend.type == 'python-wsgi':
+                        self.checks.append(GUnicornServerTest(location.backend))
                         self.__generate_website(website)
                         p = ProgramData()
                         p.name = location.backend.id
@@ -89,3 +100,6 @@ class Gunicorn (ApplicationGatewayComponent):
             s.start()
         else:
             subprocess.call(['supervisorctl', 'reload'])
+
+    def get_checks(self):
+        return self.checks

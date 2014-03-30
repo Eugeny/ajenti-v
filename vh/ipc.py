@@ -50,6 +50,27 @@ class VIPC (IPCHandler):
                 self.manager.reload()
                 return 'OK'
 
+        if command == 'check':
+            self.manager.run_checks()
+            for c in self.manager.checks:
+                if not c.satisfied:
+                    raise Exception('Check failed: %s - %s: %s' % (c.type, c.name, c.message))
+            return 'OK'
+
+        if command == 'maintenance':
+            if len(args) != 3:
+                raise Exception('Usage: v maintenance <website name> on|off')
+            for ws in self.manager.config.websites:
+                if ws.name == args[1]:
+                    ws.maintenance_mode = args[2] == 'on'
+                    break
+            else:
+                raise Exception('Website not found')
+            self.manager.save()
+            self.manager.update_configuration()
+            return 'OK'
+
         if command == 'apply':
+            self.manager.save()
             self.manager.update_configuration()
             return 'OK'
