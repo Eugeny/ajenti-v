@@ -8,7 +8,7 @@ from ajenti.util import platform_select
 
 TEMPLATE_CONFIG_FILE = """
 [global]
-pid = /var/run/php5-fpm.pid
+pid = %(pidfile)s
 error_log = /var/log/php5-fpm.log
 
 [global-pool]
@@ -89,6 +89,10 @@ class PHPFPM (ApplicationGatewayComponent):
         if os.path.exists(self.config_file):
             os.unlink(self.config_file)
         cfg = TEMPLATE_CONFIG_FILE % {
+            'pidfile': platform_select(
+                debian='/var/run/php5-fpm.pid',
+                centos='/var/run/php-fpm/php-fpm.pid',
+            ),
             'pools': '\n'.join(self.__generate_website(_) for _ in config.websites if _.enabled)
         }
         open(self.config_file, 'w').write(cfg)
