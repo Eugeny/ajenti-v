@@ -248,6 +248,7 @@ class MailEximCourierBackend (MailBackend):
             os.unlink(self.courier_userdb)
 
         for mb in config.mailboxes:
+            root = os.path.join(config.mailroot, mb.name)
             subprocess.call([
                 'userdb',
                 mb.name,
@@ -273,7 +274,6 @@ class MailEximCourierBackend (MailBackend):
                 stdin=subprocess.PIPE
             )
             udb.communicate(md5pw)
-
 
         subprocess.call(['makeuserdb'])
 

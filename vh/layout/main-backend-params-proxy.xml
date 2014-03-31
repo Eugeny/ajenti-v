@@ -1,7 +1,7 @@
 <box>
     <bind:dict bind="params">
         <vc>
-            <formline text="{URL}">
+            <formline text="URL">
                 <textbox bind="url" />
             </formline>
         </vc>
