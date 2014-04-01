@@ -420,20 +420,22 @@ begin rewrite
 
 begin authenticators
 
-plain:
-        driver = plaintext
-        public_name = PLAIN
-        server_prompts = :
-        server_condition = ${if eq{${readsocket{COURIERSOCKET}{AUTH ${eval:13+${strlen:$2$3}}\nexim\n\login\n$2\n$3\n}{5s}{ } }}{FAIL }{no}{yes}}
-        server_set_id = $2
-
 login:
-        driver = plaintext
-        public_name = LOGIN
-        server_prompts = Username:: : Password::
-        server_condition = ${if eq{${readsocket{COURIERSOCKET}{AUTH ${eval:13+${strlen:$1$2}}\nexim\n\login\n$1\n$2\n}{5s}{ } }}{FAIL }{no}{yes}}
-        server_set_id = $1
+  driver = plaintext
+  public_name = LOGIN
+  server_prompts = Username:: : Password::
+  server_condition = ${extract {address} {${readsocket{COURIERSOCKET} \
+      {AUTH ${strlen:exim\nlogin\n$1\n$2\n}\nexim\nlogin\n$1\n$2\n} }} {yes} fail}
+  server_set_id = $1
 
+plain:
+  driver = plaintext
+  public_name = PLAIN
+  server_prompts = :
+  server_condition = ${extract {address} {${readsocket{COURIERSOCKET} \
+      {AUTH ${strlen:exim\nlogin\n$2\n$3\n}\nexim\nlogin\n$2\n$3\n} }} {yes} fail}
+  server_set_id = $2
+  server_advertise_condition = ${if eq{$tls_cipher}{} {no} {yes}}
 """
 
 COURIER_AUTHRC = """
