@@ -22,6 +22,7 @@ def init():
     import extensions
     import main
     import ipc
+    import processes
 
     import gate_static
     import gate_proxy

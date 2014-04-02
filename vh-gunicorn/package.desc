@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-python-gunicorn
-VERSION=0.2.3
+VERSION=0.2.4
 DEB_DEPENDS="ajenti-v (>=0.1.15), supervisor (>= 3.0)"
 RPM_DEPENDS="ajenti-v, supervisor >= 3.0"
 PROVIDES=ajenti-v-appgate

@@ -4,7 +4,7 @@ import subprocess
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
-from ajenti.plugins.vh.api import WebserverComponent, SanityCheck
+from ajenti.plugins.vh.api import WebserverComponent, SanityCheck, Restartable
 
 from nginx_templates import *
 
@@ -140,11 +140,17 @@ class NginxWebserver (WebserverComponent):
                     .write(self.__generate_website_config(website))
 
     def apply_configuration(self):
+        NGINXRestartable.get().schedule()
+
+    def get_checks(self):
+        return [NginxConfigTest.new(), NginxServiceTest.new()]
+
+
+@plugin
+class NGINXRestartable (Restartable):
+    def restart(self):
         s = ServiceMultiplexor.get().get_one('nginx')
         if not s.running:
             s.start()
         else:
             s.command('reload')
-
-    def get_checks(self):
-        return [NginxConfigTest.new(), NginxServiceTest.new()]

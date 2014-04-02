@@ -1,11 +1,10 @@
 import os
 import shutil
-import subprocess
 
 from ajenti.api import *
-from ajenti.plugins.services.api import ServiceMultiplexor
 from ajenti.plugins.supervisor.client import SupervisorServiceManager
 from ajenti.plugins.vh.api import ApplicationGatewayComponent, SanityCheck
+from ajenti.plugins.vh.processes import SupervisorRestartable
 from ajenti.util import platform_select
 
 from reconfigure.configs import SupervisorConfig
@@ -29,7 +28,10 @@ class GUnicornServerTest (SanityCheck):
         self.name = backend.id
 
     def check(self):
-        return SupervisorServiceManager.get().get_one(self.backend.id).running
+        s = SupervisorServiceManager.get().get_one(self.backend.id)
+        if s:
+            self.message = s.status
+        return s and s.running
 
 
 @plugin
@@ -39,6 +41,7 @@ class Gunicorn (ApplicationGatewayComponent):
 
     def init(self):
         self.config_dir = '/etc/gunicorn.ajenti.d/'
+        self.checks = []
 
     def __generate_website(self, website):
         for location in website.locations:
@@ -92,14 +95,7 @@ class Gunicorn (ApplicationGatewayComponent):
         sup.save()
 
     def apply_configuration(self):
-        s = ServiceMultiplexor.get().get_one(platform_select(
-            debian='supervisor',
-            centos='supervisord',
-        ))
-        if not s.running:
-            s.start()
-        else:
-            subprocess.call(['supervisorctl', 'reload'])
+        SupervisorRestartable.get().schedule()
 
     def get_checks(self):
         return self.checks

@@ -1,0 +1,45 @@
+<body>
+    <pad>
+        <bind:collection bind="processes" id="processes">
+            <dt bind="__items" addrow="{Add}" />
+            <bind:template>
+                <collapserow>
+                    <box>
+                        <right>
+                            <hc>
+                                <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
+                            </hc>
+                        </right>
+                        <hc>
+                            <icon bind="icon" />
+                            <label bind="name" />
+                        </hc>
+                    </box>
+                    <pad>
+                        <hc>
+                            <vc>
+                                <formline text="{Name}">
+                                    <textbox bind="name" />
+                                </formline>
+                                <formline text="{Command}">
+                                    <pathbox bind="command" />
+                                </formline>
+                                <formline text="{Working directory}">
+                                    <pathbox directory="True" bind="directory" />
+                                </formline>
+                            </vc>
+                            <vc>
+                                <formline text="{Username}">
+                                    <textbox bind="user" />
+                                </formline>
+                                <formline text="{Environment}">
+                                    <textbox bind="environment" />
+                                </formline>
+                            </vc>
+                        </hc>
+                    </pad>
+                </collapserow>
+            </bind:template>
+        </bind:collection>
+    </pad>
+</body>

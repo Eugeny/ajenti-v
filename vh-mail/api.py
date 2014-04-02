@@ -5,8 +5,11 @@ import pwd
 import shutil
 import subprocess
 
+import ajenti
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
+from ajenti.plugins.vh.api import Restartable
+from ajenti.plugins.vh.processes import SupervisorRestartable
 from ajenti.util import platform_select
 
 import templates
@@ -277,19 +280,9 @@ class MailEximCourierBackend (MailBackend):
 
         subprocess.call(['makeuserdb'])
 
-        ServiceMultiplexor.get().get_one(platform_select(
-            debian='courier-authdaemon',
-            centos='courier-authlib',
-        )).restart()
-        ServiceMultiplexor.get().get_one('courier-imap').restart()
-        ServiceMultiplexor.get().get_one(platform_select(
-            debian='courier-imap-ssl',
-            centos='courier-imap',
-        )).restart()
-        ServiceMultiplexor.get().get_one(platform_select(
-            debian='exim4',
-            centos='exim',
-        )).command('restart')
+        EximRestartable.get().restart()
+        CourierIMAPRestartable.get().restart()
+        CourierAuthRestartable.get().restart()
 
 
 @plugin
@@ -355,3 +348,29 @@ class MailManager (BasePlugin):
 
         self.config.dkim_enable = True
         self.config.dkim_private_key = privkey_path
+
+
+@plugin
+class EximRestartable (Restartable):
+    def restart(self):
+        ServiceMultiplexor.get().get_one(platform_select(
+            debian='exim4',
+            centos='exim',
+        )).command('restart')
+
+
+@plugin
+class CourierIMAPRestartable (Restartable):
+    def restart(self):
+        ServiceMultiplexor.get().get_one('courier-imap').restart()
+        if ajenti.platform == 'debian':  # centos runs both
+            ServiceMultiplexor.get().get_one('courier-imap-ssl').restart()
+
+
+@plugin
+class CourierAuthRestartable (Restartable):
+    def restart(self):
+        ServiceMultiplexor.get().get_one(platform_select(
+            debian='courier-authdaemon',
+            centos='courier-authlib',
+        )).restart()

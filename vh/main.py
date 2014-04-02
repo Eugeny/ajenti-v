@@ -77,6 +77,15 @@ class WebsitesPlugin (SectionPlugin):
         if self.manager.is_configured:
             self.binder.setup().populate()
 
+    @on('recheck', 'click')
+    def on_recheck(self):
+        self.context.endpoint.send_progress(_('Saving changes'))
+        self.binder.update()
+        self.manager.save()
+        self.context.endpoint.send_progress(_('Testing configuration'))
+        self.manager.run_checks()
+        self.refresh()
+
     @on('save', 'click')
     def save(self):
         self.context.endpoint.send_progress(_('Saving changes'))
@@ -84,6 +93,8 @@ class WebsitesPlugin (SectionPlugin):
         self.manager.save()
         self.context.endpoint.send_progress(_('Applying changes'))
         self.manager.update_configuration()
+        self.context.endpoint.send_progress(_('Restarting web services'))
+        self.manager.restart_services()
         self.context.endpoint.send_progress(_('Testing configuration'))
         self.manager.run_checks()
         self.refresh()
@@ -222,12 +233,15 @@ class WebsiteEditorPlugin (SectionPlugin):
         self.binder.update()
 
         for ext in self.website.extensions:
+            ext.update()
             self.website.extension_configs[ext.classname] = ext.config
 
         self.context.endpoint.send_progress(_('Saving changes'))
         self.manager.save()
         self.context.endpoint.send_progress(_('Applying changes'))
         self.manager.update_configuration()
+        self.context.endpoint.send_progress(_('Restarting web services'))
+        self.manager.restart_services()
         self.context.endpoint.send_progress(_('Testing configuration'))
         self.manager.run_checks()
         self.refresh()

@@ -38,6 +38,7 @@
                     <pad>
                         <bind:collection bind="checks">
                             <vc>
+                                <button id="recheck" icon="refresh" text="{Refresh}" />
                                 <dt bind="__items" />
                             </vc>
                             <bind:template>
@@ -47,7 +48,7 @@
                                         <label bind="type" style="bold" />
                                         <label bind="name" />
                                     </hc>
-                                    <indent>
+                                    <indent bind:visible="message" bindtransform="bool">
                                         <label bind="message" />
                                     </indent>
                                 </collapserow>

@@ -56,6 +56,11 @@ user_config_dir=%s
 chroot_local_user=YES
 hide_ids=YES
 
+force_dot_files=YES
+local_umask=002
+chmod_enable=YES
+file_open_mode=0755
+
 """ + platform_select(
     debian="""
 background=YES

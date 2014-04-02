@@ -2,7 +2,8 @@ import os
 
 from ajenti.api import *
 from ajenti.plugins.services.api import ServiceMultiplexor
-from ajenti.plugins.vh.api import ApplicationGatewayComponent, SanityCheck
+from ajenti.plugins.vh.api import ApplicationGatewayComponent, SanityCheck, Restartable
+from ajenti.plugins.vh.processes import SupervisorRestartable
 from ajenti.util import platform_select
 
 
@@ -98,11 +99,17 @@ class PHPFPM (ApplicationGatewayComponent):
         open(self.config_file, 'w').write(cfg)
 
     def apply_configuration(self):
+        PHPFPMRestartable.get().schedule()
+
+    def get_checks(self):
+        return [FPMServiceTest.new()]
+
+
+@plugin
+class PHPFPMRestartable (Restartable):
+    def restart(self):
         s = ServiceMultiplexor.get().get_one(fpm_service_name)
         if not s.running:
             s.start()
         else:
             s.command('reload')
-
-    def get_checks(self):
-        return [FPMServiceTest.new()]

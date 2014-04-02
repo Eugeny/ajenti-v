@@ -68,9 +68,11 @@ class VIPC (IPCHandler):
                 raise Exception('Website not found')
             self.manager.save()
             self.manager.update_configuration()
+            self.manager.restart_services()
             return 'OK'
 
         if command == 'apply':
             self.manager.save()
             self.manager.update_configuration()
+            self.manager.restart_services()
             return 'OK'

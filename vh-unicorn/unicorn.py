@@ -1,10 +1,9 @@
 import os
 import shutil
-import subprocess
 
 from ajenti.api import *
-from ajenti.plugins.services.api import ServiceMultiplexor
 from ajenti.plugins.vh.api import ApplicationGatewayComponent
+from ajenti.plugins.vh.processes import SupervisorRestartable
 from ajenti.util import platform_select
 
 from reconfigure.configs import SupervisorConfig
@@ -81,17 +80,4 @@ class Gunicorn (ApplicationGatewayComponent):
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
-        s = ServiceMultiplexor.get().get_one('unicorn')
-        if not s.running:
-            s.start()
-        else:
-            s.command('reload')
-
-        s = ServiceMultiplexor.get().get_one(platform_select(
-            debian='supervisor',
-            centos='supervisord',
-        ))
-        if not s.running:
-            s.start()
-        else:
-            subprocess.call(['supervisorctl', 'reload'])
+        SupervisorRestartable.get().schedule()

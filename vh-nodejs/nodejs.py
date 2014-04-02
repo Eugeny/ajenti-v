@@ -1,10 +1,11 @@
 import subprocess
 
 from ajenti.api import *
-from ajenti.plugins.services.api import ServiceMultiplexor
+from ajenti.util import platform_select
+
 from ajenti.plugins.supervisor.client import SupervisorServiceManager
 from ajenti.plugins.vh.api import ApplicationGatewayComponent, SanityCheck
-from ajenti.util import platform_select
+from ajenti.plugins.vh.processes import SupervisorRestartable
 
 from reconfigure.configs import SupervisorConfig
 from reconfigure.items.supervisor import ProgramData
@@ -18,13 +19,19 @@ class NodeServerTest (SanityCheck):
         self.name = backend.id
 
     def check(self):
-        return SupervisorServiceManager.get().get_one(self.backend.id).running
+        s = SupervisorServiceManager.get().get_one(self.backend.id)
+        if s:
+            self.message = s.status
+        return s and s.running
 
 
 @plugin
 class NodeJS (ApplicationGatewayComponent):
     id = 'nodejs'
     title = 'Node.JS'
+
+    def init(self):
+        self.checks = []
 
     def create_configuration(self, config):
         self.checks = []
@@ -61,14 +68,7 @@ class NodeJS (ApplicationGatewayComponent):
         sup.save()
 
     def apply_configuration(self):
-        s = ServiceMultiplexor.get().get_one(platform_select(
-            debian='supervisor',
-            centos='supervisord',
-        ))
-        if not s.running:
-            s.start()
-        else:
-            subprocess.call(['supervisorctl', 'reload'])
+        SupervisorRestartable.get().schedule()
 
     def get_checks(self):
         return self.checks

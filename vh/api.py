@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import pwd
 import subprocess
@@ -20,112 +21,6 @@ class Config (object):
     def save(self):
         return {
             'websites': [_.save() for _ in self.websites],
-        }
-
-
-class WebsiteDomain (object):
-    def __init__(self, j):
-        self.domain = j['domain']
-
-    @staticmethod
-    def create(domain):
-        return WebsiteDomain({
-            'domain': domain,
-        })
-
-    def save(self):
-        return {
-            'domain': self.domain,
-        }
-
-
-class WebsiteLocation (object):
-    def __init__(self, website, j):
-        self.pattern = j['pattern']
-        self.match = j['match']
-        self.backend = Backend(self, j['backend'])
-        self.custom_conf = j.get('custom_conf', '')
-        self.custom_conf_override = j.get('custom_conf_override', False)
-        self.path = j.get('path', '')
-        self.website = website
-
-    @staticmethod
-    def create(website, template=None):
-        templates = {
-            'php-fcgi': {
-                'pattern': r'[^/]\.php(/|$)',
-                'match': 'regex',
-                'backend': Backend.create(None).save(),
-            },
-        }
-
-        default_template = {
-            'pattern': '/',
-            'match': 'exact',
-            'backend': Backend.create(None).save(),
-        }
-
-        return WebsiteLocation(website, templates[template] if template in templates else default_template)
-
-    def save(self):
-        return {
-            'pattern': self.pattern,
-            'match': self.match,
-            'backend': self.backend.save(),
-            'custom_conf': self.custom_conf,
-            'custom_conf_override': self.custom_conf_override,
-            'path': self.path,
-        }
-
-
-class WebsitePort (object):
-    def __init__(self, j):
-        self.host = j.get('host', '*')
-        self.port = j['port']
-        self.ssl = j['ssl']
-
-    @staticmethod
-    def create(port):
-        return WebsitePort({
-            'port': port,
-            'ssl': False,
-        })
-
-    def save(self):
-        return {
-            'host': self.host,
-            'port': self.port,
-            'ssl': self.ssl,
-        }
-
-
-class Backend (object):
-    def __init__(self, location, j):
-        self.type = j['type']
-        self.params = j.get('params', {})
-        self.location = location
-
-    @staticmethod
-    def create(l):
-        return Backend(l, {
-            'type': 'static',
-            'params': {}
-        })
-
-    @property
-    def id(self):
-        return '%s-%s-%s' % (self.location.website.slug, self.type, self.location.website.locations.index(self.location))
-
-    @property
-    def typename(self):
-        for cls in ApplicationGatewayComponent.get_classes():
-            if cls.id == self.type:
-                return cls.title
-
-    def save(self):
-        return {
-            'type': self.type,
-            'params': self.params,
         }
 
 
@@ -170,6 +65,112 @@ class Website (object):
         }
 
 
+class WebsiteDomain (object):
+    def __init__(self, j):
+        self.domain = j['domain']
+
+    @staticmethod
+    def create(domain):
+        return WebsiteDomain({
+            'domain': domain,
+        })
+
+    def save(self):
+        return {
+            'domain': self.domain,
+        }
+
+
+class WebsitePort (object):
+    def __init__(self, j):
+        self.host = j.get('host', '*')
+        self.port = j['port']
+        self.ssl = j['ssl']
+
+    @staticmethod
+    def create(port):
+        return WebsitePort({
+            'port': port,
+            'ssl': False,
+        })
+
+    def save(self):
+        return {
+            'host': self.host,
+            'port': self.port,
+            'ssl': self.ssl,
+        }
+
+
+class WebsiteLocation (object):
+    def __init__(self, website, j):
+        self.pattern = j['pattern']
+        self.match = j['match']
+        self.backend = Backend(self, j['backend'])
+        self.custom_conf = j.get('custom_conf', '')
+        self.custom_conf_override = j.get('custom_conf_override', False)
+        self.path = j.get('path', '')
+        self.website = website
+
+    @staticmethod
+    def create(website, template=None):
+        templates = {
+            'php-fcgi': {
+                'pattern': r'[^/]\.php(/|$)',
+                'match': 'regex',
+                'backend': Backend.create(None).save(),
+            },
+        }
+
+        default_template = {
+            'pattern': '/',
+            'match': 'exact',
+            'backend': Backend.create(None).save(),
+        }
+
+        return WebsiteLocation(website, templates[template] if template in templates else default_template)
+
+    def save(self):
+        return {
+            'pattern': self.pattern,
+            'match': self.match,
+            'backend': self.backend.save(),
+            'custom_conf': self.custom_conf,
+            'custom_conf_override': self.custom_conf_override,
+            'path': self.path,
+        }
+
+
+class Backend (object):
+    def __init__(self, location, j):
+        self.type = j['type']
+        self.params = j.get('params', {})
+        self.location = location
+
+    @staticmethod
+    def create(l):
+        return Backend(l, {
+            'type': 'static',
+            'params': {}
+        })
+
+    @property
+    def id(self):
+        return '%s-%s-%s' % (self.location.website.slug, self.type, self.location.website.locations.index(self.location))
+
+    @property
+    def typename(self):
+        for cls in ApplicationGatewayComponent.get_classes():
+            if cls.id == self.type:
+                return cls.title
+
+    def save(self):
+        return {
+            'type': self.type,
+            'params': self.params,
+        }
+
+
 class SanityCheck (object):
     def __init__(self):
         self.name = ''
@@ -208,6 +209,27 @@ class MiscComponent (Component):
     pass
 
 
+@interface
+@persistent
+@rootcontext
+class Restartable (BasePlugin):
+    def init(self):
+        self.scheduled = False
+
+    def restart(self):
+        pass
+
+    def schedule(self):
+        logging.debug('%s scheduled' % self.classname)
+        self.scheduled = True
+
+    def process(self):
+        if self.scheduled:
+            logging.debug('%s restarting' % self.classname)
+            self.scheduled = False
+            self.restart()
+
+
 @plugin
 @persistent
 @rootcontext
@@ -225,6 +247,7 @@ class VHManager (object):
         self.reload()
         self.components = ApplicationGatewayComponent.get_all()
         self.components += MiscComponent.get_all()
+        self.restartables = [x.get() for x in Restartable.get_classes()]  # get() ensures rootcontext
         self.webserver = WebserverComponent.get()
         self.checks = []
 
@@ -244,6 +267,10 @@ class VHManager (object):
         for c in self.components:
             c.apply_configuration()
         self.webserver.apply_configuration()
+
+    def restart_services(self):
+        for r in self.restartables:
+            r.process()
 
     def run_checks(self):
         self.checks = []
