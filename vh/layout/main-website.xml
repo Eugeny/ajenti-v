@@ -87,6 +87,7 @@
                             <dth text="Host" />
                             <dth text="Port" />
                             <dth text="SSL" />
+                            <dth text="SPDY" />
                             <dth />
                         </dt>
 
@@ -103,6 +104,9 @@
                                 </dtd>
                                 <dtd>
                                     <checkbox bind="ssl" />
+                                </dtd>
+                                <dtd>
+                                    <checkbox bind="spdy" />
                                 </dtd>
                                 <dtd>
                                     <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />

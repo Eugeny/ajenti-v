@@ -85,13 +85,13 @@ class WebsitePort (object):
     def __init__(self, j):
         self.host = j.get('host', '*')
         self.port = j['port']
-        self.ssl = j['ssl']
+        self.ssl = j.get('ssl', False)
+        self.spdy = j.get('spdy', False)
 
     @staticmethod
     def create(port):
         return WebsitePort({
             'port': port,
-            'ssl': False,
         })
 
     def save(self):
@@ -99,6 +99,7 @@ class WebsitePort (object):
             'host': self.host,
             'port': self.port,
             'ssl': self.ssl,
+            'spdy': self.spdy,
         }
 
 

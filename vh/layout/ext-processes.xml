@@ -11,7 +11,7 @@
                             </hc>
                         </right>
                         <hc>
-                            <icon bind="icon" />
+                            <icon icon="cog" />
                             <label bind="name" />
                         </hc>
                     </box>
