@@ -1,7 +1,7 @@
 PACKAGE=ajenti-v
-VERSION=0.2.16
-DEB_DEPENDS="ajenti (>=1.2.20.3), ajenti-v-webserver, python-reconfigure (>=0.1.39)"
-RPM_DEPENDS="ajenti >= 1.2.20.3, ajenti-v-webserver, reconfigure >= 0.1.39"
+VERSION=0.2.17
+DEB_DEPENDS="ajenti (>=1.2.20.3), ajenti-v-webserver, python-reconfigure (>=0.1.39), supervisor >= 3.0"
+RPM_DEPENDS="ajenti >= 1.2.20.3, ajenti-v-webserver, reconfigure >= 0.1.39, supervisor >= 3.0"
 PROVIDES=ajenti-v-core
 DESCRIPTION="Virtual hosting solution for Ajenti"
 read -d '' POSTINST <<END
