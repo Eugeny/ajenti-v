@@ -1,3 +1,4 @@
+import gevent
 import logging
 import os
 import subprocess
@@ -79,9 +80,7 @@ class WebsitesPlugin (SectionPlugin):
 
     @on('recheck', 'click')
     def on_recheck(self):
-        self.context.endpoint.send_progress(_('Saving changes'))
         self.binder.update()
-        self.manager.save()
         self.context.endpoint.send_progress(_('Testing configuration'))
         self.manager.run_checks()
         self.refresh()
@@ -95,8 +94,7 @@ class WebsitesPlugin (SectionPlugin):
         self.manager.update_configuration()
         self.context.endpoint.send_progress(_('Restarting web services'))
         self.manager.restart_services()
-        self.context.endpoint.send_progress(_('Testing configuration'))
-        self.manager.run_checks()
+        gevent.spawn(self.on_recheck)
         self.refresh()
         self.context.notify('info', _('Saved'))
 
@@ -228,6 +226,10 @@ class WebsiteEditorPlugin (SectionPlugin):
     def refresh(self):
         self.binder.unpopulate().populate()
 
+    def run_checks(self):
+        self.context.endpoint.send_progress(_('Testing configuration'))
+        self.manager.run_checks()
+
     @on('save', 'click')
     def save(self):
         self.binder.update()
@@ -242,7 +244,6 @@ class WebsiteEditorPlugin (SectionPlugin):
         self.manager.update_configuration()
         self.context.endpoint.send_progress(_('Restarting web services'))
         self.manager.restart_services()
-        self.context.endpoint.send_progress(_('Testing configuration'))
-        self.manager.run_checks()
+        gevent.spawn(self.run_checks)
         self.refresh()
         self.context.notify('info', _('Saved'))

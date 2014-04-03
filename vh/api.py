@@ -1,11 +1,13 @@
+from slugify import slugify
+import gevent
 import json
 import logging
 import os
 import pwd
 import subprocess
-from slugify import slugify
 
 from ajenti.api import *
+from ajenti.profiler import profile_start, profile_end
 
 
 class Config (object):
@@ -229,6 +231,7 @@ class Restartable (BasePlugin):
             logging.debug('%s restarting' % self.classname)
             self.scheduled = False
             self.restart()
+            logging.debug('%s restarted' % self.classname)
 
 
 @plugin
@@ -261,17 +264,23 @@ class VHManager (object):
             self.config = Config.create()
 
     def update_configuration(self):
-        for c in self.components:
-            c.create_configuration(self.config)
+        profile_start('V: creating configuration')
+        greenlets = [gevent.spawn(c.create_configuration, self.config) for c in self.components]
+        gevent.joinall(greenlets)
         self.webserver.create_configuration(self.config)
+        profile_end()
 
-        for c in self.components:
-            c.apply_configuration()
+        profile_start('V: applying configuration')
+        greenlets = [gevent.spawn(c.apply_configuration) for c in self.components]
+        gevent.joinall(greenlets)
         self.webserver.apply_configuration()
+        profile_end()
 
     def restart_services(self):
-        for r in self.restartables:
-            r.process()
+        profile_start('V: restarting services')
+        greenlets = [gevent.spawn(r.process) for r in self.restartables]
+        gevent.joinall(greenlets)
+        profile_end()
 
     def run_checks(self):
         self.checks = []
@@ -279,8 +288,14 @@ class VHManager (object):
             self.checks += c.get_checks()
         self.checks += self.webserver.get_checks()
 
-        for c in self.checks:
+        profile_start('V: running checks')
+
+        def run_check(c):
             c.satisfied = c.check()
+
+        greenlets = [gevent.spawn(run_check, c) for c in self.checks]
+        gevent.joinall(greenlets)
+        profile_end()
 
     def save(self):
         j = json.dumps(self.config.save(), indent=4)

@@ -3,6 +3,7 @@ import os
 import subprocess
 
 from ajenti.api import *
+from ajenti.api.helpers import subprocess_call_background
 from ajenti.ui.binder import Binder
 from ajenti.util import platform_select
 
@@ -118,12 +119,12 @@ class SupervisorRestartable (Restartable):
         if not s.running:
             s.start()
         else:
-            subprocess.call(['supervisorctl', 'reload'])
+            subprocess_call_background(['supervisorctl', 'reload'])
 
         # Await restart
         retries = 10
         while retries:
             retries -= 1
-            if subprocess.call(['supervisorctl', 'status']) == 0:
+            if subprocess_call_background(['supervisorctl', 'status']) == 0:
                 break
             gevent.sleep(1)
