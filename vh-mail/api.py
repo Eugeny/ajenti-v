@@ -169,7 +169,9 @@ class MailEximCourierBackend (MailBackend):
         except:
             mailname = 'localhost'
 
-        domains = list(set(x.domain for x in config.mailboxes))
+        domains = [x.domain for x in config.mailboxes]
+        domains += [x.domain for x in config.forwarding_mailboxes]
+        domains = list(set(domains))
         if not mailname in domains:
             domains.append(mailname)
         if not 'localhost' in domains:

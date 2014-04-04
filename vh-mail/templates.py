@@ -204,7 +204,7 @@ vdomain:
   no_more
 
 vforward:
-  debug_print = "R: virtualuserforward for $local_part@$domain"
+  debug_print = "R: vforward for $local_part@$domain"
   driver = redirect
   domains = +local_domains
   file = %(mailforward)s/$local_part@$domain
