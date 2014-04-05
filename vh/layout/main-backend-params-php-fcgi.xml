@@ -15,4 +15,17 @@
             </vc>
         </bind:dict>
     </collapserow>
+    <collapserow>
+        <hc>
+            <icon icon="cog" />
+            <label text="PHP" />
+        </hc>
+        <bind:dict bind="params">
+            <vc>
+                <formline text="open_basedir">
+                    <pathbox bind="php_open_basedir" directory="True" />
+                </formline>
+            </vc>
+        </bind:dict>
+    </collapserow>
 </dt>

@@ -61,6 +61,7 @@ class NginxWebserver (WebserverComponent):
         if location.backend.type == 'php-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP_FCGI % {
                 'id': location.backend.id,
+                'php_open_basedir': params.get('php_open_basedir', None) or location.path or ws.root,
             }
 
         if location.backend.type == 'python-wsgi':
@@ -106,7 +107,7 @@ class NginxWebserver (WebserverComponent):
             ) if website.domains else '',
             'ports': (
                 '\n'.join(
-                    'listen %s:%s%s%s;' % (
+                    'listen %s:%s%s%s%s;' % (
                         x.host, x.port,
                         ' ssl' if x.ssl else '',
                         ' spdy' if x.spdy else '',
