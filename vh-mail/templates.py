@@ -206,15 +206,13 @@ vdomain:
 vforward:
   debug_print = "R: vforward for $local_part@$domain"
   driver = redirect
+  allow_defer
+  allow_fail
   domains = +local_domains
   file = %(mailforward)s/$local_part@$domain
-  no_verify
-  no_expn
-  check_ancestor
-  directory_transport = address_directory
   file_transport = address_file
   pipe_transport = address_pipe
-  reply_transport = address_reply
+  no_more
 
 
 dnslookup:
