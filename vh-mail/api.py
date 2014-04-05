@@ -222,6 +222,7 @@ class MailEximCourierBackend (MailBackend):
         if os.path.exists(self.maildomains):
             shutil.rmtree(self.maildomains)
         os.makedirs(self.maildomains)
+        os.chmod(self.maildomains, 0755)
 
         for mb in config.mailboxes:
             root = os.path.join(config.mailroot, mb.name)
@@ -231,12 +232,14 @@ class MailEximCourierBackend (MailBackend):
 
             with open(os.path.join(self.maildomains, mb.domain), 'a+') as f:
                 f.write(mb.local + '\n')
+            os.chmod(os.path.join(self.maildomains, mb.domain), 0755)
 
         # Forwarding entries ----------------------------
 
         if os.path.exists(self.mailforward):
             shutil.rmtree(self.mailforward)
         os.makedirs(self.mailforward)
+        os.chmod(self.mailforward, 0755)
 
         for mb in config.forwarding_mailboxes:
             fpath = os.path.join(
@@ -246,6 +249,7 @@ class MailEximCourierBackend (MailBackend):
             with open(fpath, 'a+') as f:
                 for target in mb.targets:
                     f.write(target.email + '\n')
+            os.chmod(fpath, 0755)
 
         # UserDB ------------------------------------
 
