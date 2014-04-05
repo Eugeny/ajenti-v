@@ -84,10 +84,11 @@
                     <bind:collection bind="ports" id="ports">
                         <dt bind="__items" width="400" addrow="{Add}">
                             <dth />
-                            <dth text="Host" />
-                            <dth text="Port" />
+                            <dth text="{Host}" />
+                            <dth text="{Port}" />
                             <dth text="SSL" />
                             <dth text="SPDY" />
+                            <dth text="Default" />
                             <dth />
                         </dt>
 
@@ -107,6 +108,9 @@
                                 </dtd>
                                 <dtd>
                                     <checkbox bind="spdy" />
+                                </dtd>
+                                <dtd>
+                                    <checkbox bind="default" />
                                 </dtd>
                                 <dtd>
                                     <button bind="__delete" icon="remove" style="mini" warning="{Confirm deletion}" />
