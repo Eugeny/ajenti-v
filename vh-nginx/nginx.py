@@ -61,7 +61,6 @@ class NginxWebserver (WebserverComponent):
         if location.backend.type == 'php-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP_FCGI % {
                 'id': location.backend.id,
-                'php_open_basedir': params.get('php_open_basedir', None) or location.path or ws.root,
             }
 
         if location.backend.type == 'python-wsgi':

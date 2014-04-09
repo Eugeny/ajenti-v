@@ -265,16 +265,23 @@ class VHManager (object):
             self.is_configured = False
             self.config = Config.create()
 
+    def __handle_exceptions(self, greenlets):
+        for g in greenlets:
+            if g.exception:
+                raise g.exception
+
     def update_configuration(self):
         profile_start('V: creating configuration')
         greenlets = [gevent.spawn(c.create_configuration, self.config) for c in self.components]
         gevent.joinall(greenlets)
+        self.__handle_exceptions(greenlets)
         self.webserver.create_configuration(self.config)
         profile_end()
 
         profile_start('V: applying configuration')
         greenlets = [gevent.spawn(c.apply_configuration) for c in self.components]
         gevent.joinall(greenlets)
+        self.__handle_exceptions(greenlets)
         self.webserver.apply_configuration()
         profile_end()
 
@@ -282,6 +289,7 @@ class VHManager (object):
         profile_start('V: restarting services')
         greenlets = [gevent.spawn(r.process) for r in self.restartables]
         gevent.joinall(greenlets)
+        self.__handle_exceptions(greenlets)
         profile_end()
 
     def run_checks(self):
@@ -297,6 +305,7 @@ class VHManager (object):
 
         greenlets = [gevent.spawn(run_check, c) for c in self.checks]
         gevent.joinall(greenlets)
+        self.__handle_exceptions(greenlets)
         profile_end()
 
     def save(self):

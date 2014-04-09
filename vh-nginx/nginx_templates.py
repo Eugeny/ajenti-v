@@ -212,7 +212,6 @@ TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
         include fcgi.conf;
         fastcgi_pass unix:/var/run/php-fcgi-%(id)s.sock;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param PHP_VALUE open_basedir="%(php_open_basedir)s";
 """
 
 TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
