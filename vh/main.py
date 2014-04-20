@@ -82,8 +82,11 @@ class WebsitesPlugin (SectionPlugin):
     def on_recheck(self):
         self.binder.update()
         self.context.endpoint.send_progress(_('Testing configuration'))
-        self.manager.run_checks()
-        self.refresh()
+        try:
+            self.manager.run_checks()
+        finally:
+            self.context.endpoint.send_progress(None)
+            self.refresh()
 
     @on('save', 'click')
     def save(self):
@@ -228,7 +231,11 @@ class WebsiteEditorPlugin (SectionPlugin):
 
     def run_checks(self):
         self.context.endpoint.send_progress(_('Testing configuration'))
-        self.manager.run_checks()
+        try:
+            self.manager.run_checks()
+        finally:
+            self.context.endpoint.send_progress(None)
+            self.refresh()
 
     @on('save', 'click')
     def save(self):
