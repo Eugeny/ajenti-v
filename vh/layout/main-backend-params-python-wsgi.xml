@@ -13,6 +13,9 @@
                     <formline text="{Virtualenv path}">
                         <pathbox bind="venv" directory="True" />
                     </formline>
+                    <formline text="{Workers}">
+                        <textbox bind="workers" type="integer" />
+                    </formline>
                 </collapserow>
             </dt>
         </vc>

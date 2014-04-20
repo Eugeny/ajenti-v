@@ -58,7 +58,7 @@
                                     <indent>
                                         <bind:collection bind="targets" id="targets">
                                             <dt bind="__items" width="1" addrow="{Add}">
-                                                <dtr>
+                                                <dtr header="True">
                                                     <dth />
                                                     <dth text="{Target address}" />
                                                     <dth />

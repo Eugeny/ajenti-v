@@ -121,5 +121,9 @@ class VSFTPD (MiscComponent):
         open(self.pam_path, 'w').write(TEMPLATE_PAM)
         open(self.config_file, 'w').write(TEMPLATE_CONFIG % self.config_root_users)
 
+        if not os.path.exists('/var/www'):
+            os.mkdir('/var/www')
+        subprocess.call(['chown', 'www-data:', '/var/www'])
+
     def apply_configuration(self):
         ServiceMultiplexor.get().get_one('vsftpd').restart()

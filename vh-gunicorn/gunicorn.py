@@ -16,7 +16,7 @@ import multiprocessing
 
 bind = 'unix:/var/run/gunicorn-%(id)s.sock'
 chdir = '%(root)s'
-workers = multiprocessing.cpu_count() * 2 + 1
+workers = %(workers)s or (multiprocessing.cpu_count() * 2 + 1)
 """
 
 
@@ -49,6 +49,7 @@ class Gunicorn (ApplicationGatewayComponent):
                 c = TEMPLATE_PROCESS % {
                     'id': location.backend.id,
                     'root': location.path or website.root,
+                    'workers': location.backend.params.get('workers', None),
                 }
                 open(os.path.join(self.config_dir, location.backend.id), 'w').write(c)
 
