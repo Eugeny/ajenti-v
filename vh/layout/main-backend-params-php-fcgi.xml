@@ -25,6 +25,12 @@
                 <formline text="open_basedir">
                     <pathbox bind="php_open_basedir" directory="True" />
                 </formline>
+                <formline text="{PHP options}">
+                    <codearea bind="php_admin_values" width="400" height="300" />
+                </formline>
+                <formline text="{PHP flags}">
+                    <codearea bind="php_flags" width="400" height="300" />
+                </formline>
             </vc>
         </bind:dict>
     </collapserow>

@@ -40,6 +40,8 @@ pm.min_spare_servers = %(sp_min)s
 pm.max_spare_servers = %(sp_max)s
 
 php_admin_value[open_basedir] = %(php_open_basedir)s
+
+%(php_extras)s
 """
 
 
@@ -72,6 +74,19 @@ class PHPFPM (ApplicationGatewayComponent):
     def __generate_pool(self, location, backend, name):
         pm_min = backend.params.get('pm_min', 1) or 1
         pm_max = backend.params.get('pm_max', 5) or 5
+
+        extras = ''
+
+        for l in (backend.params.get('php_admin_values', None) or '').splitlines():
+            if '=' in l:
+                k, v = l.split('=', 1)
+                extras += 'php_admin_value[%s] = %s\n' % (k.strip(), v.strip())
+
+        for l in (backend.params.get('php_flags', None) or '').splitlines():
+            if '=' in l:
+                k, v = l.split('=', 1)
+                extras += 'php_flag[%s] = %s\n' % (k.strip(), v.strip())
+
         return TEMPLATE_POOL % {
             'name': name,
             'min': pm_min,
@@ -79,6 +94,7 @@ class PHPFPM (ApplicationGatewayComponent):
             'sp_min': min(2, pm_min),
             'sp_max': min(6, pm_max),
             'php_open_basedir': backend.params.get('php_open_basedir', None) or location.path or location.website.root,
+            'php_extras': extras,
         }
 
     def __generate_website(self, website):
