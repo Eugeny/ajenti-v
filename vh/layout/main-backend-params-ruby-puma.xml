@@ -10,7 +10,7 @@
                     values="['development', 'production']"
             />
             </formline>
-            <dt>
+            <dt filtering="False">
                 <collapserow>
                     <hc>
                         <icon icon="cog" />

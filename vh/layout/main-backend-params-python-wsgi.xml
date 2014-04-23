@@ -4,7 +4,7 @@
             <formline text="{Application module}">
                 <textbox bind="module" />
             </formline>
-            <dt>
+            <dt filtering="False">
                 <collapserow>
                     <hc>
                         <icon icon="cog" />

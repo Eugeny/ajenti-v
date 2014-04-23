@@ -1,4 +1,4 @@
-<dt>
+<dt filtering="False">
     <collapserow>
         <hc>
             <icon icon="cog" />
@@ -26,10 +26,10 @@
                     <pathbox bind="php_open_basedir" directory="True" />
                 </formline>
                 <formline text="{PHP options}">
-                    <codearea bind="php_admin_values" width="400" height="300" />
+                    <codearea bind="php_admin_values" width="400" height="150" />
                 </formline>
                 <formline text="{PHP flags}">
-                    <codearea bind="php_flags" width="400" height="300" />
+                    <codearea bind="php_flags" width="400" height="150" />
                 </formline>
             </vc>
         </bind:dict>

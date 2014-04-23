@@ -12,7 +12,7 @@
     <box id="backend-params">
     </box>
 
-    <dt>
+    <dt filtering="False">
         <collapserow>
             <hc>
                 <icon icon="cog" />
