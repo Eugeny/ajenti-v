@@ -1,7 +1,7 @@
 PACKAGE=ajenti-v-ftp-vsftpd
-VERSION=0.2.2
-DEB_DEPENDS="ajenti-v (>=0.2.0), vsftpd (>=3.0.0), db-util"
-RPM_DEPENDS="ajenti-v, vsftpd >= 3.0.0, db4-utils, db4"
+VERSION=0.2.3
+DEB_DEPENDS="ajenti-v (>=3.0.2), vsftpd (>=3.0.0), db-util"
+RPM_DEPENDS="ajenti-v, vsftpd >= 3.0.2, db4-utils, db4"
 PROVIDES=ajenti-v-ftp
 DESCRIPTION="VSFTPD support for Ajenti V"
 read -d '' POSTINST <<END

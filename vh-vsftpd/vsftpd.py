@@ -61,13 +61,9 @@ local_umask=002
 chmod_enable=YES
 file_open_mode=0755
 
-""" + platform_select(
-    debian="""
-background=YES
-    """,
-    centos="""
-    """,
-)
+seccomp_sandbox=NO
+
+"""
 
 TEMPLATE_PAM = """#%%PAM-1.0
 auth    required        pam_userdb.so   db=/etc/vsftpd/users
