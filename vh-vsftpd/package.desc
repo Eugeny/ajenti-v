@@ -1,6 +1,6 @@
 PACKAGE=ajenti-v-ftp-vsftpd
-VERSION=0.2.3
-DEB_DEPENDS="ajenti-v (>=3.0.2), vsftpd (>=3.0.0), db-util"
+VERSION=0.2.4
+DEB_DEPENDS="ajenti-v, vsftpd (>=3.0.2), db-util"
 RPM_DEPENDS="ajenti-v, vsftpd >= 3.0.2, db4-utils, db4"
 PROVIDES=ajenti-v-ftp
 DESCRIPTION="VSFTPD support for Ajenti V"
