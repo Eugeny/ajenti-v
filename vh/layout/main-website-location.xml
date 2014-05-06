@@ -20,7 +20,13 @@
             </hc>
             <vc>
                 <formline text="{Custom path}">
-                    <pathbox bind="path" directory="True" />
+                    <vc>
+                        <pathbox bind="path" directory="True" />
+                        <hc>
+                            <checkbox bind="path_append_pattern" text="{Append URL pattern to path}" />
+                            <label text="(root)" />
+                        </hc>
+                    </vc>
                 </formline>
 
                 <formline text="{Custom configuration}">

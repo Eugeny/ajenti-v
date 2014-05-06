@@ -115,6 +115,7 @@ class WebsiteLocation (object):
         self.custom_conf = j.get('custom_conf', '')
         self.custom_conf_override = j.get('custom_conf_override', False)
         self.path = j.get('path', '')
+        self.path_append_pattern = j.get('path_append_pattern', True)
         self.website = website
 
     @staticmethod
@@ -122,6 +123,7 @@ class WebsiteLocation (object):
         templates = {
             'php-fcgi': {
                 'pattern': r'[^/]\.php(/|$)',
+                'path_append_pattern': False,
                 'match': 'regex',
                 'backend': Backend.create(None).save(),
             },
@@ -129,6 +131,7 @@ class WebsiteLocation (object):
 
         default_template = {
             'pattern': '/',
+            'path_append_pattern': False,
             'match': 'exact',
             'backend': Backend.create(None).save(),
         }

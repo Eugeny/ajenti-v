@@ -86,10 +86,17 @@ class NginxWebserver (WebserverComponent):
         if location.custom_conf_override:
             content = ''
 
+        path_spec = ''
+        if location.path:
+            if location.path_append_pattern:
+                path_spec = 'root %s;' % location.path
+            else:
+                path_spec = 'alias %s;' % location.path
+
         return TEMPLATE_LOCATION % {
             'pattern': location.pattern,
             'custom_conf': location.custom_conf,
-            'path': ('root %s;' % location.path) if location.path else '',
+            'path': path_spec,
             'match': {
                 'exact': '',
                 'regex': '~',
