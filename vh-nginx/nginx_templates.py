@@ -3,6 +3,7 @@ TEMPLATE_CONFIG_FILE = """
 
 user %(user)s %(user)s;
 pid /var/run/nginx.pid;
+worker_processes auto;
 worker_rlimit_nofile 100000;
 
 events {
