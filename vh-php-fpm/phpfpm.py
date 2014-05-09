@@ -87,7 +87,7 @@ class PHPFPM (ApplicationGatewayComponent):
                 k, v = l.split('=', 1)
                 extras += 'php_flag[%s] = %s\n' % (k.strip(), v.strip())
 
-        open_basedir = '%s:/tmp' % location.path or location.website.root
+        open_basedir = '%s:/tmp' % (location.path or location.website.root)
         if backend.params.get('php_open_basedir', None):
             open_basedir = backend.params.get('php_open_basedir', None)
 
