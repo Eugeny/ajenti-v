@@ -87,13 +87,17 @@ class PHPFPM (ApplicationGatewayComponent):
                 k, v = l.split('=', 1)
                 extras += 'php_flag[%s] = %s\n' % (k.strip(), v.strip())
 
+        open_basedir = '%s:/tmp' % location.path or location.website.root
+        if backend.params.get('php_open_basedir', None):
+            open_basedir = backend.params.get('php_open_basedir', None)
+
         return TEMPLATE_POOL % {
             'name': name,
             'min': pm_min,
             'max': pm_max,
             'sp_min': min(2, pm_min),
             'sp_max': min(6, pm_max),
-            'php_open_basedir': backend.params.get('php_open_basedir', None) or location.path or location.website.root,
+            'php_open_basedir': open_basedir,
             'php_extras': extras,
         }
 
