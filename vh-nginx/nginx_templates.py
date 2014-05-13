@@ -1,9 +1,12 @@
+import multiprocessing
+
+
 TEMPLATE_CONFIG_FILE = """
 #AUTOMATICALLY GENERATED - DO NO EDIT!
 
 user %(user)s %(user)s;
 pid /var/run/nginx.pid;
-worker_processes auto;
+worker_processes %(workers)s;
 worker_rlimit_nofile 100000;
 
 events {
@@ -54,6 +57,7 @@ http {
     include /etc/nginx.custom.d/*.conf;
 }
 """ % {
+    'workers': multiprocessing.cpu_count(),
     'log_root': '/var/log/nginx',
     'user': 'www-data',
 }
