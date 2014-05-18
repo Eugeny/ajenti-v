@@ -9,6 +9,7 @@ find -name '*.pyc' | xargs rm
 ./deb.sh vh-php-fpm
 ./deb.sh vh-unicorn
 ./deb.sh vh-vsftpd
+./deb.sh vh-pureftpd
 ./deb.sh vh-puma
 ./deb.sh vh-nodejs
 ./deb.sh vh-mail
@@ -20,6 +21,7 @@ find -name '*.pyc' | xargs rm
 ./rpm.sh vh-php-fpm
 ./rpm.sh vh-unicorn
 ./rpm.sh vh-vsftpd
+./rpm.sh vh-pureftpd
 ./rpm.sh vh-puma
 ./rpm.sh vh-nodejs
 ./rpm.sh vh-mail

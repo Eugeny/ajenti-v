@@ -5,4 +5,4 @@ ssh root@ajenti.org /srv/repo/rebuild-debian.sh
 scp dist/*.rpm root@ajenti.org:/srv/repo/centos/repo
 ssh root@ajenti.org /srv/repo/rebuild-centos.sh
 
-ssh root@ajenti.org /srv/repo/publish.py
+#ssh root@ajenti.org /srv/repo/publish.py
