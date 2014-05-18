@@ -1,0 +1,8 @@
+PACKAGE=ajenti-v-ftp-pureftpd
+VERSION=0.1.0
+DEB_DEPENDS="ajenti-v, pure-ftpd"
+RPM_DEPENDS="ajenti-v, pure-ftpd"
+PROVIDES=ajenti-v-ftp
+DESCRIPTION="PureFTPd support for Ajenti V"
+read -d '' POSTINST <<END
+END
