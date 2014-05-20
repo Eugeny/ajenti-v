@@ -70,9 +70,7 @@ AltLog                     clf:/var/log/pureftpd.log
 
 @plugin
 class PureFTPD (MiscComponent):
-    userdb_path = platform_select(
-        debian='/etc/pure-ftpd/pureftpd.passwd',
-    )
+    userdb_path = '/etc/pure-ftpd/pureftpd.passwd'
     centos_config_file = '/etc/pure-ftpd/pure-ftpd.conf'
 
     def create_configuration(self, config):
