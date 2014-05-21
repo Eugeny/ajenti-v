@@ -96,7 +96,7 @@ class PureFTPD (MiscComponent):
             if not os.path.exists(authfile):
                 os.symlink('/etc/pure-ftpd/conf/PureDB', authfile)
         if ajenti.platform == 'centos':
-            open(centos_config_file, 'w').write(CENTOS_CONFIG)
+            open(self.centos_config_file, 'w').write(CENTOS_CONFIG)
 
     def apply_configuration(self):
         ServiceMultiplexor.get().get_one('pure-ftpd').restart()
