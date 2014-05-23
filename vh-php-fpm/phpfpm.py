@@ -54,7 +54,7 @@ php_admin_value[open_basedir] = %(php_open_basedir)s
 
 fpm_service_name = platform_select(
     debian='php5-fpm',
-    centos='php-fpm',
+    default='php-fpm',
 )
 
 

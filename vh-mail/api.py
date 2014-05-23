@@ -361,16 +361,23 @@ class EximRestartable (Restartable):
     def restart(self):
         ServiceMultiplexor.get().get_one(platform_select(
             debian='exim4',
-            centos='exim',
+            default='exim',
         )).command('restart')
 
 
 @plugin
 class CourierIMAPRestartable (Restartable):
     def restart(self):
-        ServiceMultiplexor.get().get_one('courier-imap').restart()
-        if ajenti.platform == 'debian':  # centos runs both
-            ServiceMultiplexor.get().get_one('courier-imap-ssl').restart()
+        ServiceMultiplexor.get().get_one(platform_select(
+            debian='courier-imap',
+            centos='courier-imap',
+            default='courier-imapd',
+        )).restart()
+        if ajenti.platform != 'centos':  # centos runs both
+            ServiceMultiplexor.get().get_one(platform_select(
+                debian='courier-imap-ssl',
+                default='courier-imapd-ssl',
+            )).restart()
 
 
 @plugin

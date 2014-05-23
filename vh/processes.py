@@ -117,7 +117,7 @@ class SupervisorRestartable (Restartable):
     def restart(self):
         s = ServiceMultiplexor.get().get_one(platform_select(
             debian='supervisor',
-            centos='supervisord',
+            default='supervisord',
         ))
         if not s.running:
             s.start()
