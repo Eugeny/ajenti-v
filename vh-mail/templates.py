@@ -1,8 +1,6 @@
 EXIM_CONFIG = r"""
 #--AUTOMATICALLY GENERATED - DO NO EDIT!
 
-exim_path = /usr/sbin/exim4
-
 #--MACROS
 
 SMTP_PORT = 25
