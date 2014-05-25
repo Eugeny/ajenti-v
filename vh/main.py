@@ -76,6 +76,7 @@ class WebsitesPlugin (SectionPlugin):
 
     def refresh(self):
         if self.manager.is_configured:
+            self.manager.config.websites = sorted(self.manager.config.websites, key=lambda x: x.name)
             self.binder.setup().populate()
 
     @on('recheck', 'click')
