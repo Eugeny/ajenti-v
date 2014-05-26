@@ -146,6 +146,7 @@ class WebsiteLocation (object):
             'custom_conf': self.custom_conf,
             'custom_conf_override': self.custom_conf_override,
             'path': self.path,
+            'path_append_pattern': self.path_append_pattern,
         }
 
 
