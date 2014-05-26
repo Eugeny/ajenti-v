@@ -4,7 +4,7 @@ EXIM_CONFIG = r"""
 #--MACROS
 
 SMTP_PORT = 25
-LOCAL_INTERFACES = 0.0.0.0.25 : 0.0.0.0.465
+LOCAL_INTERFACES = <; 0.0.0.0.25 ; 0.0.0.0.465 ; [::0]:25 ; [::0]:465
 CONFDIR = /etc/exim4
 
 LOCAL_DOMAINS = %(local_domains)s
@@ -193,23 +193,24 @@ begin routers
 
 %(custom_mta_routers)s
 
+vforward:
+  debug_print = "R: vforward for $local_part@$domain"
+  driver = redirect
+  allow_defer
+  allow_fail
+  no_verify
+  domains = +local_domains
+  file = %(mailforward)s/$local_part@$domain
+  file_transport = address_file
+  pipe_transport = address_pipe
+  no_more
+
 vdomain:
   debug_print = "R: vdomain for $local_part@$domain"
   driver = accept
   domains = dsearch;%(maildomains)s
   local_parts = lsearch;%(maildomains)s/$domain
   transport = vmail
-  no_more
-
-vforward:
-  debug_print = "R: vforward for $local_part@$domain"
-  driver = redirect
-  allow_defer
-  allow_fail
-  domains = +local_domains
-  file = %(mailforward)s/$local_part@$domain
-  file_transport = address_file
-  pipe_transport = address_pipe
   no_more
 
 
@@ -298,6 +299,7 @@ begin transports
 
 
 vmail:
+  debug_print = "T: vmail for $local_part@$domain"
   driver = appendfile
   user = mail
   maildir_format = true

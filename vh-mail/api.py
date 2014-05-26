@@ -248,7 +248,9 @@ class MailEximCourierBackend (MailBackend):
             )
             with open(fpath, 'a+') as f:
                 for target in mb.targets:
-                    f.write(target.email + '\n')
+                    f.write(target.email + ',')
+                if any(x.local == mb.local and x.domain == mb.domain for x in config.mailboxes):
+                    f.write(mb.local + '@' + mb.domain)
             os.chmod(fpath, 0755)
 
         # UserDB ------------------------------------
