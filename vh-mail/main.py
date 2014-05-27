@@ -67,13 +67,22 @@ class MailPlugin (SectionPlugin):
             self.context.notify('error', _('Invalid mailbox domain'))
             return
 
-        for existing in self.manager.config.mailboxes:
-            if existing.name == mb.name:
-                self.context.notify(
-                    'error',
-                    _('This address is already taken')
-                )
-                return
+        if cls == ForwardingMailbox:
+            for existing in self.manager.config.forwarding_mailboxes:
+                if existing.name == mb.name:
+                    self.context.notify(
+                        'error',
+                        _('This address is already taken')
+                    )
+                    return
+        else:
+            for existing in self.manager.config.mailboxes:
+                if existing.name == mb.name:
+                    self.context.notify(
+                        'error',
+                        _('This address is already taken')
+                    )
+                    return
 
         self.find('new-mailbox-local').value = ''
         return mb

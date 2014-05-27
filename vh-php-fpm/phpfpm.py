@@ -122,7 +122,7 @@ class PHPFPM (ApplicationGatewayComponent):
         cfg = TEMPLATE_CONFIG_FILE % {
             'pidfile': platform_select(
                 debian='/var/run/php5-fpm.pid',
-                arch='/var/run/php5-fpm.pid',
+                arch='/var/run/php-fpm.pid',
                 centos='/var/run/php-fpm/php-fpm.pid',
             ),
             'pools': '\n'.join(self.__generate_website(_) for _ in config.websites if _.enabled)
