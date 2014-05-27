@@ -203,7 +203,6 @@ vforward:
   file = %(mailforward)s/$local_part@$domain
   file_transport = address_file
   pipe_transport = address_pipe
-  no_more
 
 vdomain:
   debug_print = "R: vdomain for $local_part@$domain"
@@ -211,7 +210,6 @@ vdomain:
   domains = dsearch;%(maildomains)s
   local_parts = lsearch;%(maildomains)s/$domain
   transport = vmail
-  no_more
 
 
 dnslookup:
