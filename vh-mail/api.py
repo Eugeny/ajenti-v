@@ -131,31 +131,37 @@ class MailEximCourierBackend (MailBackend):
         self.exim_cfg_path = platform_select(
             debian='/etc/exim4/exim4.conf',
             centos='/etc/exim/exim.conf',
+            arch='/etc/mail/exim.conf',
         )
 
         for d in ['/etc/courier', '/var/run/courier']:
             if not os.path.exists(d):
-                os.mkdir(d)
+                os.makedirs(d)
 
         self.courier_authdaemonrc = platform_select(
             debian='/etc/courier/authdaemonrc',
             centos='/etc/authlib/authdaemonrc',
+            arch='/etc/authlib/authdaemonrc',
         )
         self.courier_imaprc = platform_select(
             debian='/etc/courier/imapd',
             centos='/usr/lib/courier-imap/etc/imapd',
+            arch='/etc/courier-imap/imapd',
         )
         self.courier_imapsrc = platform_select(
             debian='/etc/courier/imapd-ssl',
             centos='/usr/lib/courier-imap/etc/imapd-ssl',
+            arch='/etc/courier-imap/imapd-ssl',
         )
         self.courier_userdb = platform_select(
             debian='/etc/courier/userdb',
             centos='/etc/authlib/userdb',
+            arch='/etc/authlib/userdb',
         )
         self.courier_authsocket = platform_select(
             debian='/var/run/courier/authdaemon/socket',
             centos='/var/spool/authdaemon/socket',
+            arch='/var/run/authdaemon/socket',
         )
 
         self.maildomains = '/etc/exim.domains'
@@ -331,7 +337,7 @@ class MailManager (BasePlugin):
 
     def generate_tls_cert(self):
         if not os.path.exists(self.tls_path):
-            os.mkdir(self.tls_path)
+            os.makedirs(self.tls_path)
         key_path = os.path.join(self.tls_path, 'mail.key')
         cert_path = os.path.join(self.tls_path, 'mail.crt')
         openssl = subprocess.Popen([
@@ -346,7 +352,7 @@ class MailManager (BasePlugin):
 
     def generate_dkim_key(self):
         if not os.path.exists(self.dkim_path):
-            os.mkdir(self.dkim_path)
+            os.makedirs(self.dkim_path)
 
         privkey_path = os.path.join(self.dkim_path, 'private.key')
 

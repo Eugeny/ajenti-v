@@ -71,7 +71,10 @@ AltLog                     clf:/var/log/pureftpd.log
 @plugin
 class PureFTPD (MiscComponent):
     userdb_path = '/etc/pure-ftpd/pureftpd.passwd'
-    centos_config_file = '/etc/pure-ftpd/pure-ftpd.conf'
+    config_path = platform_select(
+        centos='/etc/pure-ftpd/pure-ftpd.conf',
+        arch='/etc/pure-ftpd.conf',
+    )
 
     def create_configuration(self, config):
         open(self.userdb_path, 'w').close()
@@ -95,8 +98,8 @@ class PureFTPD (MiscComponent):
             authfile = '/etc/pure-ftpd/auth/00puredb'
             if not os.path.exists(authfile):
                 os.symlink('/etc/pure-ftpd/conf/PureDB', authfile)
-        if ajenti.platform == 'centos':
-            open(self.centos_config_file, 'w').write(CENTOS_CONFIG)
+        if ajenti.platform in ['arch', 'centos']:
+            open(self.config_path, 'w').write(CENTOS_CONFIG)
 
     def apply_configuration(self):
         ServiceMultiplexor.get().get_one('pure-ftpd').restart()

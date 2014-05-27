@@ -84,6 +84,7 @@ class VSFTPD (MiscComponent):
     config_root_users = '/etc/vsftpd.users.d'
     config_file = platform_select(
         debian='/etc/vsftpd.conf',
+        arch='/etc/vsftpd.conf',
         centos='/etc/vsftpd/vsftpd.conf',
     )
     userdb_path = '/etc/vsftpd/users.db'

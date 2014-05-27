@@ -76,6 +76,7 @@ class PHPFPM (ApplicationGatewayComponent):
         self.config_file = platform_select(
             debian='/etc/php5/fpm/php-fpm.conf',
             centos='/etc/php-fpm.conf',
+            arch='/etc/php/php-fpm.conf',
         )
 
     def __generate_pool(self, location, backend, name):
@@ -121,6 +122,7 @@ class PHPFPM (ApplicationGatewayComponent):
         cfg = TEMPLATE_CONFIG_FILE % {
             'pidfile': platform_select(
                 debian='/var/run/php5-fpm.pid',
+                arch='/var/run/php5-fpm.pid',
                 centos='/var/run/php-fpm/php-fpm.pid',
             ),
             'pools': '\n'.join(self.__generate_website(_) for _ in config.websites if _.enabled)
