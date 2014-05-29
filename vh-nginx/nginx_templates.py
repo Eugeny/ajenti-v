@@ -115,6 +115,7 @@ types {
     text/x-component                      htc;
     text/mathml                           mml;
     image/png                             png;
+    image/svg+xml                         svg svgz;
     image/x-icon                          ico;
     image/x-jng                           jng;
     image/vnd.wap.wbmp                    wbmp;
