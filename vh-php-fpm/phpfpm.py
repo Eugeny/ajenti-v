@@ -143,4 +143,4 @@ class PHPFPMRestartable (Restartable):
         if not s.running:
             s.start()
         else:
-            s.command('reload')
+            s.restart()
