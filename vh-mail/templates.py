@@ -198,7 +198,6 @@ vforward:
   driver = redirect
   allow_defer
   allow_fail
-  no_verify
   domains = +local_domains
   file = %(mailforward)s/$local_part@$domain
   file_transport = address_file
