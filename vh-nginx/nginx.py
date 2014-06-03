@@ -80,7 +80,7 @@ class NginxWebserver (WebserverComponent):
 
         if location.backend.type == 'nodejs':
             content = TEMPLATE_LOCATION_CONTENT_NODEJS % {
-                'port': location.backend.params.get('port', 8000),
+                'port': location.backend.params.get('port', 8000) or 8000,
             }
 
         if location.custom_conf_override:
