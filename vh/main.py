@@ -105,6 +105,8 @@ class WebsitesPlugin (SectionPlugin):
 
 @plugin
 class WebsiteEditorPlugin (SectionPlugin):
+    permissionless = True
+    
     def init(self):
         self.title = 'Website editor'
         self.icon = 'globe'
