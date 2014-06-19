@@ -117,7 +117,7 @@ class NginxWebserver (WebserverComponent):
                         x.host, x.port,
                         ' ssl' if x.ssl else '',
                         ' spdy' if x.spdy else '',
-                        ' default' if x.default else '',
+                        ' default_server' if x.default else '',
                     )
                     for x in website.ports
                 )
