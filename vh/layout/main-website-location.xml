@@ -31,7 +31,7 @@
 
                 <formline text="{Custom configuration}">
                     <vc>
-                        <codearea bind="custom_conf" width="300" height="150" />
+                        <codearea bind="custom_conf" width="500" height="200" />
                         <checkbox bind="custom_conf_override" text="{Use only custom configuration and don't include standard parameters}" />
                     </vc>
                 </formline>

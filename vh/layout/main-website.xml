@@ -183,7 +183,7 @@
                 <pad>
                     <vc>
                         <formline text="{Custom configuration}">
-                            <codearea bind="custom_conf" width="300" height="150" />
+                            <codearea bind="custom_conf" width="500" height="250" />
                         </formline>
                     </vc>
                 </pad>

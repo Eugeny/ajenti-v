@@ -8,6 +8,7 @@ ajenti.edition += '+vh'
 
 info = PluginInfo(
     title='Ajenti V Virtual Hosting',
+    description='Adds easy web hosting management to Ajenti',
     icon='globe',
     dependencies=[
         PluginDependency('main'),
