@@ -210,6 +210,7 @@ class MailEximCourierBackend (MailBackend):
             'tls_privatekey': config.tls_privatekey,
             'courier_authsocket': self.courier_authsocket,
         })
+        os.chmod(self.exim_cfg_path, 0644)
         open(self.courier_authdaemonrc, 'w').write(templates.COURIER_AUTHRC % {
             'courier_authsocket': self.courier_authsocket,
         })
