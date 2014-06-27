@@ -46,12 +46,13 @@ class Gunicorn (ApplicationGatewayComponent):
     def __generate_website(self, website):
         for location in website.locations:
             if location.backend.type == 'python-wsgi':
+                location.backend.__config_name = location.backend.id.replace('-', '_') + '.py'
                 c = TEMPLATE_PROCESS % {
                     'id': location.backend.id,
                     'root': location.path or website.root,
                     'workers': location.backend.params.get('workers', None),
                 }
-                open(os.path.join(self.config_dir, location.backend.id), 'w').write(c)
+                open(os.path.join(self.config_dir, location.backend.__config_name), 'w').write(c)
 
     def create_configuration(self, config):
         self.checks = []
@@ -84,7 +85,7 @@ class Gunicorn (ApplicationGatewayComponent):
                         p = ProgramData()
                         p.name = location.backend.id
                         p.comment = COMMENT
-                        p.command = 'gunicorn -c %s/%s "%s"' % (self.config_dir, location.backend.id, location.backend.params['module'])
+                        p.command = 'gunicorn -c %s/%s "%s"' % (self.config_dir, location.backend.__config_name, location.backend.params['module'])
                         p.directory = location.path or website.root
                         virtualenv = location.backend.params.get('venv', None)
                         if virtualenv:
