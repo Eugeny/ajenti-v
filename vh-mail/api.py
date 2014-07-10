@@ -234,8 +234,10 @@ class MailEximCourierBackend (MailBackend):
         for mb in config.mailboxes:
             root = os.path.join(config.mailroot, mb.name)
             if not os.path.exists(root):
-                os.makedirs(root)
-                os.chown(root, self.mailuid, self.mailgid)
+                os.makedirs(os.path.join(root, 'Maildir'))
+                #os.chown(root, self.mailuid, self.mailgid)
+                subprocess.call(['chown', '-R', 'mail:mail', root])
+
 
             with open(os.path.join(self.maildomains, mb.domain), 'a+') as f:
                 f.write(mb.local + '\n')

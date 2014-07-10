@@ -55,7 +55,7 @@
             <body>
                 <pad>
                     <bind:collection bind="domains" id="domains">
-                        <dt bind="__items" width="200" addrow="{Add}">
+                        <dt bind="__items" width="200" addrow="{Add}" filtering="False">
                             <dtr header="True">
                                 <dth text="{Domain}" />
                                 <dth />
@@ -84,7 +84,7 @@
             <body>
                 <pad>
                     <bind:collection bind="ports" id="ports">
-                        <dt bind="__items" width="400" addrow="{Add}">
+                        <dt bind="__items" width="400" addrow="{Add}" filtering="False">
                             <dtr header="True">
                                 <dth />
                                 <dth text="{Host}" />

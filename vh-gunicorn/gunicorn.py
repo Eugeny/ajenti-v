@@ -84,6 +84,7 @@ class Gunicorn (ApplicationGatewayComponent):
                         self.__generate_website(website)
                         p = ProgramData()
                         p.name = location.backend.id
+                        p.user = location.backend.params.get('user', None) or 'www-data'
                         p.comment = COMMENT
                         p.command = 'gunicorn -c %s/%s "%s"' % (self.config_dir, location.backend.__config_name, location.backend.params['module'])
                         p.directory = location.path or website.root

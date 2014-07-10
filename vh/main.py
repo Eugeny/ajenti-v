@@ -8,6 +8,7 @@ from ajenti.api import *
 from ajenti.plugins.main.api import SectionPlugin, intent
 from ajenti.ui import on
 from ajenti.ui.binder import Binder
+from ajenti.users import UserManager
 
 from api import VHManager, Website, WebsiteDomain, WebsitePort, WebsiteLocation, ApplicationGatewayComponent
 from extensions import BaseExtension
@@ -19,6 +20,7 @@ class WebsitesPlugin (SectionPlugin):
         self.title = _('Websites')
         self.icon = 'globe'
         self.category = 'Web'
+        self.order = 1
 
         self.manager = VHManager.get()
 
@@ -104,13 +106,14 @@ class WebsitesPlugin (SectionPlugin):
 
 
 @plugin
-class WebsiteEditorPlugin (SectionPlugin):
-    permissionless = True
-    
+class WebsitesWebsiteEditorPlugin (SectionPlugin):
+    uses_access_permission_of = WebsitesPlugin
+
     def init(self):
         self.title = 'Website editor'
         self.icon = 'globe'
         self.category = 'Web'
+        self.order = 2
         self.hidden = True
 
         self.manager = VHManager.get()

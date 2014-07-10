@@ -16,6 +16,9 @@
                     <formline text="{Workers}">
                         <textbox bind="workers" type="integer" />
                     </formline>
+                    <formline text="{Username}">
+                        <textbox bind="username" />
+                    </formline>
                 </collapserow>
             </dt>
         </vc>
