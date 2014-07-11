@@ -81,7 +81,7 @@ fastcgi_param   REQUEST_METHOD          $request_method;
 fastcgi_param   CONTENT_TYPE            $content_type;
 fastcgi_param   CONTENT_LENGTH          $content_length;
 
-fastcgi_param   SCRIPT_FILENAME         $document_root$fastcgi_script_name;
+fastcgi_param   SCRIPT_FILENAME         $request_filename;
 fastcgi_param   SCRIPT_NAME             $fastcgi_script_name;
 fastcgi_param   PATH_INFO               $fastcgi_path_info;
 fastcgi_param   REQUEST_URI             $request_uri;
@@ -218,7 +218,7 @@ TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
         fastcgi_index index.php;
         include fcgi.conf;
         fastcgi_pass unix:/var/run/php-fcgi-%(id)s.sock;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME $request_filename;
 """
 
 TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
