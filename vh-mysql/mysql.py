@@ -95,6 +95,8 @@ class MySQLExtension (BaseExtension):
         self.db.query_grant(user, db)
         self.refresh()
 
+        self.context.notify('info', _('Database created. Click Save to save the database info.'))
+
     @on('delete', 'click')
     def on_delete(self):
         db = Database()
