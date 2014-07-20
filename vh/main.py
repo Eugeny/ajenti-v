@@ -170,6 +170,7 @@ class WebsitesWebsiteEditorPlugin (SectionPlugin):
         self.website.extensions = []
         for ext in extensions:
             ext = ext.new(self.ui, self.website, config=self.website.extension_configs.get(ext.classname, None))
+            ext.editor_ui = self
             ext._ui_container = self.ui.create('tab', children=[ext], title=ext.name)
             setattr(ext._ui_container, '-is-extension', True)
             self.website.extensions.append(ext)
@@ -241,16 +242,16 @@ class WebsitesWebsiteEditorPlugin (SectionPlugin):
             self.context.endpoint.send_progress(None)
             self.refresh()
 
-    @on('save', 'click')
-    def save(self):
+    def save_data(self):
         self.binder.update()
-
         for ext in self.website.extensions:
             ext.update()
             self.website.extension_configs[ext.classname] = ext.config
-
-        self.context.endpoint.send_progress(_('Saving changes'))
         self.manager.save()
+
+    @on('save', 'click')
+    def save(self):
+        self.save_data()
         self.context.endpoint.send_progress(_('Applying changes'))
         self.manager.update_configuration()
         self.context.endpoint.send_progress(_('Restarting web services'))

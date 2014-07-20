@@ -9,6 +9,7 @@ class BaseExtension (UIElement):
 
     def __init__(self, ui, website, config=None):
         UIElement.__init__(self, ui)
+        self.editor_ui = None
         self.website = website
         self.config = config or self.default_config.copy()
 
