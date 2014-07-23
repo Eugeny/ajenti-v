@@ -139,7 +139,7 @@ class MailPlugin (SectionPlugin):
             pubkey = filter(None, pubkey.split('-'))[1].replace('\n', '')
             dns = '@\t\t\t\t10800 IN TXT "v=spf1 a -all"\n'
             dns += '_domainkey\t\t10800 IN TXT "o=~; r=postmaster@<domain>"\n'
-            dns += '%s._domainkey\t10800 IN TXT "v=DKIM1; k=rsa; p="%s"\n' % (
+            dns += '%s._domainkey\t10800 IN TXT "v=DKIM1; k=rsa; p=%s"\n' % (
                 self.manager.config.dkim_selector,
                 pubkey
             )
