@@ -3,3 +3,4 @@
 *.m.js
 build
 dist
+.idea

@@ -32,8 +32,8 @@ pm.max_spare_servers = 5
 
 TEMPLATE_POOL = """
 [%(name)s]
-user = www-data
-group = www-data
+user = %(user)s
+group = %(group)s
 
 listen = /var/run/php-fcgi-%(name)s.sock
 listen.owner = www-data
@@ -82,6 +82,8 @@ class PHPFPM (ApplicationGatewayComponent):
     def __generate_pool(self, location, backend, name):
         pm_min = backend.params.get('pm_min', 1) or 1
         pm_max = backend.params.get('pm_max', 5) or 5
+        pm_user = backend.params.get('pm_user', 'www-data') or 'www-data'
+        pm_group = backend.params.get('pm_group', 'www-data') or 'www-data'
 
         extras = ''
 
@@ -103,6 +105,8 @@ class PHPFPM (ApplicationGatewayComponent):
             'name': name,
             'min': pm_min,
             'max': pm_max,
+            'user': pm_user,
+            'group': pm_group,
             'sp_min': min(2, pm_min),
             'sp_max': min(6, pm_max),
             'php_open_basedir': open_basedir,

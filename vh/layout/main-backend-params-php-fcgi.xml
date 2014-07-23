@@ -12,6 +12,12 @@
                 <formline text="{Max processes}">
                     <textbox bind="pm_max" type="integer" />
                 </formline>
+	            <formline text="{User processes}">
+		            <textbox bind="pm_user" type="text" />
+	            </formline>
+	            <formline text="{Group processes}">
+		            <textbox bind="pm_group" type="text" />
+	            </formline>
             </vc>
         </bind:dict>
     </collapserow>
