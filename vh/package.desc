@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v
-VERSION=0.2.34
+VERSION=0.2.35
 DEB_DEPENDS="ajenti (>=1.2.21.12), ajenti-v-webserver, python-reconfigure (>=0.1.39), supervisor (>= 3.0)"
 RPM_DEPENDS="ajenti >= 1.2.21.12, ajenti-v-webserver, reconfigure >= 0.1.39, supervisor >= 3.0"
 PROVIDES=ajenti-v-core
