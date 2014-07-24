@@ -39,7 +39,7 @@
                         <bind:collection bind="checks">
                             <vc>
                                 <button id="recheck" icon="refresh" text="{Refresh}" />
-                                <dt bind="__items" />
+                                <dt bind="__items" filtering="False" />
                             </vc>
                             <bind:template>
                                 <collapserow>

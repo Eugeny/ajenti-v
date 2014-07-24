@@ -5,6 +5,7 @@ import logging
 import os
 import pwd
 import subprocess
+import traceback
 
 from ajenti.api import *
 from ajenti.profiler import profile_start, profile_end
@@ -269,31 +270,37 @@ class VHManager (object):
             self.is_configured = False
             self.config = Config.create()
 
-    def __handle_exceptions(self, greenlets):
+    def __runall(self, funcs):
+        def wrap(func):
+            def wrapped():
+                try:
+                    func[0](*func[1])
+                except Exception, e:
+                    logging.error('%s in %s' % (str(e), str(func[0])))
+                    traceback.print_exc()
+                    raise
+            return wrapped
+
+        greenlets = [gevent.spawn(wrap(func)) for func in funcs]
+        gevent.joinall(greenlets)
         for g in greenlets:
             if g.exception:
                 raise g.exception
-
+        
     def update_configuration(self):
         profile_start('V: creating configuration')
-        greenlets = [gevent.spawn(c.create_configuration, self.config) for c in self.components]
-        gevent.joinall(greenlets)
-        self.__handle_exceptions(greenlets)
+        self.__runall([(c.create_configuration, [self.config]) for c in self.components])
         self.webserver.create_configuration(self.config)
         profile_end()
 
         profile_start('V: applying configuration')
-        greenlets = [gevent.spawn(c.apply_configuration) for c in self.components]
-        gevent.joinall(greenlets)
-        self.__handle_exceptions(greenlets)
+        self.__runall([(c.apply_configuration, []) for c in self.components])
         self.webserver.apply_configuration()
         profile_end()
 
     def restart_services(self):
         profile_start('V: restarting services')
-        greenlets = [gevent.spawn(r.process) for r in self.restartables]
-        gevent.joinall(greenlets)
-        self.__handle_exceptions(greenlets)
+        self.__runall([(r.process, []) for r in self.restartables])
         profile_end()
 
     def run_checks(self):
@@ -307,9 +314,7 @@ class VHManager (object):
         def run_check(c):
             c.satisfied = c.check()
 
-        greenlets = [gevent.spawn(run_check, c) for c in self.checks]
-        gevent.joinall(greenlets)
-        self.__handle_exceptions(greenlets)
+        self.__runall([(run_check, [c]) for c in self.checks])
         profile_end()
 
     def save(self):
