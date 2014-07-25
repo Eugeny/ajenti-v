@@ -201,7 +201,7 @@ class WebsitesWebsiteEditorPlugin (SectionPlugin):
             elif url.lower().endswith('.zip'):
                 script += '&& unzip "%s" -d "%s"' % (tmppath, self.website.root)
 
-            script += ' && chown www-data -R "%s"' % self.website.root
+            script += ' && chown www-data: -R "%s"' % self.website.root
             script += ' && find "%s" -type d -exec chmod 775 {} ";"' % self.website.root
             script += ' && find "%s" -type f -exec chmod 644 {} ";"' % self.website.root
 
