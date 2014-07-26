@@ -175,6 +175,8 @@ server {
     %(maintenance)s
     %(locations)s
 }
+
+%(custom_conf_toplevel)s
 """
 
 TEMPLATE_MAINTENANCE = """

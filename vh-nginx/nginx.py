@@ -127,6 +127,7 @@ class NginxWebserver (WebserverComponent):
             'maintenance': TEMPLATE_MAINTENANCE if website.maintenance_mode else '',
             'root': website.root,
             'custom_conf': website.custom_conf,
+            'custom_conf_toplevel': website.custom_conf_toplevel,
             'locations': (
                 '\n'.join(self.__generate_website_location(website, location) for location in website.locations)
             ) if not website.maintenance_mode else '',

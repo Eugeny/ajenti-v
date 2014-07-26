@@ -183,10 +183,11 @@ class WebsitesWebsiteEditorPlugin (SectionPlugin):
             self.binder.update()
             if not os.path.exists(self.website.root):
                 os.makedirs(self.website.root)
-            subprocess.call(['chown', 'www-data:', self.website.root])
+            subprocess.call(['chown', '-R', 'www-data:', self.website.root])
             self.save()
 
         self.find('create-root-directory').on('click', create_root)
+        self.find('fix-root-permissions').on('click', create_root)
         self.find('set-path').on('click', self.save)
 
         # Downloader

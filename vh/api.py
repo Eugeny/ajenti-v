@@ -41,6 +41,7 @@ class Website (object):
         self.root = j.get('root', '/srv/new-website')
         self.extension_configs = j.get('extensions', {})
         self.custom_conf = j.get('custom_conf', '')
+        self.custom_conf_toplevel = j.get('custom_conf_toplevel', '')
         self.slug = j.get('slug', slugify(self.name))
 
     @staticmethod
@@ -63,6 +64,7 @@ class Website (object):
             'root': self.root,
             'extensions': self.extension_configs,
             'custom_conf': self.custom_conf,
+            'custom_conf_toplevel': self.custom_conf_toplevel,
             'ssl_cert_path': self.ssl_cert_path,
             'ssl_key_path': self.ssl_key_path,
         }
@@ -126,7 +128,12 @@ class WebsiteLocation (object):
                 'pattern': r'[^/]\.php(/|$)',
                 'path_append_pattern': False,
                 'match': 'regex',
-                'backend': Backend.create(None).save(),
+                'backend': Backend(None, {
+                    'type': 'static',
+                    'params': {
+                        'php_admin_values': 'open_basedir = none;'
+                    }
+                }).save(),
             },
         }
 

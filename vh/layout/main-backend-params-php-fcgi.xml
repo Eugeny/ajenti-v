@@ -28,10 +28,7 @@
         </hc>
         <bind:dict bind="params">
             <vc>
-                <formline text="open_basedir">
-                    <pathbox bind="php_open_basedir" directory="True" />
-                </formline>
-                <formline text="{PHP options}">
+                <formline text="{PHP .ini values}">
                     <codearea bind="php_admin_values" width="400" height="150" />
                 </formline>
                 <formline text="{PHP flags}">

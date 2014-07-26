@@ -46,8 +46,6 @@ pm.start_servers = %(min)s
 pm.min_spare_servers = %(sp_min)s
 pm.max_spare_servers = %(sp_max)s
 
-php_admin_value[open_basedir] = %(php_open_basedir)s
-
 %(php_extras)s
 """
 
@@ -90,16 +88,12 @@ class PHPFPM (ApplicationGatewayComponent):
         for l in (backend.params.get('php_admin_values', None) or '').splitlines():
             if '=' in l:
                 k, v = l.split('=', 1)
-                extras += 'php_admin_value[%s] = %s\n' % (k.strip(), v.strip())
+                extras += 'php_admin_value[%s] = %s\n' % (k.strip(), v.strip().strip(';'))
 
         for l in (backend.params.get('php_flags', None) or '').splitlines():
             if '=' in l:
                 k, v = l.split('=', 1)
                 extras += 'php_flag[%s] = %s\n' % (k.strip(), v.strip())
-
-        open_basedir = '%s:/tmp' % (location.path or location.website.root)
-        if backend.params.get('php_open_basedir', None):
-            open_basedir = backend.params.get('php_open_basedir', None)
 
         return TEMPLATE_POOL % {
             'name': name,
@@ -109,7 +103,6 @@ class PHPFPM (ApplicationGatewayComponent):
             'group': group,
             'sp_min': min(2, pm_min),
             'sp_max': min(6, pm_max),
-            'php_open_basedir': open_basedir,
             'php_extras': extras,
         }
 

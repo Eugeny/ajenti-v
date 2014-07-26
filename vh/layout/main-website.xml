@@ -35,6 +35,7 @@
                                 <vc id="root-not-created">
                                     <button text="{Create directory}" style="normal big" id="create-root-directory" />
                                 </vc>
+                                <button text="{Fix file permissions}" style="normal big" id="fix-root-permissions" icon="lock" />
                             </vc>
                         </formline>
                     </formgroup>
@@ -184,6 +185,9 @@
                     <vc>
                         <formline text="{Custom configuration}">
                             <codearea bind="custom_conf" width="500" height="250" />
+                        </formline>
+                        <formline text="{Custom top level configuration}">
+                            <codearea bind="custom_conf_toplevel" width="500" height="250" />
                         </formline>
                     </vc>
                 </pad>
