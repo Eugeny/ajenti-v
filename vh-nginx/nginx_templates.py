@@ -158,6 +158,8 @@ types {
 TEMPLATE_WEBSITE = """
 #AUTOMATICALLY GENERATED - DO NO EDIT!
 
+%(custom_conf_toplevel)s
+
 server {
     %(ports)s
     %(ssl_cert)s
@@ -176,7 +178,6 @@ server {
     %(locations)s
 }
 
-%(custom_conf_toplevel)s
 """
 
 TEMPLATE_MAINTENANCE = """
