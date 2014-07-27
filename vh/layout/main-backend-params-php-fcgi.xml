@@ -1,40 +1,36 @@
-<dt filtering="False">
+<dt filtering="False" binder:context="params">
     <collapserow>
         <hc>
             <icon icon="cog" />
             <label text="PHP FPM" />
         </hc>
-        <bind:dict bind="params">
-            <vc>
-                <formline text="{Min processes}">
-                    <textbox bind="pm_min" type="integer" />
-                </formline>
-                <formline text="{Max processes}">
-                    <textbox bind="pm_max" type="integer" />
-                </formline>
-	            <formline text="{Process user}">
-		            <textbox bind="user" type="text" />
-	            </formline>
-	            <formline text="{Process group}">
-		            <textbox bind="group" type="text" />
-	            </formline>
-            </vc>
-        </bind:dict>
+        <vc>
+            <formline text="{Min processes}">
+                <textbox bind="[pm_min]" type="integer" />
+            </formline>
+            <formline text="{Max processes}">
+                <textbox bind="[pm_max]" type="integer" />
+            </formline>
+            <formline text="{Process user}">
+	            <textbox bind="[user]" type="text" />
+            </formline>
+            <formline text="{Process group}">
+	            <textbox bind="[group]" type="text" />
+            </formline>
+        </vc>
     </collapserow>
     <collapserow>
         <hc>
             <icon icon="cog" />
             <label text="PHP" />
         </hc>
-        <bind:dict bind="params">
-            <vc>
-                <formline text="{PHP .ini values}">
-                    <codearea bind="php_admin_values" width="400" height="150" />
-                </formline>
-                <formline text="{PHP flags}">
-                    <codearea bind="php_flags" width="400" height="150" />
-                </formline>
-            </vc>
-        </bind:dict>
+        <vc>
+            <formline text="{PHP .ini values}">
+                <codearea bind="[php_admin_values]" width="400" height="150" />
+            </formline>
+            <formline text="{PHP flags}">
+                <codearea bind="[php_flags]" width="400" height="150" />
+            </formline>
+        </vc>
     </collapserow>
 </dt>

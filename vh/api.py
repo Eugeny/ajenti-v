@@ -144,7 +144,7 @@ class WebsiteLocation (object):
             'backend': Backend.create(None).save(),
         }
 
-        return WebsiteLocation(website, templates[template] if template in templates else default_template)
+        return WebsiteLocation(website, templates.get(template, default_template))
 
     def save(self):
         return {
