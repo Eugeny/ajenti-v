@@ -173,7 +173,7 @@ class MySQLExtension (BaseExtension):
     def on_delete_user(self, user_cfg):
         user = User()
         user.name = user_cfg['name']
-        user.host = 'localhost'
+        user.host = '%'
         
         try:
             self.db.query_drop_user(user)
