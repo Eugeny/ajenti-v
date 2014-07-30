@@ -10,7 +10,7 @@ info = PluginInfo(
         PluginDependency('vh'),
         PluginDependency('services'),
         PluginDependency('supervisor'),
-        BinaryDependency('bundler'),
+        BinaryDependency('bundle'),
     ],
 )
 
