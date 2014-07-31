@@ -154,6 +154,9 @@
                             <formline text="{Custom routers}">
                                 <codearea bind="custom_mta_routers" width="500" height="100" />
                             </formline>
+                            <formline text="{Custom local router config}">
+                                <codearea bind="custom_mta_local_router" width="500" height="100" />
+                            </formline>
                             <formline text="{Custom transports}">
                                 <codearea bind="custom_mta_transports" width="500" height="100" />
                             </formline>

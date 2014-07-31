@@ -202,6 +202,7 @@ vforward:
   file = %(mailforward)s/$local_part@$domain
   file_transport = address_file
   pipe_transport = address_pipe
+  %(custom_mta_local_router)s
 
 vdomain:
   debug_print = "R: vdomain for $local_part@$domain"
@@ -209,7 +210,7 @@ vdomain:
   domains = dsearch;%(maildomains)s
   local_parts = lsearch;%(maildomains)s/$domain
   transport = vmail
-
+  %(custom_mta_local_router)s
 
 dnslookup:
   debug_print = "R: dnslookup for $local_part@$domain"
@@ -244,6 +245,7 @@ real_local:
   local_part_prefix = real-
   check_local_user
   transport = LOCAL_DELIVERY
+  %(custom_mta_local_router)s
 
 procmail:
   debug_print = "R: procmail for $local_part@$domain"
@@ -278,6 +280,7 @@ local_user:
   local_parts = ! root
   transport = LOCAL_DELIVERY
   cannot_route_message = Unknown user
+  %(custom_mta_local_router)s
 
 mail4root:
   debug_print = "R: mail4root for $local_part@$domain"
@@ -288,6 +291,7 @@ mail4root:
   local_parts = root
   user = mail
   group = mail
+  %(custom_mta_local_router)s
 
 
 begin transports
