@@ -304,7 +304,7 @@ vmail:
   driver = appendfile
   user = mail
   maildir_format = true
-  directory = %(mailroot)s/$local_part@$domain
+  directory = %(mailroot)s/$domain/$local_part
   create_directory
   delivery_date_add
   envelope_to_add

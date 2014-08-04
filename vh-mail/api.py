@@ -236,12 +236,16 @@ class MailEximCourierBackend (MailBackend):
 
         for mb in config.mailboxes:
             root = os.path.join(config.mailroot, mb.name)
-            if not os.path.exists(root):
-                for d in ['new', 'cur', 'tmp']:
-                    os.makedirs(os.path.join(root, d))
-                #os.chown(root, self.mailuid, self.mailgid)
-                subprocess.call(['chown', '-R', 'mail:mail', root])
-
+            newroot = os.path.join(config.mailroot, mb.domain, mb.local)
+            
+            if not os.path.exists(newroot):                
+                if os.path.exists(root):
+                    os.renames(root, newroot)
+                else:
+                    for d in ['new', 'cur', 'tmp']:
+                        os.makedirs(os.path.join(newroot, d))
+                #os.chown(newroot, self.mailuid, self.mailgid)
+                subprocess.call(['chown', '-R', 'mail:mail', newroot])
 
             with open(os.path.join(self.maildomains, mb.domain), 'a+') as f:
                 f.write(mb.local + '\n')
@@ -272,7 +276,7 @@ class MailEximCourierBackend (MailBackend):
             os.unlink(self.courier_userdb)
 
         for mb in config.mailboxes:
-            root = os.path.join(config.mailroot, mb.name)
+            root = os.path.join(config.mailroot, mb.domain, mb.local)
             subprocess.call([
                 'userdb',
                 mb.name,
@@ -330,7 +334,7 @@ class MailManager (BasePlugin):
 
     def get_usage(self, mb):
         return int(subprocess.check_output(
-            ['du', '-sb', os.path.join(self.config.mailroot, mb.name)]
+            ['du', '-sb', os.path.join(self.config.mailroot, mb.domain, mb.local)]
         ).split()[0])
 
     def save(self):
