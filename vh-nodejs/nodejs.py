@@ -62,6 +62,7 @@ class NodeJS (ApplicationGatewayComponent):
                             node_bin,
                             location.backend.params.get('script', None) or '.'
                         )
+                        p.environment = location.backend.params.get('environment', None) or ''
                         p.directory = location.path or website.root
                         sup.tree.programs.append(p)
 
