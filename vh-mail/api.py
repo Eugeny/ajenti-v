@@ -333,9 +333,12 @@ class MailManager (BasePlugin):
             self.config = Config.create()
 
     def get_usage(self, mb):
-        return int(subprocess.check_output(
-            ['du', '-sb', os.path.join(self.config.mailroot, mb.domain, mb.local)]
-        ).split()[0])
+        try:
+            return int(subprocess.check_output(
+                ['du', '-sb', os.path.join(self.config.mailroot, mb.domain, mb.local)]
+            ).split()[0])
+        except:
+            return 0
 
     def save(self):
         j = json.dumps(self.config.save(), indent=4)
