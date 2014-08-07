@@ -9,5 +9,8 @@
         <formline text="{Environment}">
             <textbox bind="[environment]" />
         </formline>
+        <formline text="{Process user}">
+            <textbox bind="[user]" />
+        </formline>
     </vc>
 </box>

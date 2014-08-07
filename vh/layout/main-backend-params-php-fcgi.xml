@@ -12,10 +12,10 @@
                 <textbox bind="[pm_max]" type="integer" />
             </formline>
             <formline text="{Process user}">
-	            <textbox bind="[user]" type="text" />
+	            <textbox bind="[user]" />
             </formline>
             <formline text="{Process group}">
-	            <textbox bind="[group]" type="text" />
+	            <textbox bind="[group]" />
             </formline>
         </vc>
     </collapserow>
