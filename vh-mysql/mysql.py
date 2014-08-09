@@ -12,10 +12,6 @@ from ajenti.plugins.vh.extensions import BaseExtension
 @plugin
 class MySQLExtension (BaseExtension):
     default_config = {
-        #'created': False,
-        #'name': None,
-        #'user': None,
-        #'password': None,
         'databases': [],
         'users': [],
     }

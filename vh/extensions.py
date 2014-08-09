@@ -1,3 +1,5 @@
+import copy
+
 from ajenti.api import *
 from ajenti.ui import UIElement
 
@@ -11,7 +13,7 @@ class BaseExtension (UIElement):
         UIElement.__init__(self, ui)
         self.editor_ui = None
         self.website = website
-        self.config = config or self.default_config.copy()
+        self.config = config or copy.deepcopy(self.default_config)
 
     @staticmethod
     def selftest():
