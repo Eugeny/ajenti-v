@@ -380,7 +380,14 @@ class MailManager (BasePlugin):
 
 @plugin
 class EximRestartable (Restartable):
+    paniclog = platform_select(
+        debian='/var/log/exim4/paniclog',
+        default='/var/log/exim/paniclog',
+    )
+
     def restart(self):
+        open(self.paniclog, 'w').close()
+
         ServiceMultiplexor.get().get_one(platform_select(
             debian='exim4',
             default='exim',
