@@ -37,7 +37,7 @@ class PureFTPDExtension (BaseExtension):
         self.binder.setup().populate()
 
     def update(self):
-        pass
+        self.binder.update()
 
 
 

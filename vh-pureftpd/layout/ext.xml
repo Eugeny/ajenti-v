@@ -7,7 +7,7 @@
                         <textbox readonly="True" bind="username" />
                     </formline>
                     <formline text="{Password}">
-                        <textbox readonly="True" bind="password" />
+                        <textbox bind="password" />
                     </formline>
                 </vc>
             </box>
