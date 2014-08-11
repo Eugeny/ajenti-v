@@ -1,5 +1,10 @@
 <vc>
-    <button id="go-back" icon="arrow-left" text="{Back}" />
+    <hc>
+        <button id="go-back" icon="arrow-left" text="{Back}" />
+        <box width="10" />
+        <icon icon="globe" />
+        <label bind="name" />
+    </hc>
 
     <tabs id="tabs">
         <tab title="{General}">
