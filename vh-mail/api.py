@@ -225,6 +225,7 @@ class MailEximCourierBackend (MailBackend):
 
         socketdir = os.path.split(self.courier_authsocket)[0]
         if os.path.exists(socketdir):
+            os.chmod(self.courier_authsocket, 0755)
             os.chmod(socketdir, 0755)
 
         # Domain entries ----------------------------
