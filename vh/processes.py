@@ -85,7 +85,7 @@ class Processes (MiscComponent):
             centos='/etc/supervisord.conf',
         ))
         sup.load()
-        for p in sup.tree.programs:
+        for p in list(sup.tree.programs):
             if p.comment and p.comment == self.COMMENT:
                 sup.tree.programs.remove(p)
 
