@@ -100,6 +100,8 @@ class Processes (MiscComponent):
                     p.environment = process['environment']
                     p.directory = process['directory'] or website.root
                     p.user = process['user'] or 'www-data'
+                    p.stopasgroup = True
+                    p.killasgroup = True
                     sup.tree.programs.append(p)
                     self.checks.append(ProcessTest(p.name))
 
