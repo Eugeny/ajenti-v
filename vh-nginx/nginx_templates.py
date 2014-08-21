@@ -206,7 +206,7 @@ TEMPLATE_LOCATION_CONTENT_STATIC = """
 
 TEMPLATE_LOCATION_CONTENT_PROXY = """
         proxy_pass %(url)s;
-        proxy_set_header Host $host;
+        proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header HTTPS   $https;
@@ -226,21 +226,21 @@ TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
 
 TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
         proxy_pass http://unix:/var/run/gunicorn-%(id)s.sock;
-        proxy_set_header Host $host;
+        proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 """
 
 TEMPLATE_LOCATION_CONTENT_RUBY_UNICORN = """
         proxy_pass http://unix:/var/run/unicorn-%(id)s.sock;
-        proxy_set_header Host $host;
+        proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 """
 
 TEMPLATE_LOCATION_CONTENT_RUBY_PUMA = """
         proxy_pass http://unix:/var/run/puma-%(id)s.sock;
-        proxy_set_header Host $host;
+        proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 """
@@ -248,7 +248,7 @@ TEMPLATE_LOCATION_CONTENT_RUBY_PUMA = """
 
 TEMPLATE_LOCATION_CONTENT_NODEJS = """
         proxy_pass http://127.0.0.1:%(port)i;
-        proxy_set_header Host $host;
+        proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 """
