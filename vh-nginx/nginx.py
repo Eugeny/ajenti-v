@@ -39,6 +39,7 @@ class NginxWebserver (WebserverComponent):
         self.config_file_proxy = '/etc/nginx/proxy.conf'
         self.config_vhost_root = '/etc/nginx/conf.d'
         self.config_custom_root = '/etc/nginx.custom.d'
+        self.lib_path = '/var/lib/nginx'
 
     def __generate_website_location(self, ws, location):
         params = location.backend.params
@@ -151,6 +152,10 @@ class NginxWebserver (WebserverComponent):
             if website.enabled:
                 open(os.path.join(self.config_vhost_root, website.slug + '.conf'), 'w')\
                     .write(self.__generate_website_config(website))
+
+        subprocess.call([
+            'chown', 'www-data:www-data', '-R', self.lib_path,
+        ])
 
     def apply_configuration(self):
         NGINXRestartable.get().schedule()
