@@ -143,7 +143,7 @@ class MailPlugin (SectionPlugin):
                 self.manager.config.dkim_selector,
                 pubkey
             )
-            dns += '_dmarc\t\t\t10800 IN TXT "v=DMARC1; p=quarantine; sp=r"\n'
+            dns += '_dmarc\t\t\t10800 IN TXT "v=DMARC1; p=quarantine"\n'
 
             self.find('dkim-domain-entry').value = dns
         else:
