@@ -219,26 +219,26 @@ TEMPLATE_LOCATION_CONTENT_FCGI = """
 TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
         fastcgi_index index.php;
         include fcgi.conf;
-        fastcgi_pass unix:/var/run/php-fcgi-%(id)s.sock;
+        fastcgi_pass unix:/var/run/ajenti-v/php-fcgi-%(id)s.sock;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 """
 
 TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
-        proxy_pass http://unix:/var/run/gunicorn-%(id)s.sock;
+        proxy_pass http://unix:/var/run/ajenti-v/gunicorn-%(id)s.sock;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 """
 
 TEMPLATE_LOCATION_CONTENT_RUBY_UNICORN = """
-        proxy_pass http://unix:/var/run/unicorn-%(id)s.sock;
+        proxy_pass http://unix:/var/run/ajenti-v/unicorn-%(id)s.sock;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 """
 
 TEMPLATE_LOCATION_CONTENT_RUBY_PUMA = """
-        proxy_pass http://unix:/var/run/puma-%(id)s.sock;
+        proxy_pass http://unix:/var/run/ajenti-v/puma-%(id)s.sock;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

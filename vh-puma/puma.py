@@ -56,7 +56,7 @@ class Puma (ApplicationGatewayComponent):
                         bundler = location.backend.params.get('bundler', True)
                         workers = location.backend.params.get('workers', 4)
                         environment = location.backend.params.get('environment', 4)
-                        p.command = 'puma -e %s -t %i -b unix:///var/run/puma-%s.sock' % (
+                        p.command = 'puma -e %s -t %i -b unix:///var/run/ajenti-v/puma-%s.sock' % (
                             environment, workers or 4, location.backend.id
                         )
                         if bundler:

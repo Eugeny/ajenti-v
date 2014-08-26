@@ -13,7 +13,7 @@ from reconfigure.items.supervisor import ProgramData
 TEMPLATE_PROCESS = """
 worker_processes %(workers)s
 working_directory "%(root)s"
-listen "unix:/var/run/unicorn-%(id)s.sock", :backlog => 64
+listen "unix:/var/run/ajenti-v/unicorn-%(id)s.sock", :backlog => 64
 preload_app true
 
 stderr_path "/var/log/unicorn/%(id)s.stderr.log"

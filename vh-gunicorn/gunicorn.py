@@ -14,7 +14,7 @@ from reconfigure.items.supervisor import ProgramData
 TEMPLATE_PROCESS = """
 import multiprocessing
 
-bind = 'unix:/var/run/gunicorn-%(id)s.sock'
+bind = 'unix:/var/run/ajenti-v/gunicorn-%(id)s.sock'
 chdir = '%(root)s'
 workers = %(workers)s or (multiprocessing.cpu_count() * 2 + 1)
 """

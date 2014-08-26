@@ -253,6 +253,7 @@ class Restartable (BasePlugin):
 @rootcontext
 class VHManager (object):
     config_path = '/etc/ajenti/vh.json'
+    run_path = '/var/run/ajenti-v'
     www_user = 'www-data'
 
     def init(self):
@@ -295,6 +296,10 @@ class VHManager (object):
                 raise g.exception
         
     def update_configuration(self):
+        if not os.path.exists(self.run_path):
+            os.makedirs(self.run_path)
+        subprocess.call(['chown', 'www-data:', self.run_path])
+
         profile_start('V: creating configuration')
         self.__runall([(c.create_configuration, [self.config]) for c in self.components])
         self.webserver.create_configuration(self.config)

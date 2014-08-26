@@ -35,7 +35,7 @@ TEMPLATE_POOL = """
 user = %(user)s
 group = %(group)s
 
-listen = /var/run/php-fcgi-%(name)s.sock
+listen = /var/run/ajenti-v/php-fcgi-%(name)s.sock
 listen.owner = www-data
 listen.group = www-data
 listen.mode = 0660
