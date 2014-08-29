@@ -50,6 +50,10 @@ class VIPC (IPCHandler):
                 self.manager.reload()
                 return 'OK'
 
+        if command == 'reload':
+            self.manager.reload()
+            return 'OK'
+
         if command == 'check':
             self.manager.run_checks()
             for c in self.manager.checks:
