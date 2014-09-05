@@ -223,7 +223,7 @@ class MailEximCourierBackend (MailBackend):
             'tls_pem': pem_path,
         })
 
-        if os.path.exists(courier_authsocket):
+        if os.path.exists(self.courier_authsocket):
             os.chmod(self.courier_authsocket, 0755)
         
         socketdir = os.path.split(self.courier_authsocket)[0]
