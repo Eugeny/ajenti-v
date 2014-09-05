@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-ruby-puma
-VERSION=0.1.7
+VERSION=0.1.8
 DEB_DEPENDS="ajenti-v"
 RPM_DEPENDS="ajenti-v"
 PROVIDES=ajenti-v-appgate
