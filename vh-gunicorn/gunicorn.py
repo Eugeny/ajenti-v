@@ -14,7 +14,8 @@ from reconfigure.items.supervisor import ProgramData
 TEMPLATE_PROCESS = """
 import multiprocessing
 
-bind = 'unix:/var/run/ajenti-v/gunicorn-%(id)s.sock'
+bind = 'unix:/var/run/gunicorn-%(id)s.sock'
+user = '%(user)s'
 chdir = '%(root)s'
 workers = %(workers)s or (multiprocessing.cpu_count() * 2 + 1)
 """
@@ -49,6 +50,7 @@ class Gunicorn (ApplicationGatewayComponent):
                 location.backend.__config_name = location.backend.id.replace('-', '_') + '.py'
                 c = TEMPLATE_PROCESS % {
                     'id': location.backend.id,
+                    'user': location.backend.params.get('user', None) or 'www-data',
                     'root': location.path or website.root,
                     'workers': location.backend.params.get('workers', None),
                 }
@@ -84,7 +86,6 @@ class Gunicorn (ApplicationGatewayComponent):
                         self.__generate_website(website)
                         p = ProgramData()
                         p.name = location.backend.id
-                        p.user = location.backend.params.get('user', None) or 'www-data'
                         p.comment = COMMENT
                         p.command = 'gunicorn -c %s/%s "%s"' % (self.config_dir, location.backend.__config_name, location.backend.params['module'])
                         p.directory = location.path or website.root
