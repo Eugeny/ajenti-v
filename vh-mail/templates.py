@@ -27,6 +27,10 @@ TLS_VERIFY_CERTIFICATES = ${if exists{/etc/ssl/certs/ca-certificates.crt} {/etc/
 
 COURIERSOCKET = %(courier_authsocket)s
 
+ACL_SMTP_MAIL = acl_check_mail
+ACL_SMTP_RCPT = acl_check_rcpt
+ACL_SMTP_DATA = acl_check_data
+
 #--CONFIGURATION
 
 %(custom_mta_config)s
@@ -39,9 +43,9 @@ qualify_domain = ETC_MAILNAME
 gecos_pattern = ^([^,:]*)
 gecos_name = $1
 
-acl_smtp_mail = acl_check_mail
-acl_smtp_rcpt = acl_check_rcpt
-acl_smtp_data = acl_check_data
+acl_smtp_mail = ACL_SMTP_MAIL
+acl_smtp_rcpt = ACL_SMTP_RCPT
+acl_smtp_data = ACL_SMTP_DATA
 
 # spamd_address = 127.0.0.1 783
 
