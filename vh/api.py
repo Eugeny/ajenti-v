@@ -131,7 +131,8 @@ class WebsiteLocation (object):
                 'backend': Backend(None, {
                     'type': 'static',
                     'params': {
-                        'php_admin_values': 'open_basedir = none;'
+                        'pm': 'dynamic',
+                        'php_admin_values': 'open_basedir = none;',
                     }
                 }).save(),
             },

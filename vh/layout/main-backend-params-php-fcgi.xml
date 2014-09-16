@@ -5,6 +5,12 @@
             <label text="PHP FPM" />
         </hc>
         <vc>
+            <formline text="{Process manager}">
+                <dropdown bind="[pm]"
+                    values="['dynamic', 'ondemand']"
+                    labels="['Dynamic', 'On-demand']"
+                />
+            </formline>
             <formline text="{Min processes}">
                 <textbox bind="[pm_min]" type="integer" />
             </formline>

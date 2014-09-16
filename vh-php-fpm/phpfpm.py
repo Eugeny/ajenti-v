@@ -40,7 +40,7 @@ listen.owner = www-data
 listen.group = www-data
 listen.mode = 0660
 
-pm = dynamic
+pm = %(pm)s
 pm.max_children = %(max)s
 pm.start_servers = %(min)s
 pm.min_spare_servers = %(sp_min)s
@@ -101,6 +101,7 @@ class PHPFPM (ApplicationGatewayComponent):
             'max': pm_max,
             'user': user,
             'group': group,
+            'pm': backend.params.get('pm', None) or 'dynamic',
             'sp_min': min(2, pm_min),
             'sp_max': min(6, pm_max),
             'php_extras': extras,
