@@ -56,6 +56,9 @@ http {
     include conf.d/*.conf;
     include /etc/nginx.custom.d/*.conf;
 }
+
+include /etc/nginx.custom.global.d/*.conf;
+
 """ % {
     'workers': multiprocessing.cpu_count(),
     'log_root': '/var/log/nginx',
