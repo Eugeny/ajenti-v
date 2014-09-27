@@ -55,7 +55,7 @@ class Gunicorn (ApplicationGatewayComponent):
                     'user': location.backend.params.get('user', None) or 'www-data',
                     'root': location.path or website.root,
                     'workers': location.backend.params.get('workers', None),
-                    'custom_config': location.backend.params.get('custom_conf') or '',
+                    'custom_conf': location.backend.params.get('custom_conf') or '',
                 }
                 open(os.path.join(self.config_dir, location.backend.__config_name), 'w').write(c)
 
