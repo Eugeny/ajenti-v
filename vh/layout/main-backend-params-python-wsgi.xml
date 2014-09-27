@@ -19,6 +19,9 @@
                     <formline text="{Username}">
                         <textbox bind="username" />
                     </formline>
+                    <formline text="{Custom configuration}">
+                        <codearea bind="custom_conf" />
+                    </formline>
                 </collapserow>
             </dt>
         </vc>
