@@ -138,6 +138,7 @@ class PHPFPM (ApplicationGatewayComponent):
 class PHPFPMRestartable (Restartable):
     def restart(self):
         s = ServiceMultiplexor.get().get_one(fpm_service_name)
+        print fpm_service_name, s, s.running
         if not s.running:
             s.start()
         else:
