@@ -11,8 +11,6 @@ worker_rlimit_nofile 100000;
 
 events {
     worker_connections  4096;
-    multi_accept on;
-    accept_mutex on;
     include /etc/nginx.custom.events.d/*.conf;
 }
 
