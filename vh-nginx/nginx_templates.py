@@ -146,9 +146,14 @@ types {
     application/octet-stream              iso img;
     application/octet-stream              msi msp msm;
     audio/mpeg                            mp3;
+    audio/ogg                             oga ogg;
+    audio/wav                             wav;
     audio/x-realaudio                     ra;
+    video/mp4                             mp4;
     video/mpeg                            mpeg mpg;
+    video/ogg                             ogv;
     video/quicktime                       mov;
+    video/webm                            webm;
     video/x-flv                           flv;
     video/x-msvideo                       avi;
     video/x-ms-wmv                        wmv;
