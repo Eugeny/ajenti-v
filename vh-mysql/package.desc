@@ -1,7 +1,7 @@
 PACKAGE=ajenti-v-mysql
-VERSION=0.3.2
-DEB_DEPENDS="ajenti-v (>=0.2.34), mysql-server, mysql-client"
-RPM_DEPENDS="ajenti-v >= 0.2.34, mysql-server|mariadb-server, mysql|mariadb-client"
+VERSION=0.3.3
+DEB_DEPENDS="ajenti-v (>=0.2.34), mysql-server|mariadb-server, mysql-client|mariadb-client"
+RPM_DEPENDS="ajenti-v >= 0.2.34, mysql-server, mysql"
 PROVIDES=ajenti-v-db
 DESCRIPTION="MySQL support for Ajenti V"
 read -d '' POSTINST <<END
