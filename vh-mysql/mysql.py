@@ -62,6 +62,8 @@ class MySQLExtension (BaseExtension):
         self.binder.setup().populate()
         self.find('db-name').value = self.website.slug
         self.find('db-username').value = self.website.slug
+        
+        self.find('db-password').value = str(uuid.uuid4())
 
         self.find('databases').delete_item = lambda i, c: self.on_delete_db(i)
         self.find('users').delete_item = lambda i, c: self.on_delete_user(i)
@@ -112,6 +114,8 @@ class MySQLExtension (BaseExtension):
             return
 
         username = self.find('db-username').value
+        password = self.find('db-password').value
+        
         for user in self.db.query_users():
             if user.name == username:
                 self.context.notify('error', _('This username is already used'))
@@ -119,7 +123,7 @@ class MySQLExtension (BaseExtension):
 
         user_cfg = {
             'name': username,
-            'password': str(uuid.uuid4()),
+            'password': password,
         }
 
         user = User()
