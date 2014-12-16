@@ -69,6 +69,9 @@
                     <formline text="{Name}">
                         <textbox id="db-username" />
                     </formline>
+                    <formline text="{Password}">
+                        <textbox id="db-password" />
+                    </formline>
                     <formline>
                         <button icon="plus" text="{Create}" id="create-user" />
                     </formline>
