@@ -104,6 +104,34 @@ class MySQLExtension (BaseExtension):
         self.refresh()
         self.try_save()
 
+    @on('attach-db', 'click')
+    def on_attach_db(self):
+        try:
+            self.db.query_databases()
+        except Exception, e:
+            self.context.notify('error', str(e))
+            self.context.launch('configure-plugin', plugin=self.db)
+            return
+
+        dbname = self.find('db-name').value
+
+        for db in self.config['databases']:
+            if db['name'] == dbname:
+                self.context.notify('error', _('This database name is already used'))
+                return
+
+        if dbname not in [db.name for db in self.db.query_databases()]:
+            self.context.notify('error', _('This database doesn\'t exist'))
+            return
+
+        db_cfg = {'name': dbname}
+
+        self.config['databases'].append(db_cfg)
+
+        self.on_grant()
+        self.refresh()
+        self.try_save()
+
     @on('create-user', 'click')
     def on_create_user(self):
         try:
