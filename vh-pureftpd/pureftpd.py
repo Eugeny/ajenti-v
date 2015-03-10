@@ -16,7 +16,6 @@ from ajenti.plugins.vh.extensions import BaseExtension
 class PureFTPDExtension (BaseExtension):
     default_config = {
         'created': False,
-        'user': None,
         'password': None,
     }
     name = 'FTP'
@@ -25,7 +24,8 @@ class PureFTPDExtension (BaseExtension):
         self.append(self.ui.inflate('vh-pureftpd:ext'))
         self.binder = Binder(self, self)
 
-        self.config['username'] = self.website.slug
+        if not 'username' in self.config:
+            self.config['username'] = self.website.slug
 
         if not self.config['created']:
             self.config['password'] = str(uuid.uuid4())
