@@ -33,6 +33,8 @@ ACL_SMTP_DATA = acl_check_data
 
 #--CONFIGURATION
 
+hostlist relay_from_hosts = 127.0.0.1
+
 %(custom_mta_config)s
 
 daemon_smtp_ports = SMTP_PORT
