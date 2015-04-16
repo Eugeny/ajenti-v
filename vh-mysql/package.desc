@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-mysql
-VERSION=0.3.5
+VERSION=0.3.6
 DEB_DEPENDS="ajenti-v (>=0.2.34), mysql-server|mariadb-server, mysql-client|mariadb-client"
 RPM_DEPENDS="ajenti-v >= 0.2.34, mysql-server|mariadb-server|MariaDB-server, mysql|mariadb-client|MariaDB-client"
 PROVIDES=ajenti-v-db
