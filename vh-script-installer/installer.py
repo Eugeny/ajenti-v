@@ -4,6 +4,8 @@ import tarfile
 import shutil
 import os
 
+from contextlib import closing
+
 from ajenti.api import *
 from ajenti.ui import on
 from ajenti.ui.binder import Binder
@@ -85,7 +87,7 @@ class ScriptInstaller (BaseExtension):
             f.write(urllib2.urlopen('http://wordpress.org/latest.tar.gz').read())
             f.close()
             
-        with tarfile.open('/tmp/wp.tar.gz') as tar:
+        with closing(tarfile.open('/tmp/wp.tar.gz','r')) as tar:
             tar.extractall(path="/tmp/wp")
             
         for f in os.listdir('/tmp/wp/wordpress/'):
