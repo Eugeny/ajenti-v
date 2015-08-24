@@ -26,16 +26,5 @@
 				<button icon="download-alt" text="{Install Now}" id="wp-install" style="normal big" />
 			</vc>
 		</formgroup>
-        
-        <formgroup text="{Adminer Installer}">
-			<vc>
-				
-				<formline text="{Root path}">
-					<textbox id="adminer-path" />
-				</formline>
-				
-				<button icon="download-alt" text="{Install Now}" id="wp-install" style="normal big" />
-			</vc>
-		</formgroup>
     </pad>
 </body>

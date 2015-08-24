@@ -71,6 +71,12 @@ class ScriptInstaller (BaseExtension):
 
     @on('wp-install', 'click')
     def on_install_wp(self):
+        
+        # Define User, Pass and DB Name
+        db_user = self.find('wp-db-user').value
+        db_pass = self.find('wp-db-pass').value
+        db_name = self.find('wp-db-name').value
+        
         # Download Latest Wordpress
         url = 'http://wordpress.org/latest.tar.gz'
         tmpfile = '/tmp/wp.tar.gz'
@@ -92,6 +98,11 @@ class ScriptInstaller (BaseExtension):
         
         if os.path.exists("/tmp/wp"):
             shutil.rmtree("/tmp/wp")
+            
+        self.context.notify('info', _('Wordpress Downloaded !'))
+        
+        # Generate Databases
+        self.generate_db(db_name,db_user,db_pass)
         
         # Configure Wordpress
         config_string = ""
@@ -111,9 +122,9 @@ define('AUTH_SALT',        'put your unique phrase here');
 define('SECURE_AUTH_SALT', 'put your unique phrase here');
 define('LOGGED_IN_SALT',   'put your unique phrase here');
 define('NONCE_SALT',       'put your unique phrase here');""",salt)
-                    config_string = config_string.replace('database_name_here',self.find('wp-db-name').value)
-                    config_string = config_string.replace('username_here',self.find('wp-db-user').value)
-                    config_string = config_string.replace('password_here',self.find('wp-db-pass').value)
+                    config_string = config_string.replace('database_name_here',db_name)
+                    config_string = config_string.replace('username_here',db_user)
+                    config_string = config_string.replace('password_here',db_pass)
                     sample_file.close()
                     
                 with open(self.website.root+'/wp-config.php','wb') as wp_config:
@@ -132,17 +143,18 @@ define('NONCE_SALT',       'put your unique phrase here');""",salt)
         self.context.notify('info', _('Wordpress Installed !'))
         self.refresh()
         self.try_save()
-
-    @on('create-db', 'click')
-    def on_create_db(self):
+    
+    def generate_db(self,db_name,db_user,db_pass):
+        
+        # Create Database
         try:
             self.db.query_databases()
         except Exception, e:
             self.context.notify('error', str(e))
             self.context.launch('configure-plugin', plugin=self.db)
             return
-
-        dbname = self.find('db-name').value
+            
+        dbname = db_name
 
         for db in self.db.query_databases():
             if db.name == dbname:
@@ -159,25 +171,13 @@ define('NONCE_SALT',       'put your unique phrase here');""",salt)
 
         self.config['databases'].append(db_cfg)
 
-        self.on_grant()
-        self.refresh()
-        self.try_save()
-
-    @on('create-user', 'click')
-    def on_create_user(self):
-        try:
-            self.db.query_databases()
-        except Exception, e:
-            self.context.notify('error', str(e))
-            self.context.launch('configure-plugin', plugin=self.db)
-            return
-
-        username = self.find('db-username').value
-        password = self.find('db-password').value
+        # Create User
+        username = db_user
+        password = db_pass
         
         for user in self.db.query_users():
             if user.name == username:
-                self.context.notify('error', _('This username is already used'))
+                self.context.notify('error', _('This username is already exists'))
                 return
 
         user_cfg = {
@@ -196,62 +196,14 @@ define('NONCE_SALT',       'put your unique phrase here');""",salt)
             return
 
         self.config['users'].append(user_cfg)
-
-        self.on_grant()
-        self.refresh()
-        self.try_save()
-    
-    @on('grant', 'click')
-    def on_grant(self):
-        for db_cfg in self.config['databases']:
-            db = Database()
-            db.name = db_cfg['name']
-            for user_cfg in self.config['users']:
-                user = User()
-                user.name = user_cfg['name']
-                user.password = user_cfg['password']
-                user.host = '%'
-                self.db.query_grant(user, db)
-        self.context.notify('info', _('Permissions granted.'))
-
-    def on_delete_db(self, db_cfg):
-        db = Database()
-        db.name = db_cfg['name']
-        try:
-            self.db.query_drop(db)
-        except Exception, e:
-            # I'm gonna burn in hell for this...
-            if not 'ERROR 1008' in e:
-                self.context.notify('error', str(e))
-                return
-
-        self.config['databases'].remove(db)
-        self.refresh()
-        self.try_save()
         
-    def on_delete_user(self, user_cfg):
-        user = User()
-        user.name = user_cfg['name']
-        user.host = '%'
+        # Grant User
+        dbku = Database()
+        dbku.name = dbname
+        self.db.query_grant(user, dbku)
         
-        try:
-            self.db.query_drop_user(user)
-        except Exception, e:
-            if not 'ERROR 1008' in e:
-                self.context.notify('error', str(e))
-                return
-
-        self.config['users'].remove(user_cfg)
-        self.refresh()
-        self.try_save()
-
-    def on_detach_db(self, db_cfg):
-        self.config['databases'].remove(db_cfg)
-        self.refresh()
-        self.try_save()
-
-    def on_detach_user(self, user_cfg):
-        self.config['users'].remove(user_cfg)
+        self.context.notify('info', _('Database Created !'))
+        
         self.refresh()
         self.try_save()
 
