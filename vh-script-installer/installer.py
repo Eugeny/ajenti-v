@@ -71,6 +71,7 @@ class ScriptInstaller (BaseExtension):
 
     @on('wp-install', 'click')
     def on_install_wp(self):
+        # Download Latest Wordpress
         url = 'http://wordpress.org/latest.tar.gz'
         tmpfile = '/tmp/wp.tar.gz'
         
@@ -91,6 +92,41 @@ class ScriptInstaller (BaseExtension):
         
         if os.path.exists("/tmp/wp"):
             shutil.rmtree("/tmp/wp")
+        
+        # Configure Wordpress
+        config_string = ""
+        if os.path.isfile(self.website.root+'/wp-config-sample.php'):
+            
+            if not os.path.isfile(self.website.root+'/wp-config.php'):
+                
+                salt = urllib2.urlopen('https://api.wordpress.org/secret-key/1.1/salt/').read()
+                
+                with open (self.website.root+'/wp-config-sample.php','r') as sample_file:
+                    config_string = sample_file.read()
+                    config_string = config_string.replace("""define('AUTH_KEY',         'put your unique phrase here');
+define('SECURE_AUTH_KEY',  'put your unique phrase here');
+define('LOGGED_IN_KEY',    'put your unique phrase here');
+define('NONCE_KEY',        'put your unique phrase here');
+define('AUTH_SALT',        'put your unique phrase here');
+define('SECURE_AUTH_SALT', 'put your unique phrase here');
+define('LOGGED_IN_SALT',   'put your unique phrase here');
+define('NONCE_SALT',       'put your unique phrase here');""",salt)
+                    config_string = config_string.replace('database_name_here',self.find('wp-db-name').value)
+                    config_string = config_string.replace('username_here',self.find('wp-db-user').value)
+                    config_string = config_string.replace('password_here',self.find('wp-db-pass').value)
+                    sample_file.close()
+                    
+                with open(self.website.root+'/wp-config.php','wb') as wp_config:
+                    wp_config.write(config_string) 
+                    wp_config.close()   
+                    
+            else:
+                self.context.notify('error', _('Config file already exists!'))
+                return
+                
+        else:
+            self.context.notify('error', _('File wp-config-sample.php\nNot Found!'))
+            return
             
         
         self.context.notify('info', _('Wordpress Installed !'))
