@@ -124,7 +124,7 @@ class SupervisorRestartable (Restartable):
         if not s.running:
             s.start()
         else:
-            subprocess_call_background(['supervisorctl', 'reload'])
+            subprocess_call_background(['supervisorctl', 'update'])
 
         # Await restart
         retries = 10
