@@ -52,7 +52,7 @@ class Gunicorn (ApplicationGatewayComponent):
                 location.backend.__config_name = location.backend.id.replace('-', '_') + '.py'
                 c = TEMPLATE_PROCESS % {
                     'id': location.backend.id,
-                    'user': location.backend.params.get('user', None) or 'www-data',
+                    'user': location.backend.params.get('username', None) or 'www-data',
                     'root': location.path or website.root,
                     'workers': location.backend.params.get('workers', None),
                     'custom_conf': location.backend.params.get('custom_conf') or '',
