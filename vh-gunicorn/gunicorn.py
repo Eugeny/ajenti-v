@@ -90,7 +90,7 @@ class Gunicorn (ApplicationGatewayComponent):
                         p = ProgramData()
                         p.name = location.backend.id
                         p.comment = COMMENT
-                        p.command = 'gunicorn -c %s/%s "%s"' % (self.config_dir, location.backend.__config_name, location.backend.params['module'])
+                        p.command = 'gunicorn -c %s%s "%s"' % (self.config_dir, location.backend.__config_name, location.backend.params['module'])
                         p.directory = location.path or website.root
                         virtualenv = location.backend.params.get('venv', None)
                         if virtualenv:
