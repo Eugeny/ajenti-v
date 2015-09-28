@@ -197,8 +197,10 @@ class WebsitesWebsiteEditorPlugin (SectionPlugin):
             self.save()
             tmppath = '/tmp/ajenti-v-download'
             script = 'wget "%s" -O "%s" ' % (url, tmppath)
-            if url.lower().endswith('.tar.gz') or url.lower().endswith('.tgz'):
+            if url.lower().endswith(('tar', '.tar.gz', '.tgz', '.tar.bz2', '.tbz2')):
                 script += '&& tar xf "%s" -C "%s"' % (tmppath, self.website.root)
+            elif url.lower().endswith('.rar'):
+                script += '&& unrar x "%s" "%s"' % (tmppath, self.website.root)
             elif url.lower().endswith('.zip'):
                 script += '&& unzip "%s" -d "%s"' % (tmppath, self.website.root)
 
