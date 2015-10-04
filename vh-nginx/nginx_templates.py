@@ -171,6 +171,7 @@ server {
     %(ports)s
     %(ssl_cert)s
     %(ssl_key)s
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     %(server_name)s
 
     access_log /var/log/nginx/%(slug)s.access.log;
