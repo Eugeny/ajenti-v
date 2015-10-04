@@ -64,7 +64,8 @@ AllowUserFXP                yes
 ProhibitDotFilesWrite       no
 ProhibitDotFilesRead        no
 AutoRename                  no
-AltLog                     clf:/var/log/pureftpd.log
+AltLog                      clf:/var/log/pureftpd.log
+TLS                         1
 """
 
 
