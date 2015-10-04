@@ -503,5 +503,6 @@ TLS_TRUSTCERTS=/etc/ssl/certs
 TLS_VERIFYPEER=NONE
 TLS_CACHEFILE=/var/lib/courier/couriersslcache
 TLS_CACHESIZE=524288
+TLS_DHPARAMS=/etc/courier/dhparams.pem
 MAILDIRPATH=Maildir
 """
