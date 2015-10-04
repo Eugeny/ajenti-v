@@ -32,7 +32,10 @@
                             <textbox id="db-name" />
                         </formline>
                         <formline>
-                            <button icon="plus" text="{Create}" id="create-db" />
+                            <hc>
+                                <button icon="plus" text="{Create}" id="create-db" />
+                                <button icon="link" text="{Attach}" id="attach-db" />
+                            </hc>
                         </formline>
                     </vc>
                 </vc>
