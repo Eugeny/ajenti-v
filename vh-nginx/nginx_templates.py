@@ -49,6 +49,7 @@ http {
     open_file_cache_errors on;
 
     server_tokens off;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
 
     include proxy.conf;
     include fcgi.conf;
@@ -171,7 +172,6 @@ server {
     %(ports)s
     %(ssl_cert)s
     %(ssl_key)s
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     %(server_name)s
 
     access_log /var/log/nginx/%(slug)s.access.log;
