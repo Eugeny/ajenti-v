@@ -29,6 +29,7 @@ class PureFTPDExtension (BaseExtension):
 
         if not self.config['created']:
             self.config['password'] = str(uuid.uuid4())
+            self.config['path'] = self.website.root
             self.config['created'] = True
 
         self.refresh()
@@ -86,7 +87,7 @@ class PureFTPD (MiscComponent):
                     p = subprocess.Popen(
                         [
                             'pure-pw', 'useradd', cfg['username'], '-u', 'www-data',
-                            '-d', website.root,
+                            '-d', cfg['path'],
                         ],
                         stdin=subprocess.PIPE
                     )
