@@ -9,6 +9,9 @@
                     <formline text="{Password}">
                         <textbox bind="password" />
                     </formline>
+                    <formline text="{Path}">
+                        <pathbox bind="path" directory="True" />
+                    </formline>
                 </vc>
             </box>
         </pad>
