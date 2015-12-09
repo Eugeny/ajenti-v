@@ -87,7 +87,7 @@ class PureFTPD (MiscComponent):
                     p = subprocess.Popen(
                         [
                             'pure-pw', 'useradd', cfg['username'], '-u', 'www-data',
-                            '-d', cfg['path'],
+                            '-d', cfg['path'] or website.root,
                         ],
                         stdin=subprocess.PIPE
                     )

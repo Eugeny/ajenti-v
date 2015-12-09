@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-ftp-pureftpd
-VERSION=0.1.7
+VERSION=0.1.8
 DEB_DEPENDS="ajenti-v, pure-ftpd"
 RPM_DEPENDS="ajenti-v, pure-ftpd"
 PROVIDES=ajenti-v-ftp
