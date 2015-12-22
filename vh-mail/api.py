@@ -306,7 +306,9 @@ class MailEximCourierBackend (MailBackend):
             )
             udb.communicate(md5pw)
 
-        os.chmod(self.courier_userdb, 0600)
+        if os.path.exists(self.courier_userdb):
+            os.chmod(self.courier_userdb, 0600)
+
         subprocess.call(['makeuserdb'])
 
         EximRestartable.get().restart()
