@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-nginx
-VERSION=0.1.42
+VERSION=0.1.43
 DEB_DEPENDS="ajenti-v (>=0.2.26), nginx"
 RPM_DEPENDS="ajenti-v >= 0.2.26, nginx >= 1.4.0"
 PROVIDES=ajenti-v-webserver
