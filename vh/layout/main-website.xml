@@ -97,6 +97,7 @@
                                 <dth text="{Port}" />
                                 <dth text="SSL" />
                                 <dth text="SPDY" />
+                                <dth text="HTTP2" />
                                 <dth text="Default" />
                                 <dth />
                             </dtr>
@@ -118,6 +119,9 @@
                                 </dtd>
                                 <dtd>
                                     <checkbox bind="spdy" />
+                                </dtd>
+                                <dtd>
+                                    <checkbox bind="http2" />
                                 </dtd>
                                 <dtd>
                                     <checkbox bind="default" />
