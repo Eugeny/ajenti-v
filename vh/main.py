@@ -182,7 +182,7 @@ class WebsitesWebsiteEditorPlugin (SectionPlugin):
         def create_root():
             self.binder.update()
             if not os.path.exists(self.website.root):
-                os.makedirs(self.website.root)
+                os.makedirs(self.website.root, 0755)
             subprocess.call(['chown', '-R', 'www-data:', self.website.root])
             self.save()
 

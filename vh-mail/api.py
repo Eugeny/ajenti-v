@@ -138,7 +138,7 @@ class MailEximCourierBackend (MailBackend):
 
         for d in ['/etc/courier', '/var/run/courier']:
             if not os.path.exists(d):
-                os.makedirs(d)
+                os.makedirs(d, 0755)
 
         self.courier_authdaemonrc = platform_select(
             debian='/etc/courier/authdaemonrc',
@@ -234,8 +234,7 @@ class MailEximCourierBackend (MailBackend):
 
         if os.path.exists(self.maildomains):
             shutil.rmtree(self.maildomains)
-        os.makedirs(self.maildomains)
-        os.chmod(self.maildomains, 0755)
+        os.makedirs(self.maildomains, 0755)
 
         for mb in config.mailboxes:
             root = os.path.join(config.mailroot, mb.name)
@@ -246,7 +245,7 @@ class MailEximCourierBackend (MailBackend):
                     os.renames(root, newroot)
                 else:
                     for d in ['new', 'cur', 'tmp']:
-                        os.makedirs(os.path.join(newroot, d))
+                        os.makedirs(os.path.join(newroot, d), 0755)
                 #os.chown(newroot, self.mailuid, self.mailgid)
                 subprocess.call(['chown', '-R', 'mail:mail', newroot])
 
@@ -258,8 +257,7 @@ class MailEximCourierBackend (MailBackend):
 
         if os.path.exists(self.mailforward):
             shutil.rmtree(self.mailforward)
-        os.makedirs(self.mailforward)
-        os.chmod(self.mailforward, 0755)
+        os.makedirs(self.mailforward, 0755)
 
         for mb in config.forwarding_mailboxes:
             fpath = os.path.join(
@@ -357,7 +355,7 @@ class MailManager (BasePlugin):
 
     def generate_tls_cert(self):
         if not os.path.exists(self.tls_path):
-            os.makedirs(self.tls_path)
+            os.makedirs(self.tls_path, 0755)
         key_path = os.path.join(self.tls_path, 'mail.key')
         cert_path = os.path.join(self.tls_path, 'mail.crt')
         openssl = subprocess.Popen([
@@ -372,7 +370,7 @@ class MailManager (BasePlugin):
 
     def generate_dkim_key(self):
         if not os.path.exists(self.dkim_path):
-            os.makedirs(self.dkim_path)
+            os.makedirs(self.dkim_path, 0755)
 
         privkey_path = os.path.join(self.dkim_path, 'private.key')
 

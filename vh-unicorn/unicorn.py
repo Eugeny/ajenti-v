@@ -52,7 +52,7 @@ class Gunicorn (ApplicationGatewayComponent):
     def create_configuration(self, config):
         if os.path.exists(self.config_dir):
             shutil.rmtree(self.config_dir)
-        os.mkdir(self.config_dir)
+        os.mkdir(self.config_dir, 0755)
 
         sup = SupervisorConfig(path=platform_select(
             debian='/etc/supervisor/supervisord.conf',
@@ -78,6 +78,6 @@ class Gunicorn (ApplicationGatewayComponent):
     def apply_configuration(self):
         log_dir = '/var/log/unicorn'
         if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
+            os.makedirs(log_dir, 0755)
 
         SupervisorRestartable.get().schedule()

@@ -138,11 +138,11 @@ class NginxWebserver (WebserverComponent):
 
     def create_configuration(self, config):
         shutil.rmtree(self.config_root)
-        os.mkdir(self.config_root, 755)
-        os.mkdir(self.config_vhost_root, 755)
+        os.mkdir(self.config_root, 0755)
+        os.mkdir(self.config_vhost_root, 0755)
 
         if not os.path.exists(self.config_custom_root):
-            os.mkdir(self.config_custom_root, 755)
+            os.mkdir(self.config_custom_root, 0755)
 
         open(self.config_file, 'w').write(TEMPLATE_CONFIG_FILE)
         open(self.config_file_mime, 'w').write(TEMPLATE_CONFIG_MIME)

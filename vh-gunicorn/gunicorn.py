@@ -63,7 +63,7 @@ class Gunicorn (ApplicationGatewayComponent):
         self.checks = []
         if os.path.exists(self.config_dir):
             shutil.rmtree(self.config_dir)
-        os.mkdir(self.config_dir)
+        os.mkdir(self.config_dir, 0755)
 
         for website in config.websites:
             if website.enabled:

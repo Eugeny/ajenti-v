@@ -92,10 +92,10 @@ class VSFTPD (MiscComponent):
 
     def create_configuration(self, config):
         if not os.path.exists(self.config_root):
-            os.mkdir(self.config_root)
+            os.mkdir(self.config_root, 0755)
         if os.path.exists(self.config_root_users):
             shutil.rmtree(self.config_root_users)
-        os.mkdir(self.config_root_users)
+        os.mkdir(self.config_root_users, 0755)
 
         pwfile = tempfile.NamedTemporaryFile(delete=False)
         pwpath = pwfile.name
@@ -119,7 +119,7 @@ class VSFTPD (MiscComponent):
         open(self.config_file, 'w').write(TEMPLATE_CONFIG % self.config_root_users)
 
         if not os.path.exists('/var/www'):
-            os.mkdir('/var/www')
+            os.mkdir('/var/www', 0755)
         subprocess.call(['chown', 'www-data:', '/var/www'])
 
     def apply_configuration(self):
