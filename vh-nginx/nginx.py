@@ -114,10 +114,11 @@ class NginxWebserver (WebserverComponent):
             ) if website.domains else '',
             'ports': (
                 '\n'.join(
-                    'listen %s:%s%s%s%s;' % (
+                    'listen %s:%s%s%s%s%s;' % (
                         x.host, x.port,
                         ' ssl' if x.ssl else '',
                         ' spdy' if x.spdy else '',
+                        ' http2' if x.http2 else '',
                         ' default_server' if x.default else '',
                     )
                     for x in website.ports
