@@ -107,6 +107,7 @@ class WebsitePort (object):
             'port': self.port,
             'ssl': self.ssl,
             'spdy': self.spdy,
+            'http2': self.http2,
             'default': self.default,
         }
 
