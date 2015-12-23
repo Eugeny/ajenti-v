@@ -233,6 +233,13 @@ TEMPLATE_LOCATION_CONTENT_PHP_FCGI = """
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 """
 
+TEMPLATE_LOCATION_CONTENT_PHP7_0_FCGI = """
+        fastcgi_index index.php;
+        include fcgi.conf;
+        fastcgi_pass unix:/var/run/ajenti-v-php7.0-fcgi-%(id)s.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+"""
+
 TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI = """
         proxy_pass http://unix:/var/run/ajenti-v-gunicorn-%(id)s.sock;
         proxy_set_header Host $http_host;
