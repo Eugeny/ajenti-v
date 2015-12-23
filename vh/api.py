@@ -92,6 +92,7 @@ class WebsitePort (object):
         self.port = j['port']
         self.ssl = j.get('ssl', False)
         self.spdy = j.get('spdy', False)
+        self.http2 = j.get('http2', False)
         self.default = j.get('default', False)
 
     @staticmethod
