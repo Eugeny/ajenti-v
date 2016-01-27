@@ -2,7 +2,7 @@
     <collapserow>
         <hc>
             <icon icon="cog" />
-            <label text="PHP7.0 FPM" />
+            <label text="PHP-7.0 FPM" />
         </hc>
         <vc>
             <formline text="{Process manager}">
@@ -18,10 +18,10 @@
                 <textbox bind="[pm_max]" type="integer" />
             </formline>
             <formline text="{Process user}">
-                    <textbox bind="[user]" />
+	            <textbox bind="[user]" />
             </formline>
             <formline text="{Process group}">
-                    <textbox bind="[group]" />
+	            <textbox bind="[group]" />
             </formline>
         </vc>
     </collapserow>
