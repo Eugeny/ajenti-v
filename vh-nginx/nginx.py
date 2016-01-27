@@ -63,6 +63,16 @@ class NginxWebserver (WebserverComponent):
             content = TEMPLATE_LOCATION_CONTENT_PHP_FCGI % {
                 'id': location.backend.id,
             }
+            
+        if location.backend.type == 'php5.6-fcgi':
+            content = TEMPLATE_LOCATION_CONTENT_PHP56_FCGI % {
+                'id': location.backend.id,
+            }
+
+	    if location.backend.type == 'php7.0-fcgi':
+            content = TEMPLATE_LOCATION_CONTENT_PHP70_FCGI % {
+                'id': location.backend.id,
+            }
 
         if location.backend.type == 'python-wsgi':
             content = TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI % {
