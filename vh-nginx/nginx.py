@@ -69,7 +69,7 @@ class NginxWebserver (WebserverComponent):
                 'id': location.backend.id,
             }
 
-	    if location.backend.type == 'php7.0-fcgi':
+        if location.backend.type == 'php7.0-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP70_FCGI % {
                 'id': location.backend.id,
             }
