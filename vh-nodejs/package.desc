@@ -1,5 +1,5 @@
 PACKAGE=ajenti-v-nodejs
-VERSION=0.1.9
+VERSION=0.2.0
 DEB_DEPENDS="ajenti-v, supervisor"
 RPM_DEPENDS="ajenti-v, supervisor"
 PROVIDES=ajenti-v-appgate
