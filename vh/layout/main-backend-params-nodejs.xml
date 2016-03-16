@@ -1,16 +1,32 @@
-<box binder:context="params">
-    <vc>
-        <formline text="{Script name}">
-            <textbox bind="[script]" />
-        </formline>
-        <formline text="{Script's HTTP port}">
-            <textbox bind="[port]" type="integer" />
-        </formline>
-        <formline text="{Environment}">
-            <textbox bind="[environment]" />
-        </formline>
-        <formline text="{Process user}">
-            <textbox bind="[user]" />
-        </formline>
-    </vc>
+<box>
+    <bind:dict bind="params">
+        <vc>
+            <formline text="{Script name}">
+                <textbox bind="[script]" />
+            </formline>
+            <formline text="{Script's HTTP port}">
+                <textbox bind="[port]" type="integer" />
+            </formline>
+            <formline text="{Environment}">
+                <textbox bind="[environment]" />
+            </formline>
+            <dt filtering="False">
+                <collapserow>
+                    <hc>
+                        <icon icon="cog" />
+                        <label text="Node" />
+                    </hc>
+                    <formline text="{Nvm path}">
+                        <pathbox bind="venv" directory="True" />
+                    </formline>
+                    <formline text="{Username}">
+                        <textbox bind="username" />
+                    </formline>
+                    <formline text="{Custom configuration}">
+                        <codearea bind="custom_conf" />
+                    </formline>
+                </collapserow>
+            </dt>
+        </vc>
+    </bind:dict>
 </box>
