@@ -289,21 +289,26 @@ class MailEximCourierBackend (MailBackend):
                 'home=%s' % root,
                 'mail=%s' % root,
             ])
-
-            udbpw = subprocess.Popen(
-                ['userdbpw', '-md5'],
-                stdout=subprocess.PIPE,
-                stdin=subprocess.PIPE
-            )
-            o, e = udbpw.communicate(
-                '%s\n%s\n' % (mb.password, mb.password)
-            )
-            md5pw = o
+            
+            if mb.password[:len("md5|")]=="md5|":    #Check if the stored password is encrypted with md5 algorithm already
+                md5pw=mb.password[len("md5|"):]
+                
+            else:                                    #If stored password is not encrypted (i.e. plaintext), then encrypty it with md5
+                udbpw = subprocess.Popen(
+                    ['userdbpw', '-md5'],
+                    stdout=subprocess.PIPE,
+                    stdin=subprocess.PIPE
+                )
+                o, e = udbpw.communicate(
+                    '%s\n%s\n' % (mb.password, mb.password)
+                )
+                md5pw = o
 
             udb = subprocess.Popen(
-                ['userdb', mb.name, 'set', 'systempw'],
-                stdin=subprocess.PIPE
+               ['userdb', mb.name, 'set', 'systempw'],
+               stdin=subprocess.PIPE
             )
+                
             udb.communicate(md5pw)
 
         if os.path.exists(self.courier_userdb):
