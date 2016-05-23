@@ -146,6 +146,42 @@
                     <formline text="{SSL key path}">
                         <pathbox bind="ssl_key_path" />
                     </formline>
+                    
+                    <formline text="{Protocols}">
+                        <textbox bind="ssl_protocols" />
+                    </formline>
+
+                    <formline text="{Prefer Server Ciphers}">
+                        <textbox bind="ssl_prefer_server_ciphers" />
+                    </formline>
+
+                    <formline text="{Diffie-Hellman group}">
+                        <pathbox bind="ssl_diffie_hellman_group" />
+                    </formline>
+
+                    <formline text="{Ciphers}">
+                        <textbox bind="ssl_ciphers" />
+                    </formline>
+
+                    <formline text="{Session Timeout}">
+                        <textbox bind="ssl_session_timeout" />
+                    </formline>
+
+                    <formline text="{Session Cache}">
+                        <textbox bind="ssl_session_cache" />
+                    </formline>
+
+                    <formline text="{Stapling}">
+                        <textbox bind="ssl_stapling" />
+                    </formline>
+
+                    <formline text="{Stapling_Verify}">
+                        <textbox bind="ssl_stapling_verify" />
+                    </formline>
+
+                    <formline text="{Header}">
+                        <textbox bind="ssl_header" />
+                    </formline>
                 </pad>
             </body>
         </tab>
