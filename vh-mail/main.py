@@ -44,16 +44,6 @@ class MailPlugin (SectionPlugin):
         def post_mb_update(object, collection, item, ui):
             if ui.find('password').value:
                 item.password = ui.find('password').value
-                if item.password[:len("md5|")]!="md5|":       #If the password is not encrypted as md5, then encrypt it using userdbpw for consistency
-                    udbpw = subprocess.Popen(
-                        ['userdbpw', '-md5'],
-                        stdout=subprocess.PIPE,
-                        stdin=subprocess.PIPE
-                    )
-                    o, e = udbpw.communicate(
-                        '%s\n%s\n' % (item.password, item.password)
-                    )
-                    item.password = "md5|"+o        #Prefix the hash with "md5|"
 
         self.find('mailboxes').post_item_bind = post_mb_bind
         self.find('mailboxes').post_item_update = post_mb_update
