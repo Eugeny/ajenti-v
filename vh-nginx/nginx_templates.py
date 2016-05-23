@@ -172,6 +172,15 @@ server {
     %(ports)s
     %(ssl_cert)s
     %(ssl_key)s
+    %(ssl_protocols)s
+    %(ssl_prefer_server_ciphers)s
+    %(ssl_dhparam)s
+    %(ssl_ciphers)s
+    %(ssl_session_timeout)s
+    %(ssl_session_cache)s
+    %(ssl_stapling)s
+    %(ssl_stapling_verify)s
+    %(ssl_header)s
     %(server_name)s
 
     access_log /var/log/nginx/%(slug)s.access.log;
