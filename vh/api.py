@@ -33,6 +33,15 @@ class Website (object):
         self.owner = j.get('owner', 'root')
         self.ssl_cert_path = j.get('ssl_cert_path', '')
         self.ssl_key_path = j.get('ssl_key_path', '')
+        self.ssl_protocols = j.get('ssl_protocols', '')
+        self.ssl_prefer_server_ciphers = j.get('ssl_prefer_server_ciphers', '')
+        self.ssl_diffie_hellman_group = j.get('ssl_diffie_hellman_group', '')
+        self.ssl_ciphers = j.get('ssl_ciphers', '')
+        self.ssl_session_timeout = j.get('ssl_session_timeout', '')
+        self.ssl_session_cache = j.get('ssl_session_cache', '')
+        self.ssl_stapling = j.get('ssl_stapling', '')
+        self.ssl_stapling_verify = j.get('ssl_stapling_verify', '')
+        self.ssl_header = j.get('ssl_header', '')
         self.domains = [WebsiteDomain(_) for _ in j['domains']]
         self.ports = [WebsitePort(_) for _ in j.get('ports', [])]
         self.locations = [WebsiteLocation(self, _) for _ in j.get('locations', [])]
@@ -67,6 +76,17 @@ class Website (object):
             'custom_conf_toplevel': self.custom_conf_toplevel,
             'ssl_cert_path': self.ssl_cert_path,
             'ssl_key_path': self.ssl_key_path,
+            'ssl_cert_path': self.ssl_cert_path,
+            'ssl_key_path': self.ssl_key_path,
+            'ssl_protocols': self.ssl_protocols,
+            'ssl_prefer_server_ciphers': self.ssl_prefer_server_ciphers,
+            'ssl_diffie_hellman_group': self.ssl_diffie_hellman_group,
+            'ssl_ciphers': self.ssl_ciphers,
+            'ssl_session_timeout': self.ssl_session_timeout,
+            'ssl_session_cache': self.ssl_session_cache,
+            'ssl_stapling': self.ssl_stapling,
+            'ssl_stapling_verify': self.ssl_stapling_verify,
+            'ssl_header': self.ssl_header,
         }
 
 
