@@ -158,6 +158,30 @@ class WebsiteLocation (object):
                     }
                 }).save(),
             },
+            'php5.6-fcgi': {
+                'pattern': r'[^/]\.php(/|$)',
+                'path_append_pattern': False,
+                'match': 'regex',
+                'backend': Backend(None, {
+                    'type': 'static',
+                    'params': {
+                        'pm': 'dynamic',
+                        'php_admin_values': 'open_basedir = none;',
+                    }
+                }).save(),
+            },
+            'php7.0-fcgi': {
+                'pattern': r'[^/]\.php(/|$)',
+                'path_append_pattern': False,
+                'match': 'regex',
+                'backend': Backend(None, {
+                    'type': 'static',
+                    'params': {
+                        'pm': 'dynamic',
+                        'php_admin_values': 'open_basedir = none;',
+                    }
+                }).save(),
+            },
         }
 
         default_template = {
