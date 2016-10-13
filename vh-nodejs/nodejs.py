@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 from ajenti.api import *
@@ -58,13 +59,26 @@ class NodeJS (ApplicationGatewayComponent):
                         self.checks.append(NodeServerTest(location.backend))
                         p = ProgramData()
                         p.name = location.backend.id
-                        p.command = '%s %s' % (
-                            node_bin,
-                            location.backend.params.get('script', None) or '.'
-                        )
+
+             		command = location.backend.params.get('script', None)
+                        if command.find("npm ") == -1 :
+                            command = '%s %s' % (
+                                node_bin,
+                                location.backend.params.get('script', None) or '.'
+                            )
+
                         p.user = location.backend.params.get('user', None) or 'www-data'
-                        p.environment = location.backend.params.get('environment', None) or ''
                         p.directory = location.path or website.root
+
+                        p.environment = location.backend.params.get('environment', None) or ''
+                        virtualenv = location.backend.params.get('venv', None)
+                        if virtualenv:
+                            p.environment = '; '.join([p.environment, 'PATH="%s:%s"' % (os.path.join(virtualenv, 'bin'), os.environ['PATH'])])
+                            p.command = os.path.join(virtualenv, 'bin') + '/' + command
+                        else:
+                            p.command = command
+
+
                         sup.tree.programs.append(p)
 
         sup.save()
