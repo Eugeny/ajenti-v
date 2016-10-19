@@ -95,7 +95,7 @@ class PHP70FPM (ApplicationGatewayComponent):
             'group': group,
             'pm': backend.params.get('pm', None) or 'dynamic',
             'sp_min': min(2, pm_min),
-            'sp_max': min(6, pm_max),
+            'sp_max': min(max(6, pm_min), pm_max),
             'php_extras': extras,
         }
 
