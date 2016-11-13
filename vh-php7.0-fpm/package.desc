@@ -1,0 +1,8 @@
+PACKAGE=ajenti-v-php7-fpm
+VERSION=0.1.21
+DEB_DEPENDS="ajenti-v, php7.0-fpm"
+RPM_DEPENDS="ajenti-v, php-fpm"
+PROVIDES=ajenti-v-appgate
+DESCRIPTION="PHP support for Ajenti V (via PHP-FPM)"
+read -d '' POSTINST <<END
+END
