@@ -380,6 +380,8 @@ procmail_pipe:
 remote_smtp:
   debug_print = "T: remote_smtp for $local_part@$domain"
   driver = smtp
+  interface = <;${lookup{$sender_address_domain}lsearch{/etc/exim4/domainips}}
+  helo_data = <;${lookup{$sender_address_domain}lsearch{/etc/exim4/domainips}}
   .ifdef DKIM_ENABLE
     dkim_domain = $sender_address_domain
     .ifdef DKIM_SELECTOR
