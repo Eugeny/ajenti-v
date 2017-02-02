@@ -35,7 +35,7 @@ TEMPLATE_POOL = """
 user = %(user)s
 group = %(group)s
 
-listen = /var/run/ajenti-v-php-fcgi-%(name)s.sock
+listen = %(listen)s
 listen.owner = www-data
 listen.group = www-data
 listen.mode = 0660
@@ -82,6 +82,7 @@ class PHPFPM (ApplicationGatewayComponent):
         pm_max = backend.params.get('pm_max', 5) or 5
         user = backend.params.get('user', 'www-data') or 'www-data'
         group = backend.params.get('group', 'www-data') or 'www-data'
+        listen = backend.params.get('listen', '/var/run/ajenti-v-php-fcgi-' + name + '.sock') or '/var/run/ajenti-v-php-fcgi-'+ name + '.sock'
 
         extras = ''
 
@@ -97,6 +98,7 @@ class PHPFPM (ApplicationGatewayComponent):
 
         return TEMPLATE_POOL % {
             'name': name,
+            'listen': listen,
             'min': pm_min,
             'max': pm_max,
             'user': user,

@@ -61,17 +61,17 @@ class NginxWebserver (WebserverComponent):
 
         if location.backend.type == 'php-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP_FCGI % {
-                'id': location.backend.id,
+                'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php-fcgi-'+ location.backend.id + '.sock',
             }
             
         if location.backend.type == 'php5.6-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP56_FCGI % {
-                'id': location.backend.id,
+                'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php5.6-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php5.6-fcgi-'+ location.backend.id + '.sock',
             }
 
         if location.backend.type == 'php7.0-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP70_FCGI % {
-                'id': location.backend.id,
+                'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php7.0-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php7.0-fcgi-'+ location.backend.id + '.sock',
             }
 
         if location.backend.type == 'python-wsgi':
