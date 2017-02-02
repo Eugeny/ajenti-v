@@ -23,6 +23,9 @@
             <formline text="{Process group}">
 	            <textbox bind="[group]" />
             </formline>
+            <formline text="{Custom listen}">
+	            <textbox bind="[listen]" />
+            </formline>
         </vc>
     </collapserow>
     <collapserow>
