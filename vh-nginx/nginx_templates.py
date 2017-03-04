@@ -188,6 +188,7 @@ server {
 
     root %(root)s;
     index index.html index.htm index.php;
+    include /etc/nginx.custom.server.d/*.conf;
 
     %(custom_conf)s
 
