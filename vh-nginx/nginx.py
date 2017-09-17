@@ -193,4 +193,7 @@ class NginxWebserver (WebserverComponent):
 class NGINXRestartable (Restartable):
     def restart(self):
         s = ServiceMultiplexor.get().get_one('nginx')
-        s.restart()
+        if not s.running:
+            s.start()
+        else:
+            s.command('reload')
