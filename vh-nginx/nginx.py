@@ -74,6 +74,11 @@ class NginxWebserver (WebserverComponent):
                 'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php7.0-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php7.0-fcgi-'+ location.backend.id + '.sock',
             }
 
+        if location.backend.type == 'php7.1-fcgi':
+            content = TEMPLATE_LOCATION_CONTENT_PHP71_FCGI % {
+                'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php7.1-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php7.1-fcgi-'+ location.backend.id + '.sock',
+            }
+
         if location.backend.type == 'python-wsgi':
             content = TEMPLATE_LOCATION_CONTENT_PYTHON_WSGI % {
                 'id': location.backend.id,
@@ -188,4 +193,7 @@ class NginxWebserver (WebserverComponent):
 class NGINXRestartable (Restartable):
     def restart(self):
         s = ServiceMultiplexor.get().get_one('nginx')
-        s.restart()
+        if not s.running:
+            s.start()
+        else:
+            s.command('reload')
