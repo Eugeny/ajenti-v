@@ -1,0 +1,30 @@
+<body binder:context="config">
+    <pad>
+		<formgroup text="{Wordpress Installer}">
+			<vc>
+				
+				<formline text="{Root path}">
+					<textbox id="wp-path" />
+				</formline>
+				
+				<formline text="{Database Name}">
+					<textbox id="wp-db-name" />
+				</formline>
+				
+				<formline text="{Database User}">
+					<textbox id="wp-db-user" />
+				</formline>
+				
+				<formline text="{Database Password}">
+					<textbox id="wp-db-pass" />
+				</formline>
+				
+				<formline>
+					<checkbox id="enabled" text="{Create Database if not exists}" />
+				</formline>
+				
+				<button icon="download-alt" text="{Install Now}" id="wp-install" style="normal big" />
+			</vc>
+		</formgroup>
+    </pad>
+</body>
