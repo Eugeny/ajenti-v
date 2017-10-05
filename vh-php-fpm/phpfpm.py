@@ -78,8 +78,10 @@ class PHPFPM (ApplicationGatewayComponent):
         )
 
     def __generate_pool(self, location, backend, name):
-        pm_min = backend.params.get('pm_min', 1) or 1
-        pm_max = backend.params.get('pm_max', 5) or 5
+        pm_min_default = 2
+        pm_max_default = 5
+        pm_min = backend.params.get('pm_min', pm_min_default) or pm_min_default
+        pm_max = backend.params.get('pm_max', pm_max_default) or pm_max_default
         user = backend.params.get('user', 'www-data') or 'www-data'
         group = backend.params.get('group', 'www-data') or 'www-data'
         listen = backend.params.get('listen', '/var/run/ajenti-v-php-fcgi-' + name + '.sock') or '/var/run/ajenti-v-php-fcgi-'+ name + '.sock'
@@ -104,8 +106,8 @@ class PHPFPM (ApplicationGatewayComponent):
             'user': user,
             'group': group,
             'pm': backend.params.get('pm', None) or 'dynamic',
-            'sp_min': min(2, pm_min),
-            'sp_max': min(6, pm_max),
+            'sp_min': max(pm_min_default, pm_min),
+            'sp_max': max(pm_max_default, pm_max),
             'php_extras': extras,
         }
 
