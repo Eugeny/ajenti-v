@@ -86,7 +86,9 @@ class PureFTPD (MiscComponent):
                 if cfg and cfg['created']:
                     p = subprocess.Popen(
                         [
-                            'pure-pw', 'useradd', cfg['username'], '-u', 'www-data',
+                            'pure-pw', 'useradd', cfg['username'], 
+                            '-u', cfg.get('system_user', 'www-data'),
+                            '-g', cfg.get('system_group', 'www-data'),
                             '-d', cfg.get('path', None) or website.root,
                         ],
                         stdin=subprocess.PIPE
