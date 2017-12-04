@@ -194,6 +194,18 @@ class WebsiteLocation (object):
                     }
                 }).save(),
             },
+            'php7.2-fcgi': {
+                'pattern': r'[^/]\.php(/|$)',
+                'path_append_pattern': False,
+                'match': 'regex',
+                'backend': Backend(None, {
+                    'type': 'static',
+                    'params': {
+                        'pm': 'dynamic',
+                        'php_admin_values': 'open_basedir = none;',
+                    }
+                }).save(),
+            },
         }
 
         default_template = {
