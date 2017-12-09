@@ -12,6 +12,12 @@
                     <formline text="{Path}">
                         <pathbox bind="path" directory="True" />
                     </formline>
+                    <formline text="{System user}">
+                        <textbox bind="system_user" />
+                    </formline>
+                    <formline text="{System group}">
+                        <textbox bind="system_group" />
+                    </formline>
                 </vc>
             </box>
         </pad>
