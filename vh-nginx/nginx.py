@@ -46,7 +46,7 @@ class NginxWebserver (WebserverComponent):
 
         if location.backend.type == 'static':
             content = TEMPLATE_LOCATION_CONTENT_STATIC % {
-                'autoindex': 'autoindex on;' if params.has_key('autoindex') else '',
+                'autoindex': 'autoindex on;' if params.has_key('autoindex') and params['autoindex'] else '',
             }
 
         if location.backend.type == 'proxy':
