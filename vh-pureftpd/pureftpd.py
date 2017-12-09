@@ -26,6 +26,13 @@ class PureFTPDExtension (BaseExtension):
 
         if not 'username' in self.config:
             self.config['username'] = self.website.slug
+            
+        if not 'system_user' in self.config:
+            self.config['system_user'] = ""
+
+        if not 'system_group' in self.config:
+            self.config['system_group'] = ""
+
 
         if not self.config['created']:
             self.config['password'] = str(uuid.uuid4())
@@ -86,7 +93,9 @@ class PureFTPD (MiscComponent):
                 if cfg and cfg['created']:
                     p = subprocess.Popen(
                         [
-                            'pure-pw', 'useradd', cfg['username'], '-u', 'www-data',
+                            'pure-pw', 'useradd', cfg['username'], 
+                            '-u', cfg.get('system_user') or 'www-data',
+                            '-g', cfg.get('system_group') or 'www-data',
                             '-d', cfg.get('path', None) or website.root,
                         ],
                         stdin=subprocess.PIPE
