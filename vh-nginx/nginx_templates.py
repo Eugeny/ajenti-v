@@ -8,6 +8,7 @@ user %(user)s %(user)s;
 pid /var/run/nginx.pid;
 worker_processes %(workers)s;
 worker_rlimit_nofile 100000;
+include /etc/nginx.modules.d/*.conf;
 
 events {
     worker_connections  4096;
