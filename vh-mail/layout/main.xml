@@ -148,6 +148,9 @@
                             <formline text="{Custom configuration}">
                                 <codearea bind="custom_mta_config" width="500" height="100" />
                             </formline>
+                            <formline text="{Custom authenticators}">
+                                <codearea bind="custom_mta_authenticators" width="500" height="100" />
+                            </formline>
                             <formline text="{Custom ACLs}">
                                 <codearea bind="custom_mta_acl" width="500" height="100" />
                             </formline>
