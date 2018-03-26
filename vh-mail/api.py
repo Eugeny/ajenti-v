@@ -28,6 +28,7 @@ class Config (object):
         self.custom_mta_routers = j.get('custom_mta_routers', '')
         self.custom_mta_local_router = j.get('custom_mta_local_router', '')
         self.custom_mta_transports = j.get('custom_mta_transports', '')
+        self.custom_mta_authenticators = j.get('custom_mta_authenticators', '')
         self.dkim_enable = j.get('dkim_enable', False)
         self.dkim_selector = j.get('dkim_selector', 'x')
         self.dkim_private_key = j.get('dkim_private_key', '')
@@ -51,6 +52,7 @@ class Config (object):
             'custom_mta_local_router': self.custom_mta_local_router,
             'custom_mta_config': self.custom_mta_config,
             'custom_mta_transports': self.custom_mta_transports,
+            'custom_mta_authenticators' : self.custom_mta_authenticators,
             'dkim_enable': self.dkim_enable,
             'dkim_selector': self.dkim_selector,
             'dkim_private_key': self.dkim_private_key,
@@ -205,6 +207,7 @@ class MailEximCourierBackend (MailBackend):
             'custom_mta_local_router': config.custom_mta_local_router,
             'custom_mta_config': config.custom_mta_config,
             'custom_mta_transports': config.custom_mta_transports,
+            'custom_mta_authenticators': config.custom_mta_authenticators,
             'dkim_enable': 'DKIM_ENABLE=1' if config.dkim_enable else '',
             'dkim_selector': config.dkim_selector,
             'dkim_private_key': config.dkim_private_key,
