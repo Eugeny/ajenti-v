@@ -425,6 +425,8 @@ begin rewrite
 
 begin authenticators
 
+%(custom_mta_authenticators)s
+
 login:
   driver = plaintext
   public_name = LOGIN
