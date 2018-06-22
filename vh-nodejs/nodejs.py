@@ -70,7 +70,8 @@ class NodeJS (ApplicationGatewayComponent):
                         p.user = location.backend.params.get('user', None) or 'www-data'
                         p.directory = location.path or website.root
 
-                        p.environment = location.backend.params.get('environment', None) or ''
+                        # Throws exception if user does not set environment param but sets nvm param. 
+                        p.environment = location.backend.params.get('environment', '') or ''
                         virtualenv = location.backend.params.get('venv', None)
                         if virtualenv:
                             p.environment = '; '.join([p.environment, 'PATH="%s:%s"' % (os.path.join(virtualenv, 'bin'), os.environ['PATH'])])
