@@ -50,7 +50,7 @@ http {
     open_file_cache_errors on;
 
     server_tokens off;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
 
     include proxy.conf;
     include fcgi.conf;
@@ -266,6 +266,13 @@ TEMPLATE_LOCATION_CONTENT_PHP71_FCGI = """
 """
 
 TEMPLATE_LOCATION_CONTENT_PHP72_FCGI = """
+        fastcgi_index index.php;
+        include fcgi.conf;
+        fastcgi_pass %(listen)s;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+"""
+
+TEMPLATE_LOCATION_CONTENT_PHP73_FCGI = """
         fastcgi_index index.php;
         include fcgi.conf;
         fastcgi_pass %(listen)s;
