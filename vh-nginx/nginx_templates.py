@@ -50,7 +50,7 @@ http {
     open_file_cache_errors on;
 
     server_tokens off;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
 
     include proxy.conf;
     include fcgi.conf;
