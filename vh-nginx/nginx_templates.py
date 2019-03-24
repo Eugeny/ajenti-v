@@ -8,6 +8,7 @@ user %(user)s %(user)s;
 pid /var/run/nginx.pid;
 worker_processes %(workers)s;
 worker_rlimit_nofile 100000;
+include /etc/nginx.modules.d/*.conf;
 
 events {
     worker_connections  4096;
@@ -49,7 +50,7 @@ http {
     open_file_cache_errors on;
 
     server_tokens off;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
 
     include proxy.conf;
     include fcgi.conf;
@@ -99,7 +100,7 @@ fastcgi_param   REMOTE_ADDR             $remote_addr;
 fastcgi_param   REMOTE_PORT             $remote_port;
 fastcgi_param   SERVER_ADDR             $server_addr;
 fastcgi_param   SERVER_PORT             $server_port;
-fastcgi_param   SERVER_NAME             $server_name;
+fastcgi_param   SERVER_NAME             $host;
 
 fastcgi_param   HTTPS                   $https;
 
@@ -122,6 +123,7 @@ types {
     image/x-icon                          ico;
     image/x-jng                           jng;
     image/vnd.wap.wbmp                    wbmp;
+    application/json                      json;
     application/java-archive              jar war ear;
     application/mac-binhex40              hqx;
     application/pdf                       pdf;
@@ -264,6 +266,13 @@ TEMPLATE_LOCATION_CONTENT_PHP71_FCGI = """
 """
 
 TEMPLATE_LOCATION_CONTENT_PHP72_FCGI = """
+        fastcgi_index index.php;
+        include fcgi.conf;
+        fastcgi_pass %(listen)s;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+"""
+
+TEMPLATE_LOCATION_CONTENT_PHP73_FCGI = """
         fastcgi_index index.php;
         include fcgi.conf;
         fastcgi_pass %(listen)s;

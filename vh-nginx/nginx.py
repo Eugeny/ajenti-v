@@ -39,6 +39,7 @@ class NginxWebserver (WebserverComponent):
         self.config_file_proxy = '/etc/nginx/proxy.conf'
         self.config_vhost_root = '/etc/nginx/conf.d'
         self.config_custom_root = '/etc/nginx.custom.d'
+	self.config_modules_root = '/etc/nginx.modules.d'
         self.lib_path = '/var/lib/nginx'
 
     def __generate_website_location(self, ws, location):
@@ -82,6 +83,11 @@ class NginxWebserver (WebserverComponent):
         if location.backend.type == 'php7.2-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP72_FCGI % {
                 'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php7.2-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php7.2-fcgi-'+ location.backend.id + '.sock',
+            }
+
+        if location.backend.type == 'php7.3-fcgi':
+            content = TEMPLATE_LOCATION_CONTENT_PHP73_FCGI % {
+                'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php7.3-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php7.3-fcgi-'+ location.backend.id + '.sock',
             }
 
         if location.backend.type == 'python-wsgi':
@@ -172,6 +178,9 @@ class NginxWebserver (WebserverComponent):
 
         if not os.path.exists(self.config_custom_root):
             os.mkdir(self.config_custom_root, 755)
+
+        if not os.path.exists(self.config_modules_root):
+            os.mkdir(self.config_modules_root, 755)
 
         open(self.config_file, 'w').write(TEMPLATE_CONFIG_FILE)
         open(self.config_file_mime, 'w').write(TEMPLATE_CONFIG_MIME)

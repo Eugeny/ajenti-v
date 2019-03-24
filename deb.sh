@@ -35,4 +35,4 @@ mkdir -p $BUILDDIR/$PLUGINDIR/$PLUGIN
 cp -r $PLUGIN/* $BUILDDIR/$PLUGINDIR/$PLUGIN
 find $BUILDDIR -name '*.pyc' -delete
 
-dpkg-deb -b $BUILDDIR $DISTDIR/"$PACKAGE"_"$VERSION".deb
+dpkg-deb -Z gzip -b $BUILDDIR $DISTDIR/"$PACKAGE"_"$VERSION".deb
