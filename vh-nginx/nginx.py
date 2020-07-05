@@ -39,7 +39,7 @@ class NginxWebserver (WebserverComponent):
         self.config_file_proxy = '/etc/nginx/proxy.conf'
         self.config_vhost_root = '/etc/nginx/conf.d'
         self.config_custom_root = '/etc/nginx.custom.d'
-	self.config_modules_root = '/etc/nginx.modules.d'
+        self.config_modules_root = '/etc/nginx.modules.d'
         self.lib_path = '/var/lib/nginx'
 
     def __generate_website_location(self, ws, location):
@@ -88,6 +88,11 @@ class NginxWebserver (WebserverComponent):
         if location.backend.type == 'php7.3-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP73_FCGI % {
                 'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php7.3-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php7.3-fcgi-'+ location.backend.id + '.sock',
+            }
+
+        if location.backend.type == 'php7.4-fcgi':
+            content = TEMPLATE_LOCATION_CONTENT_PHP74_FCGI % {
+                'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php7.4-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php7.4-fcgi-'+ location.backend.id + '.sock',
             }
 
         if location.backend.type == 'python-wsgi':
