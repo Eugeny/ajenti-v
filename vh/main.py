@@ -194,7 +194,6 @@ class WebsitesWebsiteEditorPlugin (SectionPlugin):
 
         def download():
             url = self.find('download-url').value
-            self.save()
             tmppath = '/tmp/ajenti-v-download'
             script = 'wget "%s" -O "%s" ' % (url, tmppath)
             if url.lower().endswith(('tar', '.tar.gz', '.tgz', '.tar.bz2', '.tbz2')):
