@@ -12,6 +12,7 @@ find -name '*.pyc' | xargs rm
 ./deb.sh vh-php7.2-fpm
 ./deb.sh vh-php7.3-fpm
 ./deb.sh vh-php7.4-fpm
+./deb.sh vh-php8.1-fpm
 ./deb.sh vh-unicorn
 ./deb.sh vh-vsftpd
 ./deb.sh vh-pureftpd
@@ -29,6 +30,7 @@ find -name '*.pyc' | xargs rm
 ./rpm.sh vh-php7.2-fpm
 ./rpm.sh vh-php7.3-fpm
 ./rpm.sh vh-php7.4-fpm
+./rpm.sh vh-php8.1-fpm
 ./rpm.sh vh-unicorn
 ./rpm.sh vh-vsftpd
 ./rpm.sh vh-pureftpd
