@@ -230,6 +230,18 @@ class WebsiteLocation (object):
                     }
                 }).save(),
             },
+            'php8.0-fcgi': {
+                'pattern': r'[^/]\.php(/|$)',
+                'path_append_pattern': False,
+                'match': 'regex',
+                'backend': Backend(None, {
+                    'type': 'static',
+                    'params': {
+                        'pm': 'dynamic',
+                        'php_admin_values': 'open_basedir = none;',
+                    }
+                }).save(),
+            },
             'php8.1-fcgi': {
                 'pattern': r'[^/]\.php(/|$)',
                 'path_append_pattern': False,

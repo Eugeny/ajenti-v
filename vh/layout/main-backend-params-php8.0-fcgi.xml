@@ -1,0 +1,45 @@
+<dt filtering="False" binder:context="params">
+    <collapserow>
+        <hc>
+            <icon icon="cog" />
+            <label text="PHP-8.0 FPM" />
+        </hc>
+        <vc>
+            <formline text="{Process manager}">
+                <dropdown bind="[pm]"
+                    values="['dynamic', 'ondemand']"
+                    labels="['Dynamic', 'On-demand']"
+                />
+            </formline>
+            <formline text="{Min processes}">
+                <textbox bind="[pm_min]" type="integer" />
+            </formline>
+            <formline text="{Max processes}">
+                <textbox bind="[pm_max]" type="integer" />
+            </formline>
+            <formline text="{Process user}">
+	            <textbox bind="[user]" />
+            </formline>
+            <formline text="{Process group}">
+	            <textbox bind="[group]" />
+            </formline>
+            <formline text="{Custom listen}">
+	            <textbox bind="[listen]" />
+            </formline>
+        </vc>
+    </collapserow>
+    <collapserow>
+        <hc>
+            <icon icon="cog" />
+            <label text="PHP" />
+        </hc>
+        <vc>
+            <formline text="{PHP .ini values}">
+                <codearea bind="[php_admin_values]" width="400" height="150" />
+            </formline>
+            <formline text="{PHP flags}">
+                <codearea bind="[php_flags]" width="400" height="150" />
+            </formline>
+        </vc>
+    </collapserow>
+</dt>

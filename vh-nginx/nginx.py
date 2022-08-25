@@ -95,6 +95,11 @@ class NginxWebserver (WebserverComponent):
                 'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php7.4-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php7.4-fcgi-'+ location.backend.id + '.sock',
             }
 
+        if location.backend.type == 'php8.0-fcgi':
+            content = TEMPLATE_LOCATION_CONTENT_PHP80_FCGI % {
+                'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php8.0-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php8.0-fcgi-'+ location.backend.id + '.sock',
+            }
+
         if location.backend.type == 'php8.1-fcgi':
             content = TEMPLATE_LOCATION_CONTENT_PHP81_FCGI % {
                 'listen': location.backend.params.get('listen', 'unix:/var/run/ajenti-v-php8.1-fcgi-' + location.backend.id + '.sock') or 'unix:/var/run/ajenti-v-php8.1-fcgi-'+ location.backend.id + '.sock',

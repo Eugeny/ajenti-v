@@ -286,6 +286,13 @@ TEMPLATE_LOCATION_CONTENT_PHP74_FCGI = """
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 """
 
+TEMPLATE_LOCATION_CONTENT_PHP80_FCGI = """
+        fastcgi_index index.php;
+        include fcgi.conf;
+        fastcgi_pass %(listen)s;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+"""
+
 TEMPLATE_LOCATION_CONTENT_PHP81_FCGI = """
         fastcgi_index index.php;
         include fcgi.conf;
