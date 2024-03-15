@@ -37,7 +37,7 @@ http {
     gzip_proxied any;
     gzip_min_length 256;
     gzip_comp_level 4;
-    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js image/svg image/svg+xml;
 
     server_names_hash_bucket_size 128;
 
